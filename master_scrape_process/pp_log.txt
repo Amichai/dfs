@@ -1,0 +1,413 @@
+ # Kevin Durant
+----------------  ----
+3-PT Made          2.5
+Assists            4.5
+Fantasy Score     53
+Free Throws Made   6
+Points            30.5
+Rebounds           8.5
+----------------  ----
+ # Giannis Antetokounmpo
+----------------  ----
+3-PT Made          1
+Assists            4.5
+Fantasy Score     57
+Free Throws Made   6.5
+Points            30.5
+Rebounds          12.5
+----------------  ----
+ # James Harden
+----------------  ----
+3-PT Made          3
+Assists            9.5
+Fantasy Score     52
+Free Throws Made   6.5
+Points            25.5
+Rebounds           7.5
+----------------  ----
+ # Khris Middleton
+----------------  ----
+3-PT Made          2
+Assists            4.5
+Fantasy Score     37.5
+Free Throws Made   3.5
+Points            21.5
+Rebounds           6.5
+----------------  ----
+ # Bruce Brown
+-------------  ----
+Fantasy Score  21.5
+Points          9.5
+Rebounds        5.5
+-------------  ----
+ # Jrue Holiday
+-------------  ----
+3-PT Made       2
+Assists         7
+Fantasy Score  36.5
+Points         17.5
+Rebounds        5
+-------------  ----
+ # Anthony Davis
+----------------  ----
+Fantasy Score     47
+Free Throws Made   4.5
+Points            23.5
+Rebounds           8.5
+----------------  ----
+ # Joe Harris
+-------------  ----
+3-PT Made       2.5
+Fantasy Score  21.5
+Points         12.5
+-------------  ----
+ # Brook Lopez
+----------------  ----
+Fantasy Score     23
+Free Throws Made   1.5
+Points            12.5
+Rebounds           5.5
+----------------  ----
+ # LaMarcus Aldridge
+-------------  ----
+Fantasy Score  23.5
+Points         10.5
+-------------  ----
+ # Grayson Allen
+----------------  ----
+3-PT Made          2
+Fantasy Score     18
+Free Throws Made   1.5
+Points             9.5
+Rebounds           3
+----------------  ----
+ # Stephen Curry
+----------------  ----
+3-PT Made          5.5
+Assists            5
+Fantasy Score     52
+Free Throws Made   6
+Points            33.5
+Rebounds           5
+----------------  ----
+ # LeBron James
+----------------  ----
+3-PT Made          2
+Assists            6.5
+Fantasy Score     48.5
+Free Throws Made   4.5
+Points            24.5
+Rebounds           7
+----------------  ----
+ # Draymond Green
+----------------  ----
+Assists            7.5
+Fantasy Score     34
+Free Throws Made   1.5
+Points             7.5
+Rebounds           6.5
+----------------  ----
+ # Russell Westbrook
+----------------  ----
+3-PT Made          1
+Assists            9
+Fantasy Score     47.5
+Free Throws Made   4.5
+Points            17.5
+Rebounds           8.5
+----------------  ----
+ # Andrew Wiggins
+----------------  ----
+3-PT Made          1.5
+Assists            2
+Fantasy Score     32
+Free Throws Made   2.5
+Points            18.5
+Rebounds           5
+----------------  ----
+ # Jordan Poole
+-------------  ----
+3-PT Made       3
+Assists         3
+Fantasy Score  30
+Points         17.5
+-------------  ----
+ # Carmelo Anthony
+-------------  ----
+3-PT Made       2
+Fantasy Score  20
+Points         12.5
+Rebounds        3
+-------------  ----
+ # Kevon Looney
+-------------  ----
+Assists         1.5
+Fantasy Score  18.5
+Points          5.5
+Rebounds        5.5
+-------------  ----
+ # Kent Bazemore
+-------------  ----
+3-PT Made       1
+Fantasy Score  19
+Points          8.5
+Rebounds        4
+-------------  ----
+2021-10-19 08:17:01
+2021-10-19 08:30:01
+2021-10-19 08:43:01
+2021-10-19 08:56:01
+2021-10-19 09:09:02
+2021-10-19 09:22:02
+2021-10-19 09:35:02
+2021-10-19 09:48:02
+2021-10-19 10:01:03
+2021-10-19 10:14:03
+Giannis Antetokounmpo - Assists: old: 4.5 new: 5.0
+2021-10-19 10:27:03
+Grayson Allen - Points: old: 9.5 new: 10.5
+2021-10-19 10:40:03
+2021-10-19 10:53:04
+2021-10-19 11:06:04
+James Harden - Assists: old: 9.5 new: 10.0
+2021-10-19 11:19:04
+2021-10-19 11:32:04
+2021-10-19 11:45:05
+2021-10-19 11:58:05
+2021-10-19 12:11:05
+2021-10-19 12:24:05
+New player: DeMar DeRozan
+-------  ----
+Assists   5
+Points   21.5
+-------  ----
+New player: Lonzo Ball
+--------  ----
+Assists    6
+Points    14.5
+Rebounds   5
+--------  ----
+New player: Nikola Vucevic
+--------  ----
+Assists    3.5
+Points    22.5
+Rebounds  11.5
+--------  ----
+New player: Zach LaVine
+--------  ----
+Assists    4
+Points    24.5
+Rebounds   5
+--------  ----
+2021-10-19 12:37:06
+2021-10-19 12:50:06
+DeMar DeRozan new stat - Rebounds: 4.5
+DeMar DeRozan new stat - Free Throws Made: 6.0
+Lonzo Ball new stat - 3-PT Made: 3.0
+Nikola Vucevic new stat - 3-PT Made: 2.0
+Nikola Vucevic new stat - Free Throws Made: 2.0
+Zach LaVine new stat - 3-PT Made: 3.0
+Zach LaVine new stat - Free Throws Made: 4.0
+2021-10-19 13:03:06
+Brook Lopez new stat - 3-PT Made: 1.0
+New player: Blake Griffin
+--------  ---
+Points    7.5
+Rebounds  4.5
+--------  ---
+2021-10-19 13:16:07
+2021-10-19 13:29:07
+New player: Patty Mills
+---------  ---
+3-PT Made  1.5
+Points     8.5
+---------  ---
+2021-10-19 13:42:08
+2021-10-19 13:55:08
+2021-10-19 14:08:08
+2021-10-19 14:21:08
+2021-10-19 14:34:09
+Draymond Green - Fantasy Score: old: 34.0 new: 32.5
+Andrew Wiggins - Points: old: 18.5 new: 17.0
+Andrew Wiggins - Fantasy Score: old: 32.0 new: 30.5
+New player: Bradley Beal
+--------  ----
+Assists    5
+Points    27.5
+Rebounds   5.5
+--------  ----
+New player: Fred VanVleet
+--------  ----
+Assists    6.5
+Points    19.5
+Rebounds   5
+--------  ----
+New player: Kyle Kuzma
+--------  ----
+Points    13.5
+Rebounds   7.5
+--------  ----
+New player: OG Anunoby
+--------  ----
+Points    17.5
+Rebounds   6
+--------  ----
+New player: Spencer Dinwiddie
+--------  ----
+Points    16.5
+Rebounds   4.5
+--------  ----
+New player: Scottie Barnes
+--------  ----
+Points    10.5
+Rebounds   4.5
+--------  ----
+New player: Daniel Gafford
+--------  ----
+Points    11.5
+Rebounds   8.5
+--------  ----
+New player: Kentavious Caldwell-Pope
+--------  ---
+Points    9.5
+Rebounds  3.5
+--------  ---
+2021-10-19 14:47:09
+Bradley Beal new stat - 3-PT Made: 2.0
+Bradley Beal new stat - Free Throws Made: 6.5
+Fred VanVleet new stat - 3-PT Made: 3.0
+Fred VanVleet new stat - Free Throws Made: 3.5
+Kyle Kuzma new stat - 3-PT Made: 1.5
+OG Anunoby new stat - 3-PT Made: 2.0
+OG Anunoby new stat - Assists: 2.5
+Spencer Dinwiddie new stat - Assists: 7.5
+Spencer Dinwiddie new stat - 3-PT Made: 1.5
+Scottie Barnes new stat - Assists: 3.5
+Scottie Barnes new stat - 3-PT Made: 0.5
+Kentavious Caldwell-Pope new stat - Assists: 2.5
+Kentavious Caldwell-Pope new stat - 3-PT Made: 1.5
+2021-10-19 15:00:09
+Andrew Wiggins - Points: old: 17.0 new: 16.0
+Jordan Poole - Points: old: 17.5 new: 18.5
+2021-10-19 15:13:10
+New player: Julius Randle
+----------------  ----
+3-PT Made          2
+Assists            4.5
+Free Throws Made   5.5
+Points            22.5
+Rebounds           8.5
+----------------  ----
+New player: RJ Barrett
+----------------  ----
+3-PT Made          1.5
+Assists            2.5
+Free Throws Made   3
+Points            15.5
+Rebounds           5.5
+----------------  ----
+New player: Kemba Walker
+---------  ----
+3-PT Made   2
+Assists     4
+Points     15.5
+Rebounds    3.5
+---------  ----
+New player: Evan Fournier
+---------  ----
+3-PT Made   2
+Points     12.5
+Rebounds    3
+---------  ----
+2021-10-19 15:26:10
+2021-10-19 15:39:10
+2021-10-19 15:52:11
+New player: Karl-Anthony Towns
+----------------  ----
+3-PT Made          2
+Assists            5
+Free Throws Made   5.5
+Points            24.5
+Rebounds          11.5
+----------------  ----
+New player: Anthony Edwards
+----------------  ----
+3-PT Made          2.5
+Assists            4
+Free Throws Made   2.5
+Points            22.5
+Rebounds           5.5
+----------------  ----
+New player: Kevin Porter Jr.
+---------  ----
+3-PT Made   2
+Assists     6.5
+Points     17.5
+Rebounds    4.5
+---------  ----
+New player: Christian Wood
+---------  ----
+3-PT Made   2
+Points     20.5
+Rebounds    9.5
+---------  ----
+New player: D'Angelo Russell
+---------  ----
+3-PT Made   2.5
+Assists     7.5
+Points     19.5
+Rebounds    3
+---------  ----
+New player: Jalen Green
+--------  ----
+Assists    2.5
+Points    14.5
+Rebounds   3.5
+--------  ----
+2021-10-19 16:05:11
+2021-10-19 16:18:12
+Andrew Wiggins - Points: old: 16.0 new: 15.5
+2021-10-19 16:31:12
+2021-10-19 16:44:12
+2021-10-19 16:57:13
+New player: Malik Monk
+------  ---
+Points  9.5
+------  ---
+New player: Otto Porter Jr.
+--------  ----
+Points    10.5
+Rebounds   4.5
+--------  ----
+New player: Juan Toscano-Anderson
+------  ---
+Points  6.5
+------  ---
+2021-10-19 17:10:13
+2021-10-19 17:23:14
+Russell Westbrook - Rebounds: old: 8.5 new: 9.0
+2021-10-19 17:36:14
+LaMarcus Aldridge - Points: old: 10.5 new: 8.5
+New player: George Hill
+---------  ---
+3-PT Made  0.5
+Assists    1.5
+Points     5.5
+---------  ---
+2021-10-19 17:49:14
+2021-10-19 18:02:15
+New player: Pat Connaughton
+---------  ---
+3-PT Made  1.5
+Points     7.5
+---------  ---
+New player: Jordan Nwora
+--------  ---
+Points    8.5
+Rebounds  3.5
+--------  ---
+Otto Porter Jr. new stat - 3-PT Made: 1.5
+2021-10-19 18:15:15
+LaMarcus Aldridge new stat - Rebounds: 3.5
+Draymond Green - Fantasy Score: old: 32.5 new: 30.0
+Andrew Wiggins - Fantasy Score: old: 30.5 new: 28.0

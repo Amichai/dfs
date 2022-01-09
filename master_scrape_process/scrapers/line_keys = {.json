@@ -1,0 +1,15 @@
+line_keys = {
+"How many blocks will ": "blocks",
+"How many assists will ": "assists",
+"How many rebounds will ": "rebounds",
+"How many three-pointers will ": "three-pointers",
+"How many total points:  rebounds and assists will ": "points",
+"How many total rebounds and assists will ": "rebounds + assists",
+"How many total points and rebounds will ": "points + rebounds",
+"How many total steals and blocks will ": "steals + blocks",
+"How many steals will ": "steals",
+"How many total points and assists will ": "points + assists",
+"How many points will ": "points",
+}
+
+

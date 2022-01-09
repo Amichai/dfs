@@ -1,0 +1,45 @@
+CSV2
+
+
+Donovan Mitchell,Tre Jones,Bradley Beal,Devin Vassell,Saddiq Bey,Hamidou Diallo,Serge Ibaka,Aaron Gordon,Nikola Jokic
+Donovan Mitchell,Tre Jones,Hamidou Diallo,Bradley Beal,DeMar DeRozan,Saddiq Bey,Serge Ibaka,Kyle Kuzma,Jakob Poeltl
+James Harden,Tre Jones,Devin Vassell,Hamidou Diallo,Jamorko Pickett,Saddiq Bey,Christian Wood,Serge Ibaka,Nikola Jokic
+Tre Jones,Eric Bledsoe,Devin Vassell,Bradley Beal,Saddiq Bey,Hamidou Diallo,Aaron Gordon,Kyle Kuzma,Nikola Jokic
+Tre Jones,Derrick White,Bradley Beal,Eric Bledsoe,Will Barton,Saddiq Bey,Serge Ibaka,Aaron Gordon,Nikola Jokic
+James Harden,Tre Jones,Bradley Beal,Devin Vassell,Jamorko Pickett,Hamidou Diallo,Serge Ibaka,Jae'Sean Tate,Nikola Jokic
+Tre Jones,James Harden,Hamidou Diallo,Will Barton,Jamorko Pickett,Saddiq Bey,Serge Ibaka,Kyle Kuzma,Nikola Jokic
+James Harden,Tre Jones,Hamidou Diallo,Devin Vassell,Saddiq Bey,Will Barton,Aaron Gordon,Serge Ibaka,Nikola Jokic
+Eric Bledsoe,James Harden,Cassius Stanley,Devin Vassell,Saddiq Bey,Hamidou Diallo,Serge Ibaka,Aaron Gordon,Nikola Jokic
+Tre Jones,James Harden,Devin Vassell,Eric Bledsoe,Saddiq Bey,Hamidou Diallo,Aaron Gordon,Serge Ibaka,Nikola Jokic
+Kevin Porter,Facundo Campazzo,Hamidou Diallo,Will Barton,Saddiq Bey,Jamorko Pickett,Aaron Gordon,Christian Wood,Nikola Jokic
+Tre Jones,Reggie Jackson,Eric Bledsoe,James Harden,Jamorko Pickett,Saddiq Bey,Kevin Durant,Marcus Morris,Serge Ibaka
+Tre Jones,Stephen Curry,Will Barton,Donovan Mitchell,Saddiq Bey,Andrew Wiggins,Rudy Gay,Bojan Bogdanovic,Rudy Gobert
+Derrick White,Tre Jones,James Harden,Hamidou Diallo,Saddiq Bey,Jamorko Pickett,Keldon Johnson,Christian Wood,Jakob Poeltl
+Tre Jones,Zach LaVine,Bradley Beal,Hamidou Diallo,DeMar DeRozan,Saddiq Bey,Kyle Kuzma,Serge Ibaka,Daniel Gafford
+Donovan Mitchell,Tre Jones,Bradley Beal,Devin Vassell,Saddiq Bey,Hamidou Diallo,Serge Ibaka,Aaron Gordon,Nikola Jokic
+Donovan Mitchell,Tre Jones,Hamidou Diallo,Bradley Beal,DeMar DeRozan,Saddiq Bey,Serge Ibaka,Kyle Kuzma,Jakob Poeltl
+James Harden,Tre Jones,Devin Vassell,Hamidou Diallo,Jamorko Pickett,Saddiq Bey,Christian Wood,Serge Ibaka,Nikola Jokic
+Tre Jones,Eric Bledsoe,Devin Vassell,Bradley Beal,Saddiq Bey,Hamidou Diallo,Aaron Gordon,Kyle Kuzma,Nikola Jokic
+Tre Jones,Derrick White,Bradley Beal,Eric Bledsoe,Will Barton,Saddiq Bey,Serge Ibaka,Aaron Gordon,Nikola Jokic
+
+
+['', '', '', Hamidou Diallo, Saddiq Bey, Devin Vassell, Bradley Beal, Tre Jones, '']
+[Jakob Poeltl, Kyle Kuzma, '', Saddiq Bey, DeMar DeRozan, Bradley Beal, Hamidou Diallo, Tre Jones, '']
+['', '', '', Saddiq Bey, Jamorko Pickett, Hamidou Diallo, Devin Vassell, Tre Jones, '']
+['', Kyle Kuzma, '', Hamidou Diallo, Saddiq Bey, Bradley Beal, Devin Vassell, '', Tre Jones]
+['', '', '', Saddiq Bey, '', '', Bradley Beal, Derrick White, Tre Jones]
+['', '', '', Hamidou Diallo, Jamorko Pickett, Devin Vassell, Bradley Beal, Tre Jones, '']
+['', Kyle Kuzma, '', Saddiq Bey, Jamorko Pickett, '', Hamidou Diallo, '', Tre Jones]
+['', '', '', '', Saddiq Bey, Devin Vassell, Hamidou Diallo, Tre Jones, '']
+['', '', '', Hamidou Diallo, Saddiq Bey, Devin Vassell, Cassius Stanley, '', '']
+['', '', '', Hamidou Diallo, Saddiq Bey, '', Devin Vassell, '', Tre Jones]
+['', '', '', Jamorko Pickett, Saddiq Bey, '', Hamidou Diallo, '', '']
+['', '', '', Saddiq Bey, Jamorko Pickett, '', '', '', Tre Jones]
+['', '', '', '', Saddiq Bey, '', '', '', Tre Jones]
+[Jakob Poeltl, '', Keldon Johnson, Jamorko Pickett, Saddiq Bey, Hamidou Diallo, '', Tre Jones, Derrick White]
+[Daniel Gafford, '', Kyle Kuzma, Saddiq Bey, DeMar DeRozan, Hamidou Diallo, Bradley Beal, Zach LaVine, Tre Jones]
+['', '', '', Hamidou Diallo, Saddiq Bey, Devin Vassell, Bradley Beal, Tre Jones, '']
+[Jakob Poeltl, Kyle Kuzma, '', Saddiq Bey, DeMar DeRozan, Bradley Beal, Hamidou Diallo, Tre Jones, '']
+['', '', '', Saddiq Bey, Jamorko Pickett, Hamidou Diallo, Devin Vassell, Tre Jones, '']
+['', Kyle Kuzma, '', Hamidou Diallo, Saddiq Bey, Bradley Beal, Devin Vassell, '', Tre Jones]
+['', '', '', Saddiq Bey, '', '', Bradley Beal, Derrick White, Tre Jones]

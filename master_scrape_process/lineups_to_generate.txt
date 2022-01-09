@@ -1,0 +1,12 @@
+slate name|filename|type|locks|excludes
+#7pm main|FanDuel-NBA-2021 ET-12 ET-11 ET-68451-players-list.csv|full||Caleb Martin,Jaren Jackson
+#7pm single|FanDuel-NBA-2021 ET-12 ET-11 ET-68453-players-list.csv|single||
+#7pm 3man|FanDuel-NBA-2021 ET-12 ET-13 ET-68547-players-list.csv|three||
+#9pm express|FanDuel-NBA-2021 ET-12 ET-13 ET-68552-players-list.csv|full||
+#7:30 main|FanDuel-NBA-2021 ET-12 ET-14 ET-68624-players-list.csv|full||
+#7:30 3man|FanDuel-NBA-2021 ET-12 ET-14 ET-68627-players-list.csv|three||
+#7main|FanDuel-NBA-2021 ET-12 ET-15 ET-68690-players-list.csv|full||
+#7:30 three man|FanDuel-NBA-2021 ET-12 ET-15 ET-68691-players-list.csv|three||
+#8pm express|FanDuel-NBA-2021 ET-12 ET-15 ET-68693-players-list.csv|full||
+#8:30 express|FanDuel-NBA-2021 ET-12 ET-15 ET-68694-players-list.csv|full||
+#7pm 3man|FanDuel-NBA-2021 ET-12 ET-16 ET-68772-players-list.csv|three||
