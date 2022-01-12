@@ -1,0 +1,30 @@
+Brooklyn,BKN
+Milwaukee,MIL
+Golden State,GSW
+LA Lakers,LAL
+Indiana,IND
+Charlotte,CHA
+Chicago,CHI
+Detroit,DET
+New York,NYK
+Boston,BOS
+Washington,WAS
+Toronto,TOR
+Cleveland,CLE
+Memphis,MEM
+Houston,HOU
+Minnesota,MIN
+Philadelphia,PHI
+New Orleans,NOP
+Orlando,ORL
+San Antonio,SAS
+Oklahoma City,OKC
+Utah,UTA
+Denver,DEN
+Phoenix,PHX
+Sacramento,SAC
+Portland,POR
+Dallas,DAL
+Atlanta,ATL
+Miami,MIA
+LA Clippers,LAC

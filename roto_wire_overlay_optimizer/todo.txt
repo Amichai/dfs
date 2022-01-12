@@ -1,0 +1,10 @@
+
+
+
+# scrape rotowire
+# make a decision on every GTD
+# compare current lineups to past lineups
+# calculate extra or missing money per team
+# use rotowire depth chart to determine who's up next for each missing player
+# create an "up next" player pool
+# generate lineups from the "up next" player pool and money line projections
