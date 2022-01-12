@@ -695,6 +695,50 @@ def optimize_three_man_challenge(projection_file_name, fd_slate_file_name):
 
 
 
+def generate_n_rosters(by_position, n, iter_count=1000000):
+    # names_to_exclude = [p.name for p in players_to_exclude]
+    all_rosters = []
+
+    roster_keys = []
+
+    random.seed(time.time())
+    for i in range(iter_count):
+        random_lineup = build_random_line_up(by_position)
+
+        if random_lineup.cost > 60000 or not random_lineup.is_valid:
+            continue
+        
+        result = optimize_roster(random_lineup, by_position)
+
+        team_to_count = {}
+        for player in result.players:
+            if not player.team in team_to_count:
+                team_to_count[player.team] = 1
+            else:
+                team_to_count[player.team] += 1
+
+        is_roster_valid = True
+        for team, ct in team_to_count.items():
+            if ct > 4:
+                is_roster_valid = False
+
+        if not is_roster_valid:
+            continue
+
+
+        all_names = [a.name for a in result.players]
+        all_names_sorted = sorted(all_names)
+        roster_key = ",".join(all_names_sorted)
+        if not roster_key in roster_keys:
+            all_rosters.append(result)
+            roster_keys.append(roster_key)
+        # if roster_count > 50:
+        #     break
+    all_rosters_sorted = sorted(all_rosters, key=lambda a: a.value, reverse=True)
+    __import__('pdb').set_trace()
+    return all_rosters_sorted[:n]
+
+
 
 def generate_single_roster(by_position, players_to_exclude, iter_count=1000000, seed_roster=None):
     # names_to_exclude = [p.name for p in players_to_exclude]
@@ -1045,6 +1089,7 @@ def parse_upload_template(csv_template_file):
     name_to_salary = {}
     player_id_to_name = {}
     name_to_team = {}
+    players_to_remove = []
 
     first_line = template_file_lines[0]
     for line in template_file_lines[1:]:
@@ -1075,9 +1120,10 @@ def parse_upload_template(csv_template_file):
         player_id_to_name[player_id] = name
         if injury_status == 'O':
             print("{} is OUT".format(name))
+            players_to_remove.append(name)
             continue
 
-    return player_id_to_name, name_to_team, name_to_salary, name_to_player_id, first_line, entries
+    return player_id_to_name, name_to_team, name_to_salary, name_to_player_id, first_line, entries, players_to_remove
 
 
 def print_lineups(lineups):
@@ -1107,7 +1153,7 @@ def regenerate_MME_ensemble(by_position, csv_template_file, start_time_to_teams,
                     all_matchups.append(matchup)
 
 
-    player_id_to_name, name_to_team, name_to_salary, _, _, _ = parse_upload_template(csv_template_file)
+    player_id_to_name, name_to_team, name_to_salary, _, _, _, players_to_remove = parse_upload_template(csv_template_file)
 
     # current_lineups = load_current_lineups(current_lineups_filepath, player_id_to_name)
     current_lineups = load_current_lineups(csv_template_file, player_id_to_name)
@@ -1282,20 +1328,97 @@ def filter_on_matchup_pair(all_results, seed_rosters, by_position, iter_count_sh
 
     pass
 
-def generate_roster_ensemble(by_position, iter_count_short, iter_count_long, seed_rosters, all_matchups, start_time_to_matchup):
 
+def generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup, entries):
+    generated_rosters = generate_roster_ensemble(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup)
+
+
+    assert len(generated_rosters) == 25
+
+    for i in range(150):
+        seed_roster = None
+        if seed_rosters != None:
+            seed_roster = seed_rosters[25 + i]
+
+        result = generate_single_roster(by_position, [], 10, seed_roster)
+        generated_rosters.append(result)
+
+
+    # rosters_to_generate = len(entries)
+
+    assert len(generated_rosters) == len(entries)
+    # for roster in generated_rosters:
+    #     print(roster)
+    
+    # all_results = []
+    # while len(all_results) < rosters_to_generate:
+    #     all_results += list(generated_rosters)
+
+    # return all_results[:rosters_to_generate]
+
+    return generated_rosters
+
+def generate_roster_ensemble_exhaustive(by_position, seed_rosters):
+
+
+    if seed_rosters != None:
+        seed_rosters_sorted = sorted(seed_rosters, key=lambda a: len([b for b in a if b != ""]), reverse=True)
+
+        # generate each of these rosters 1 by 1 and add them to our pool of unique keys
+
+    unique_rosters = []
+    result = generate_n_rosters(by_position, 1000, 100000)
+
+
+
+    # generate the n best rosters
+    pass
+
+def generate_roster_ensemble(by_position, iter_count_short, iter_count_long, seed_rosters, all_matchups, start_time_to_matchup):
+    last_six_matchups =  all_matchups[-6:]
+    print("last six matchups")
+    print(last_six_matchups)
     # if seed_rosters != None, then we don't want to generate more than we have
     all_results = []
 
     # 10 rosters
     generate_optimal_roster_plus_9_exclusive(all_results, seed_rosters, by_position, iter_count_long, iter_count_short)
     
-    #5
-    boost_each_matchup(all_results, seed_rosters, by_position, iter_count_short, all_matchups)
+    # #5
+    # boost_each_matchup(all_results, seed_rosters, by_position, iter_count_short, all_matchups)
     
-    #10
-    boost_each_matchup_pair(all_results, seed_rosters, by_position, iter_count_short, all_matchups)
+    # TODO
+    
 
+    #10
+    boost_each_matchup_pair(all_results, seed_rosters, by_position, iter_count_short, last_six_matchups)
+
+
+    for i in range(len(all_results)):
+        to_print = all_results[i]
+        if i == 0:
+            print("Optimal - {}".format(to_print))
+        elif i < 10:
+            # __import__('pdb').set_trace()
+            to_exclude = all_results[0].players[i - 1]
+            print("Exclude: {} - {}".format(to_exclude, to_print))
+        else:
+            counter = 0
+            for idx1 in range(6):
+                for idx2 in range(6):
+                    if idx1 <= idx2:
+                        continue
+                    to_print = all_results[i + counter]
+                    boosted = "Boosted: {} - {}".format(last_six_matchups[idx1], last_six_matchups[idx2])
+                    print("{} - {}".format(boosted, to_print))
+                    counter += 1
+
+            break
+
+    # __import__('pdb').set_trace()
+
+
+    # __import__('pdb').set_trace()
     # player_list = all_results[0].players
 
 
@@ -1332,7 +1455,7 @@ def generate_roster_ensemble(by_position, iter_count_short, iter_count_long, see
     return all_results
 
 def print_lineup_csv(csv_upload_file, csv_template_file):
-    player_id_to_name, _, _, name_to_player_id, first_line, entries = parse_upload_template(csv_template_file)
+    player_id_to_name, _, _, name_to_player_id, first_line, entries, _ = parse_upload_template(csv_template_file)
     lines = open(csv_upload_file, "r").readlines()
     for line in lines[1:]:
         players = line.split(',')[3:]
@@ -1346,6 +1469,17 @@ def print_lineup_csv(csv_upload_file, csv_template_file):
 
     __import__('pdb').set_trace()
 
+
+def remove_players_from_player_pool(by_position, players_to_remove):
+    to_return = {}
+    for pos, players in by_position.items():
+        to_return[pos] = []
+        for player in players:
+            if player.name in players_to_remove:
+                continue
+
+            to_return[pos].append(player)
+    return to_return
 
 def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, all_matchups=None, seed_rosters=None):
     if all_matchups == None:
@@ -1383,15 +1517,17 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
         team_to_start_time[team1] = start_time[2]
         team_to_start_time[team2] = start_time[2]
 
-    _, _, _, name_to_player_id, first_line, entries = parse_upload_template(csv_template_file)
+    _, _, _, name_to_player_id, first_line, entries, players_to_remove = parse_upload_template(csv_template_file)
+
+    by_position = remove_players_from_player_pool(by_position, players_to_remove)
     # parse this file
     # get all the games I'm exposed to
     # get player id mapping
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(20000 / 1.5)
-    iter_count_fast = int(20000 / 2)
+    iter_count_slow = int(20000 / 1.5/ 1.2)
+    iter_count_fast = int(20000 / 2 / 1.2)
     all_results = []
 
     start_time_to_matchup = {}
@@ -1408,17 +1544,12 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
             pass
 
 
-    generated_rosters = generate_roster_ensemble(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup)
-    # duplicate these resolved rosters to take us to len(entries)
-    rosters_to_generate = len(entries)
-    for roster in generated_rosters:
-        print(roster)
+    # generate_roster_ensemble_exhaustive(by_position, seed_rosters)
+    generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup, entries)
     
-    while len(all_results) < rosters_to_generate:
-        all_results += list(generated_rosters)
 
 
-    construct_upload_template_file(all_results[:rosters_to_generate], first_line, entries, name_to_player_id, seed_rosters)
+    construct_upload_template_file(generated_rosters, first_line, entries, name_to_player_id, seed_rosters)
 
 
 def generate_unique_rosters(by_position, ct, players_to_exclude=[], iter_count=1000000, seed_roster=None):

@@ -1,16 +1,27 @@
-
-CLE
-@WAS
+UTA
+@DET
 7:00pm ET
 
 MIL
-@ORL
+@CHA
 7:00pm ET
+
+IND
+@BOS
+7:30pm ET
+
+SA
+@NY
+7:30pm ET
 
 PHI
-@BKN
-7:00pm ET
+@HOU
+8:00pm ET
 
-GS
-@DEN
-9:30pm ET
+CLE
+@SAC
+10:00pm ET
+
+BKN
+@POR
+10:00pm ET

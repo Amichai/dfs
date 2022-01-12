@@ -41,13 +41,16 @@ from roto_wire_overlay_optimizer import roto_wire_scrape
 # player superdraft salary cap
 # optimize for yahoo fd
 
-name_transform = {"Guillermo Hernangomez": 'Willy Hernangomez', "Cam Thomas": "Cameron Thomas", "Moe Harkless": 'Maurice Harkless', 'Juancho Hernangómez':"Juancho Hernangomez", "Guillermo Hernangómez": 'Willy Hernangomez', 'Timothé Luwawu-Cabarrot': 'Timothe Luwawu-Cabarrot', 'Enes Kanter': 'Enes Freedom', 'Kenyon Martin Jr.': 'KJ Martin'}
+name_transform = {"Guillermo Hernangomez": 'Willy Hernangomez', "Cam Thomas": "Cameron Thomas", "Moe Harkless": 'Maurice Harkless', 'Juancho Hernangómez':"Juancho Hernangomez", "Guillermo Hernangómez": 'Willy Hernangomez', 'Timothé Luwawu-Cabarrot': 'Timothe Luwawu-Cabarrot', 'Enes Kanter': 'Enes Freedom', 'Kenyon Martin Jr.': 'KJ Martin', 'Nic Claxton': 'Nicolas Claxton', 'Kenyon Martin': 'KJ Martin'}
 
 def normalize_name(name):
     name = name.replace("  ", " ")
     name = name.replace("’", "'")
     name = name.replace(".", "")
     parts = name.split(" ")
+
+    if name == 'Kenyon Martin Jr':
+        return "KJ Martin"
 
     if len(parts) > 2:
         return "{} {}".format(parts[0], parts[1]).strip()
@@ -906,7 +909,7 @@ def print_all_player_projections(projections):
 
 def print_rosters_and_projections(excluded_players, slate_name=""):
     current_date = datetime.datetime.now()
-    projection_file_name = "money_line_scrape_{}_{}_{}.txt".format(current_date.month, current_date.day, current_date.year)
+    projection_file_name = "money_line_scrapes/money_line_scrape_{}_{}_{}.txt".format(current_date.month, current_date.day, current_date.year)
     pp_fdp_projections = get_player_projections(projection_file_name)
     dk_fdp_projections = get_player_projections_dk(projection_file_name)
     awesemo_fdp_projections = get_player_projections_awesemo(projection_file_name)
@@ -1241,6 +1244,49 @@ def adjust_players_by_position(by_position, new_player_val, team_adjustment):
                 dk_players_by_position[pos].append(pl)
 
 
+def load_start_times(path):
+    start_times = open(path, "r")
+    lines = start_times.readlines()
+    first_team = None
+    second_team = None
+    time_conversion = {
+        '12:00pm ET': 0, '12:30pm ET': 0.5,
+        '1:00pm ET': 1, '1:30pm ET': 1.5,
+        '2:00pm ET': 2, '2:30pm ET': 2.5,
+        '3:00pm ET': 3, '3:30pm ET': 3.5,
+        '4:00pm ET': 4, '4:30pm ET': 4.5,
+        '5:00pm ET': 5, '5:30pm ET': 5.5,
+        '6:00pm ET': 6, '6:30pm ET': 6.5, 
+        '7:00pm ET': 7, '7:30pm ET': 7.5, 
+        '8:00pm ET': 8, '8:30pm ET': 8.5, 
+        '9:00pm ET': 9, '9:30pm ET': 9.5, 
+        '10:00pm ET': 10, '10:30pm ET': 10.5, 
+        '11:00pm ET': 11, '11:30pm ET': 11.5}
+
+    time_to_teams = {}
+    for line in lines:
+        line = line.strip().strip('\n')
+
+        if line == "":
+            continue
+
+        if line[0].isdigit():
+            time_key = time_conversion[line]
+            if not time_key in time_to_teams:
+                time_to_teams[time_key] = []
+            time_to_teams[time_key] += [first_team, second_team]
+            continue
+
+        if line[0] == '@':
+            # second team
+            second_team = line.strip('@')
+            continue
+
+        first_team = line
+
+    return time_to_teams
+
+
 def fd_optimize(file_path, slate_name, slate_type, locks=[], excludes=[]):
     download_folder = "/Users/amichailevy/Downloads/"
     folder = download_folder + "player_lists/"
@@ -1271,10 +1317,8 @@ if __name__ == "__main__":
     # ------
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
-    
-    
-    #main - TODO: 1 - 1/8/21
-    path = "FanDuel-NBA-2022 ET-01 ET-08 ET-69912-players-list.csv"
+    #main - TODO: 1 - 1/11/21
+    path = "FanDuel-NBA-2022 ET-01 ET-11 ET-70065-players-list.csv"
 
     fd_slate = (folder + path, "full", "main")
     
@@ -1335,27 +1379,25 @@ if __name__ == "__main__":
     # resolved_rosters = dk_random_optimizer.generate_unique_rosters(dk_players_by_position, 1)
     # generate_dk_lineups_file(resolved_rosters, dk_players, "main")
 
-    __import__('pdb').set_trace()
     # assert False
+    
     print("-----")
-    # TODO 2 - 1/8/21
-    start_time_to_teams = {
-        7: ["UTA", "IND", "ORL", "DET", "MIL", "CHA"],
-        7.5: ["NY", "BOS"],
-        9: ["MIA", "PHO"]
-    }
+    # TODO: 2 - 1/11/21
+    # update start_times.txt
+    start_time_to_teams = load_start_times("start_times2.txt")
+    print(start_time_to_teams)
 
 
-    # # TODO 3 - 1/8/21
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-08-69912-entries-upload-template.csv"
+    # # TODO: 3 - 1/11/21
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-11-70065-entries-upload-template (3).csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
 
-    # TODO 4 - 1/8/21
-    current_time = 7.6
+    # TODO: 4 - 1/11/21
+    current_time = 7.1
     
-    # TODO 5 - 1/8/21
-    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-08-69912-entries-upload-template (2).csv"
+    # TODO: 5 - 1/11/21
+    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-11-70065-entries-upload-template (4).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, to_re_optimize, start_time_to_teams, current_time)
     
     assert False

@@ -1171,13 +1171,13 @@ def test_table():
 if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
     dk_slate_file = folder + "DKSalaries_12_30_21.csv"
-    #TODO 1- 1/8/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-08 ET-69912-players-list.csv"
+    #TODO 1- 1/9/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-11 ET-70065-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
     current_date = datetime.datetime.now()
-    output_file_name = "money_line_scrape_{}_{}_{}.txt".format(current_date.month, current_date.day, current_date.year)
+    output_file_name = "money_line_scrapes/money_line_scrape_{}_{}_{}.txt".format(current_date.month, current_date.day, current_date.year)
 
 
     # all_sites = ["PP", "RW", "Underdog", "HotStreak", "DK", "Awesemo"]
@@ -1185,7 +1185,7 @@ if __name__ == "__main__":
     # all_sites = ["betMGM", "Underdog", "HotStreak", "PP", "RW", "DK", "Awesemo", "Caesars"]
 
     # all_sites = ["betMGM", "TF", "PP", "RW", "Caesars", "Underdog"]
-    all_sites = ["betMGM", "PP", "Caesars", "DK"]
+    all_sites = ["RW", "betMGM", "PP", "Caesars"]
 
 
 
