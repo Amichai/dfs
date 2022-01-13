@@ -1318,7 +1318,7 @@ if __name__ == "__main__":
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
     #main - TODO: 1 - 1/11/21
-    path = "FanDuel-NBA-2022 ET-01 ET-11 ET-70065-players-list.csv"
+    path = "FanDuel-NBA-2022 ET-01 ET-12 ET-70111-players-list.csv"
 
     fd_slate = (folder + path, "full", "main")
     
@@ -1382,23 +1382,23 @@ if __name__ == "__main__":
     # assert False
     
     print("-----")
-    # TODO: 2 - 1/11/21
+    # TODO: 2 - 1/12/21
     # update start_times.txt
     start_time_to_teams = load_start_times("start_times2.txt")
     print(start_time_to_teams)
 
 
-    # # TODO: 3 - 1/11/21
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-11-70065-entries-upload-template (3).csv"
+    # # TODO: 3 - 1/12/21
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-12-70111-entries-upload-template.csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
 
-    # TODO: 4 - 1/11/21
-    current_time = 7.1
+    # TODO: 4 - 1/12/21
+    current_time = 8.1
     
-    # TODO: 5 - 1/11/21
-    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-11-70065-entries-upload-template (4).csv"
-    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, to_re_optimize, start_time_to_teams, current_time)
+    # TODO: 5 - 1/12/21
+    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-12-70111-entries-upload-template (4).csv"
+    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, to_re_optimize, start_time_to_teams, current_time, ["Norvel Pelle", "Rajon Rondo", "Derrick White"])
     
     assert False
 

@@ -1,23 +1,35 @@
-OKC
+CHA
+@PHI
+7:00pm ET
+
+BOS
+@IND
+7:00pm ET
+
+ORL
 @WAS
 7:00pm ET
 
-PHO
-@TOR
+DAL
+@NY
 7:30pm ET
 
-MIN
-@NO
-8:00pm ET
+MIA
+@ATL
+7:30pm ET
 
-GS
-@MEM
-8:00pm ET
+HOU
+@SA
+8:30pm ET
 
-DET
+CLE
+@UTA
+9:00pm ET
+
+BKN
 @CHI
-8:00pm ET
+10:00pm ET
 
-DEN
-@LAC
-10:30pm ET
+LAL
+@SAC
+10:00pm ET
