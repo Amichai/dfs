@@ -1,6 +1,12 @@
 import datetime
 from json import dumps
 
+import sys
+import os
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
 import pandas as pd
 from fd_optimizer import Player, generate_single_roster
 from optimizer_player_pool import normalize_name
