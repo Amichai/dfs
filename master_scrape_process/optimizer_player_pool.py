@@ -1317,8 +1317,8 @@ if __name__ == "__main__":
     # ------
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
-    #main - TODO: 1 - 1/11/21
-    path = "FanDuel-NBA-2022 ET-01 ET-12 ET-70111-players-list.csv"
+    #main - TODO: 1 - 1/12/21
+    path = "FanDuel-NBA-2022 ET-01 ET-14 ET-70191-players-list.csv"
 
     fd_slate = (folder + path, "full", "main")
     
@@ -1366,39 +1366,25 @@ if __name__ == "__main__":
     print_rosters_and_projections(excluded_players, fd_slate[2])
 
     
-    # fd_optimizer.modify_roster(fd_players_by_position, "Bobby Portis,Tony Bradley,Pascal Siakam,Scottie Barnes,Khris Middleton,Jalen Brunson,Josh Giddey,Terry Rozier,LaMelo Ball", [])
-
-    # check the current time
-    # pass in a starting roster
-    # adjustment_dict = {"Troy Brown": 40}
-    # adjust_players_by_position(dk_players_by_position, adjustment_dict, {})
-    # roster_str = "Josh Giddey,Jalen Suggs,DeAndre' Bembry,Giannis Antetokounmpo,Myles Turner,Dejounte Murray,Georges Niang,Steven Adams"
-    # dk_random_optimizer.modify_existing_roster(dk_players_by_position, roster_str, locked_teams=["BKN", "OKC", "ATL", "ORL", "MIL", "PHX", "SAS"])
-
-    # dk_players_by_position['UTIL'].append(dk_random_optimizer.Player("Luka Garza", 'UTIL', 3000, "", 100))
-    # resolved_rosters = dk_random_optimizer.generate_unique_rosters(dk_players_by_position, 1)
-    # generate_dk_lineups_file(resolved_rosters, dk_players, "main")
-
-    # assert False
-    
     print("-----")
-    # TODO: 2 - 1/12/21
+    # TODO: 2 - 1/14/21
     # update start_times.txt
     start_time_to_teams = load_start_times("start_times2.txt")
     print(start_time_to_teams)
 
 
-    # # TODO: 3 - 1/12/21
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-12-70111-entries-upload-template.csv"
+    # # TODO: 3 - 1/14/21
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-14-70191-entries-upload-template.csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
 
-    # TODO: 4 - 1/12/21
-    current_time = 8.1
+    # TODO: 4 - 1/14/21
+    current_time = 9.6
     
     # TODO: 5 - 1/12/21
-    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-12-70111-entries-upload-template (4).csv"
-    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, to_re_optimize, start_time_to_teams, current_time, ["Norvel Pelle", "Rajon Rondo", "Derrick White"])
+    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-14-70191-entries-upload-template (4).csv"
+    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, to_re_optimize, start_time_to_teams, current_time, [])
+
     
     assert False
 

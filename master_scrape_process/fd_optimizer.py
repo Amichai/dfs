@@ -1082,6 +1082,7 @@ def load_current_lineups(path, player_id_to_name):
 
     return rosters
 
+
 def parse_upload_template(csv_template_file, exclude):
     template_file_lines = open(csv_template_file, "r").readlines()
     entries = []
@@ -1209,6 +1210,7 @@ def regenerate_MME_ensemble(by_position, csv_template_file, start_time_to_teams,
 
     generate_MME_ensemble(by_position_filtered_on_locked_teams, csv_template_file, start_time_to_teams, all_matchups, seed_rosters)
     
+
 def serialize_player_pool(player_pool):
     dict_to_serialize = {}
     for pos, players in player_pool.items():
@@ -1348,23 +1350,30 @@ def generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, se
 
     generated_rosters = []
 
-    for i in range(150):
+    random_rosters_to_generate = 20
+
+    for i in range(random_rosters_to_generate):
         seed_roster = None
         if seed_rosters != None:
             seed_roster = seed_rosters[i]
 
         result = None
         for i in range(20):
-            result = generate_single_roster(by_position, [], 10, seed_roster)
+            result = generate_single_roster(by_position, [], 7, seed_roster)
             if result != None:
                 break
 
         generated_rosters.append(result)
 
+    # __import__('pdb').set_trace()
     generated_ct = len(generated_rosters)
     assert entries[generated_ct -1][2] == entries[0][2]
-    assert entries[generated_ct -1][2] != entries[generated_ct][2]
-    generated_rosters += generate_roster_ensemble(by_position, iter_count_fast, iter_count_slow, seed_rosters[150:], all_matchups, start_time_to_matchup)
+    # assert entries[generated_ct -1][2] != entries[generated_ct][2]
+
+    if seed_rosters != None:
+        seed_rosters = seed_rosters[random_rosters_to_generate:]
+
+    generated_rosters += generate_roster_ensemble(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup)
 
     # rosters_to_generate = len(entries)
 
@@ -1397,14 +1406,39 @@ def generate_roster_ensemble_exhaustive(by_position, seed_rosters):
     pass
 
 def generate_roster_ensemble(by_position, iter_count_short, iter_count_long, seed_rosters, all_matchups, start_time_to_matchup):
-    last_six_matchups =  all_matchups[-6:]
-    print("last six matchups")
-    print(last_six_matchups)
+    # last_six_matchups =  all_matchups[-6:]
+    last_five_matchups = all_matchups[-5:]
+    print("last five matchups")
+    print(last_five_matchups)
     # if seed_rosters != None, then we don't want to generate more than we have
     all_results = []
 
     # 10 rosters
     generate_optimal_roster_plus_9_exclusive(all_results, seed_rosters, by_position, iter_count_long, iter_count_short)
+
+
+    by_position_filtered = filter_player_pool_on_matchups(by_position, last_five_matchups)
+
+
+    generate_optimal_roster_plus_9_exclusive(all_results, seed_rosters, by_position_filtered, iter_count_long, iter_count_short)
+
+
+    for i in range(len(all_results)):
+        result = all_results[i]
+        if i == 0:
+            print("Optimal - {}".format(result))
+        elif i < 10:
+            to_exclude = all_results[0].players[i - 1]
+            print("Exclude: {} - {}".format(to_exclude, result))
+        elif i == 10:
+            print("Optimal - {}".format(result))
+        else:
+            to_exclude = all_results[10].players[i - 11]
+            print("Exclude: {} - {}".format(to_exclude, result))
+            
+
+
+    # __import__('pdb').set_trace()
     
     # #5
     # boost_each_matchup(all_results, seed_rosters, by_position, iter_count_short, all_matchups)
@@ -1412,30 +1446,30 @@ def generate_roster_ensemble(by_position, iter_count_short, iter_count_long, see
     # TODO
     
 
-    #10
-    boost_each_matchup_pair(all_results, seed_rosters, by_position, iter_count_short, last_six_matchups)
+    # #10
+    # boost_each_matchup_pair(all_results, seed_rosters, by_position, iter_count_short, last_six_matchups)
 
 
-    for i in range(len(all_results)):
-        to_print = all_results[i]
-        if i == 0:
-            print("Optimal - {}".format(to_print))
-        elif i < 10:
-            # __import__('pdb').set_trace()
-            to_exclude = all_results[0].players[i - 1]
-            print("Exclude: {} - {}".format(to_exclude, to_print))
-        else:
-            counter = 0
-            for idx1 in range(6):
-                for idx2 in range(6):
-                    if idx1 <= idx2:
-                        continue
-                    to_print = all_results[i + counter]
-                    boosted = "Boosted: {} - {}".format(last_six_matchups[idx1], last_six_matchups[idx2])
-                    print("{} - {}".format(boosted, to_print))
-                    counter += 1
+    # for i in range(len(all_results)):
+    #     to_print = all_results[i]
+    #     if i == 0:
+    #         print("Optimal - {}".format(to_print))
+    #     elif i < 10:
+    #         # __import__('pdb').set_trace()
+    #         to_exclude = all_results[0].players[i - 1]
+    #         print("Exclude: {} - {}".format(to_exclude, to_print))
+    #     else:
+    #         counter = 0
+    #         for idx1 in range(len(all_matchups)):
+    #             for idx2 in range(len(all_matchups)):
+    #                 if idx1 <= idx2:
+    #                     continue
+    #                 to_print = all_results[i + counter]
+    #                 boosted = "Boosted: {} - {}".format(last_six_matchups[idx1], last_six_matchups[idx2])
+    #                 print("{} - {}".format(boosted, to_print))
+    #                 counter += 1
 
-            break
+    #         break
 
     # __import__('pdb').set_trace()
 

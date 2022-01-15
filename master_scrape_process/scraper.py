@@ -1171,8 +1171,8 @@ def test_table():
 if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
     dk_slate_file = folder + "DKSalaries_12_30_21.csv"
-    #TODO 1- 1/9/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-12 ET-70111-players-list.csv"
+    #TODO 1- 1/14/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-14 ET-70191-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 

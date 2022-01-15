@@ -1,35 +1,35 @@
-CHA
-@PHI
-7:00pm ET
-
-BOS
+PHO
 @IND
 7:00pm ET
 
 ORL
-@WAS
+@CHA
 7:00pm ET
 
-DAL
-@NY
+TOR
+@DET
+7:00pm ET
+
+BOS
+@PHI
+7:00pm ET
+
+GS
+@CHI
 7:30pm ET
 
-MIA
-@ATL
-7:30pm ET
+ATL
+@MIA
+8:00pm ET
 
-HOU
+CLE
 @SA
 8:30pm ET
 
-CLE
-@UTA
-9:00pm ET
-
-BKN
-@CHI
+HOU
+@SAC
 10:00pm ET
 
-LAL
-@SAC
+DAL
+@MEM
 10:00pm ET
