@@ -1217,7 +1217,7 @@ if __name__ == "__main__":
         sites[site][player_name][stat] = str(val)
 
 
-    driver = webdriver.Chrome("../master_scrape_process/chromedriver5")
+    driver = webdriver.Chrome("../master_scrape_process/chromedriver6")
 
     period = 28
     log("starting up! PERIOD: {}".format(period), output_file)

@@ -101,36 +101,57 @@ def compare_result(model, x_vals, y_vals):
 
     print("model diff sq {}".format(round(total_diff1_sq, 2)))
     print("naive diff sq {}".format(round(total_diff2_sq, 2)))
-    import pdb; pdb.set_trace()
-    pass
 
 
-if __name__ == "__main__":
-    money_lines = get_money_line_values("../money_line_scrapes/money_line_scrape_1_11_2022.txt")
-
-    player_results = get_player_results('01/11/2022')
-
-    model = linear_model.LinearRegression()
+def collect_data(money_line_path, date):
+    money_lines = get_money_line_values(money_line_path)
+    player_results = get_player_results(date)
 
     x_val_players = []
     x_vals = []
     y_vals = []
-    all_players = money_lines.keys()
+
+    def add_feature(all_x_vals, all_lines, name):
+        x1 = all_lines[name]
+        all_x_vals.append(float(x1))
+
+    def add_feature_pair(all_x_vals, all_lines, name1, name2):
+        x1 = all_lines[name1]
+        x2 = all_lines[name2]
+        all_x_vals.append(float(x1) * float(x2))
+
     for player, all_lines in money_lines.items():
+        all_x_vals = []
         try:
-            x1 = all_lines["Caesars-Points"]
-            x2 = all_lines["Caesars-Assists"]
-            x3 = all_lines["Caesars-Rebounds"]
-            x4 = all_lines["Caesars-Blocks"]
-            x5 = all_lines["Caesars-Steals"]
-            x6 = all_lines["Caesars-Turnovers"]
-            # x7 = all_lines['Caesars-Points + Assists']
-            # x8 = all_lines['Caesars-Points + Rebounds']
-            # x9 = all_lines['Caesars-Rebounds + Assists']
-            # x10 = all_lines['Caesars-3pt Field Goals']
+            # add_feature(all_x_vals, all_lines, "Caesars-Points")
+            # add_feature(all_x_vals, all_lines, "Caesars-Assists")
+            # add_feature(all_x_vals, all_lines, "Caesars-Rebounds")
+            # add_feature(all_x_vals, all_lines, "Caesars-Blocks")
+            # add_feature(all_x_vals, all_lines, "Caesars-Steals")
+            # add_feature(all_x_vals, all_lines, "Caesars-Turnovers")
+
+            # add_feature(all_x_vals, all_lines, "PP-Fantasy Score")
+
+            # add_feature_pair(all_x_vals, all_lines, "Caesars-Points", "Caesars-Points")
+            # add_feature_pair(all_x_vals, all_lines, "Caesars-Rebounds", "Caesars-Rebounds")
+            # add_feature_pair(all_x_vals, all_lines, "Caesars-Points", "Caesars-Rebounds")
+
+            
+
+            # add_feature(all_x_vals, all_lines, "Caesars-3pt Field Goals")
+
+            # add_feature(all_x_vals, all_lines, "Caesars-Points + Assists")
+            # add_feature(all_x_vals, all_lines, "Caesars-Points + Rebounds")
+            add_feature(all_x_vals, all_lines, "caesars-Projected-Fantasy Score")
+            # add_feature(all_x_vals, all_lines, "Caesars-Rebounds + Assists")
+            # add_feature(all_x_vals, all_lines, "Caesars-Blocks + Steals")
+            # add_feature(all_x_vals, all_lines, "Caesars-Points + Assists + Rebounds")
+
+    #{'betMGM-rebounds + assists': '5.4658176943699734', 'betMGM-points': '14.5', 'betMGM-blocks': '0.107421875', 'betMGM-rebounds': '2.613874345549738', 'betMGM-steals': '0.6733668341708543', 'betMGM-steals + blocks': '1.287037037037037', 'betMGM-points + assists': '16.516042780748663', 'betMGM-points + rebounds': '17.5', 'betMGM-three-pointers': '2.5040322580645165', 'betMGM-assists': '2.358527131782946', 'betMGM-Projected-Fantasy Score': '23.52', 'PP-Points': '14.5', 'PP-3-PT Made': '2.5', 'PP-Fantasy Score': '22.0', 'Caesars-Points': '14.483957219251337', 'Caesars-Assists': '2.326354679802956', 'Caesars-Rebounds': '2.576771653543307', 'Caesars-Points + Assists': '16.516042780748663', 'Caesars-Points + Rebounds': '17.483957219251337', 'Caesars-Rebounds + Assists': '5.397286821705427', 'Caesars-Points + Assists + Rebounds': '19.45424403183024', 'Caesars-3pt Field Goals': '2.516042780748663', 'Caesars-Blocks': '0.1071428571428571', 'Caesars-Steals': '0.6736453201970444', 'Caesars-Blocks + Steals': '1.2921686746987953', 'Caesars-Turnovers': '1.3263546798029557', 'caesars-Projected-Fantasy Score': '22.97', 'MLE-Projected-Fantasy Score': '22.97'}
 
             y_val = player_results[player]
-            if y_val < 5:
+            # if y_val < 10:
+            if y_val == 0:
                 continue
         except:
             continue
@@ -138,14 +159,52 @@ if __name__ == "__main__":
         x_val_players.append(player)
         # x_vals.append([x1, x2, x3, x4, x5, x6, \
         # x7, x8, x9, x10])
-        x_vals.append([float(a) for a in [x1, x2, x3, x4, x5, x6]])
+        x_vals.append(all_x_vals)
         y_vals.append(y_val)
-    
 
+    return (x_vals, y_vals) 
+
+
+
+if __name__ == "__main__":
+    to_parse = [
+        ("../money_line_scrapes/money_line_scrape_1_14_2022.txt", '01/14/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_13_2022.txt", '01/13/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_12_2022.txt", '01/12/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_11_2022.txt", '01/11/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_10_2022.txt", '01/10/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_9_2022.txt", '01/09/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_8_2022.txt", '01/08/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_7_2022.txt", '01/07/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_6_2022.txt", '01/06/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_5_2022.txt", '01/05/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_4_2022.txt", '01/04/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_3_2022.txt", '01/03/2022'),
+        ("../money_line_scrapes/money_line_scrape_1_2_2022.txt", '01/02/2022'),
+        
+        
+        ]
+
+    x_vals = []
+    y_vals = []
+    for path, date in to_parse:
+        x_vals1, y_vals1 = collect_data(path, date)
+        x_vals += x_vals1
+        y_vals += y_vals1
+
+
+
+
+    model = linear_model.LinearRegression()
+
+    print("Points,Assists,Rebounds,Blocks,Steals,Turnovers")
+    
     model.fit(x_vals, y_vals)
     r_sq = model.score(x_vals, y_vals)
     print("Intercept: ", model.intercept_)
     print("Coefficients: \n", model.coef_)
     print('coefficient of determination:', r_sq)
 
-    compare_result(model, x_vals, y_vals)
+    print("Data count: {}".format(len(x_vals)))
+
+    # compare_result(model, x_vals, y_vals)

@@ -176,8 +176,14 @@ def query(driver, game_guids, all_team_names):
 
             line = market['line']
             original_line = float(line)
+            # __import__('pdb').set_trace()
             line = float(line) + (float(odds_percentage) - 0.5) * 1.5
-            assert abs(line - original_line) < 0.9
+
+            #TODO - this needs to be projected into a new scraper with new fantasy score projections!
+            # line = float(line) + (float(odds_percentage) - 0.5) * (float(line) / 2)
+
+
+            # assert abs(line - original_line) < 0.9
             to_return[name][stat] = str(line)
 
 
@@ -185,7 +191,7 @@ def query(driver, game_guids, all_team_names):
 
 
 if __name__ == "__main__":
-    driver = webdriver.Chrome("../../master_scrape_process/chromedriver")
+    driver = webdriver.Chrome("../../master_scrape_process/chromedriver6")
 
     
 

@@ -520,7 +520,9 @@ def load_season_data(all_teams=None):
     today = datetime.datetime.now()
     yesterday = today - datetime.timedelta(days=1)
 
-    filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
+    # filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
+    filename = "~/Downloads/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
+
 
     dfs = pd.read_excel(filename, sheet_name=None)
     if 'NBA-DFS-SEASON-FEED' in dfs:
