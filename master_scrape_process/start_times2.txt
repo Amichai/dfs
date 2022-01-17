@@ -1,35 +1,15 @@
 PHO
-@IND
-7:00pm ET
-
-ORL
-@CHA
-7:00pm ET
-
-TOR
 @DET
-7:00pm ET
-
-BOS
-@PHI
-7:00pm ET
-
-GS
-@CHI
-7:30pm ET
-
-ATL
-@MIA
-8:00pm ET
-
-CLE
-@SA
-8:30pm ET
+1:00pm ET
 
 HOU
 @SAC
-10:00pm ET
+6:00pm ET
 
-DAL
-@MEM
-10:00pm ET
+UTA
+@DEN
+8:00pm ET
+
+GS
+@MIN
+8:00pm ET

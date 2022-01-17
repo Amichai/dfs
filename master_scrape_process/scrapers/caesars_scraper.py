@@ -1,4 +1,5 @@
 from os import link
+import logging
 import time
 import datetime
 from bs4.element import NamespacedAttribute
@@ -7,6 +8,11 @@ import json
 import requests
 from selenium import webdriver
 
+# logging.basicConfig(filename='master_scraper.log', encoding='utf-8', level=logging.INFO)
+# logger = logging.getLogger("Caesars")
+
+def time_str():
+    return str(datetime.datetime.now()).split('.')[0]
 
 def get_game_guids(driver, all_team_names):
     url = "https://www.williamhill.com/us/az/bet/basketball/events/all"
@@ -177,14 +183,16 @@ def query(driver, game_guids, all_team_names):
             line = market['line']
             original_line = float(line)
             # __import__('pdb').set_trace()
-            line = float(line) + (float(odds_percentage) - 0.5) * 1.5
+            # line_adjusted = float(line) + (float(odds_percentage) - 0.5) * 1.5
+            line_adjusted = float(line) + (float(odds_percentage) - 0.5) * float(line)
 
             #TODO - this needs to be projected into a new scraper with new fantasy score projections!
             # line = float(line) + (float(odds_percentage) - 0.5) * (float(line) / 2)
 
 
-            # assert abs(line - original_line) < 0.9
-            to_return[name][stat] = str(line)
+            # assert abs(line_adjusted - original_line) < 0.9
+            to_return[name][stat] = str(line_adjusted)
+            # logger.info("{} {} {} {} {} {}".format(time_str(), name, stat, line, odds_percentage, line_adjusted))
 
 
     return to_return

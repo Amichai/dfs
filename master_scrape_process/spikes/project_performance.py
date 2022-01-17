@@ -123,12 +123,12 @@ def collect_data(money_line_path, date):
     for player, all_lines in money_lines.items():
         all_x_vals = []
         try:
-            # add_feature(all_x_vals, all_lines, "Caesars-Points")
-            # add_feature(all_x_vals, all_lines, "Caesars-Assists")
-            # add_feature(all_x_vals, all_lines, "Caesars-Rebounds")
-            # add_feature(all_x_vals, all_lines, "Caesars-Blocks")
-            # add_feature(all_x_vals, all_lines, "Caesars-Steals")
-            # add_feature(all_x_vals, all_lines, "Caesars-Turnovers")
+            add_feature(all_x_vals, all_lines, "Caesars-Points")
+            add_feature(all_x_vals, all_lines, "Caesars-Assists")
+            add_feature(all_x_vals, all_lines, "Caesars-Rebounds")
+            add_feature(all_x_vals, all_lines, "Caesars-Blocks")
+            add_feature(all_x_vals, all_lines, "Caesars-Steals")
+            add_feature(all_x_vals, all_lines, "Caesars-Turnovers")
 
             # add_feature(all_x_vals, all_lines, "PP-Fantasy Score")
 
@@ -142,7 +142,7 @@ def collect_data(money_line_path, date):
 
             # add_feature(all_x_vals, all_lines, "Caesars-Points + Assists")
             # add_feature(all_x_vals, all_lines, "Caesars-Points + Rebounds")
-            add_feature(all_x_vals, all_lines, "caesars-Projected-Fantasy Score")
+            # add_feature(all_x_vals, all_lines, "caesars-Projected-Fantasy Score")
             # add_feature(all_x_vals, all_lines, "Caesars-Rebounds + Assists")
             # add_feature(all_x_vals, all_lines, "Caesars-Blocks + Steals")
             # add_feature(all_x_vals, all_lines, "Caesars-Points + Assists + Rebounds")

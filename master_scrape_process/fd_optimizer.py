@@ -1346,6 +1346,23 @@ def filter_on_matchup_pair(all_results, seed_rosters, by_position, iter_count_sh
     pass
 
 
+def generate_rosters_3(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup, entries):
+    seed_roster1 = None
+    seed_roster2 = None
+    seed_roster3 = None
+    if seed_rosters != None:
+        seed_roster1 = seed_rosters[0]
+        seed_roster2 = seed_rosters[1]
+        seed_roster3 = seed_rosters[2]
+    
+    result1 = generate_unique_rosters(by_position, 1, [], iter_count_slow, seed_roster1)
+    by_position2 = exclude_matchup(by_position, "PHO@DET")
+    result2 = generate_unique_rosters(by_position2, 1, [], iter_count_slow, seed_roster2)
+    by_position3 = exclude_matchup(by_position2, "HOU@SAC")
+    result3 = generate_unique_rosters(by_position3, 1, [], iter_count_slow, seed_roster3)
+
+    return [result1[0], result2[0], result3[0]]
+
 def generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, all_matchups, start_time_to_matchup, entries):
 
     generated_rosters = []
@@ -1604,10 +1621,17 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
     # generate_roster_ensemble_exhaustive(by_position, seed_rosters)
     matchups_sorted = sorted(all_matchups, key=lambda a: matchup_to_start_time[a])
-    
-    generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
+
+    #entries
+    #[(entry_id, contest_id, contest_name)]
+
+    # __import__('pdb').set_trace()
+
+    # generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
+    generated_rosters = generate_rosters_3(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
     
 
+    # __import__('pdb').set_trace()
 
     construct_upload_template_file(generated_rosters, first_line, entries, name_to_player_id, seed_rosters)
 

@@ -47,10 +47,13 @@ def get_player_projections_caesars(projection_file_name):
 
 
 current_date = datetime.datetime.now()
-projection_file_name = "money_line_scrapes/money_line_scrape_{}_{}_{}.txt".format(current_date.month, current_date.day - 1, current_date.year)
+month = 1
+day = 14
+year = 2022
+projection_file_name = "../money_line_scrapes/money_line_scrape_{}_{}_{}.txt".format(month, day, year)
 caesars_fdp_projections = get_player_projections_caesars(projection_file_name)
 
-path = "FanDuel-NBA-2022 ET-01 ET-10 ET-69990-players-list.csv"
+path = "FanDuel-NBA-2022 ET-01 ET-14 ET-70191-players-list.csv"
 download_folder = "/Users/amichailevy/Downloads/"
 folder = download_folder + "player_lists/"
 fd_slate = (folder + path, "full", "main")
@@ -60,7 +63,7 @@ fd_players = get_fd_slate_players(fd_slate_file, exclude_injured_players=False)
 name_to_fd = {}
 season_data = load_season_data()
 all_teams = season_data.keys()
-date = '01/10/2022'
+date = '01/{}/2022'.format(day)
 for team in all_teams:
     if not date in season_data[team]:
         continue
@@ -72,15 +75,13 @@ for team in all_teams:
         name_to_fd[name] = row[19]
 
 
-start_time_to_teams = load_start_times("start_times.txt")
+# start_time_to_teams = load_start_times("../start_times2.txt")
+# all_start_times = sorted(start_time_to_teams.keys())
 
-
-all_start_times = sorted(start_time_to_teams.keys())
-
-team_to_start_time = {}
-for start_time, teams in start_time_to_teams.items():
-    for team in teams:
-        team_to_start_time[team] = start_time
+# team_to_start_time = {}
+# for start_time, teams in start_time_to_teams.items():
+#     for team in teams:
+#         team_to_start_time[team] = start_time
 
 all_players = []
 by_position = {}
@@ -101,13 +102,12 @@ for player, info in fd_players.items():
         pl = Player(player, pos, cost, team, value, "")
         by_position[pos].append(pl)
 
-        start_time_boost = round(all_start_times.index(team_to_start_time[team]) / (len(all_start_times) - 1), 2)
+        # start_time_boost = round(all_start_times.index(team_to_start_time[team]) / (len(all_start_times) - 1), 2)
         
 
         ubiquity_value = round(value / cost * 10000, 2)
-        ubiquity_value += start_time_boost
+        # ubiquity_value += start_time_boost
         all_players.append((pl, ubiquity_value))
-
 
 seen_names = []
 counter = 1
@@ -130,7 +130,7 @@ for res in all_players_sorted:
 
 all_vals = []
 for i in range(150):
-    result = generate_single_roster(by_position, [], 10)
+    result = generate_single_roster(by_position, [], 500)
     print(result)
     actual_val = 0
     for player in result.players:
@@ -139,6 +139,12 @@ for i in range(150):
     all_vals.append((round(actual_val, 2), result.value))
 
     # for each player calculate ubiquity reading
+
+money_line = 315.9
+
+hit = len([a for a in all_vals if a[0] > money_line])
+print("{} / {}".format(hit, len(all_vals)))
+
 
 print(sorted(all_vals, key=lambda a:a[0], reverse=True))
 

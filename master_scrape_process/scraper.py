@@ -620,8 +620,15 @@ def get_player_projections_Caesars(sites):
         stls = stat_to_values['Steals']
         turnovers = stat_to_values["Turnovers"]
         
+        # Intercept:  2.996728802425636
+        # Coefficients: 
+        # [ 0.97807943  1.41114124  1.10975585  2.6698833   2.82786309 -1.52885945]
+
 
         projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
+
+        projected2 = pts * 0.97807943 + rbds * 1.41114124 + asts * 1.10975585 + blks * 2.6698833 + stls * 2.82786309 + turnovers * -1.52885945 + 2.996728802425636
+
         player_to_fp[player] = projected
     
     return player_to_fp
@@ -1171,8 +1178,8 @@ def test_table():
 if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
     dk_slate_file = folder + "DKSalaries_12_30_21.csv"
-    #TODO 1- 1/14/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-14 ET-70191-players-list.csv"
+    #TODO 1- 1/16/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-16 ET-70319-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
