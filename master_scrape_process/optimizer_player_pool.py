@@ -1,8 +1,10 @@
 # -*- coding: UTF-8 -*-
+from difflib import IS_LINE_JUNK
 from io import DEFAULT_BUFFER_SIZE
 from os import stat
 import json
 import time
+from pkg_resources import FileMetadata
 import requests
 import sys
 import datetime
@@ -521,7 +523,7 @@ def load_season_data(all_teams=None):
     yesterday = today - datetime.timedelta(days=1)
 
     # filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
-    filename = "~/Downloads/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
+    filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
 
 
     dfs = pd.read_excel(filename, sheet_name=None)
@@ -1158,7 +1160,6 @@ def generate_sd_lineups_file(rosters, sd_players, template_filename):
     output_file.close()
 
 def generate_sd_lineups():
-    # TODO: manually exclude used players to get more diverse lineups
     all_sd_players = []
     for pos, players in sd_players_by_position.items():
         all_sd_players += players
@@ -1314,16 +1315,16 @@ def fd_optimize(file_path, slate_name, slate_type, locks=[], excludes=[]):
 
 
 if __name__ == "__main__":
-    download_folder = "/Users/amichailevy/Downloads/"
+    download_folder = "/Users/amichailevy/Downloads/spike_data/"
     folder = download_folder + "player_lists/"
     # ------
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
-    #main - TODO: 1 - 1/16/21
-    path = "FanDuel-NBA-2022 ET-01 ET-16 ET-70319-players-list.csv"
+    #main - TODO: 1 - 1/18/21
+    path = "FanDuel-NBA-2022 ET-01 ET-18 ET-70430-players-list.csv"
+
 
     fd_slate = (folder + path, "full", "main")
-    
 
     # sd_slate_file = folder + "SD-111321-NBA-Main-Multiplier-playerlist.csv"
     # sd_salary_cap_slate_file = folder + "SD-111521-NBA-Main-Salary-playerlist.csv"
@@ -1368,26 +1369,22 @@ if __name__ == "__main__":
     print_rosters_and_projections(excluded_players, fd_slate[2])
 
     
+
     print("-----")
-    # TODO: 2 - 1/16/21
+    # TODO: 2 - 1/17/21
     # update start_times.txt
     start_time_to_teams = load_start_times("start_times2.txt")
+    
     print(start_time_to_teams)
 
-
-    # # TODO: 3 - 1/16/21
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-16-70319-entries-upload-template.csv"
+    # # TODO: 3 - 1/17/21
+    # upload_template_path = "/Users/amichailevy/Downloads/spike_data/FanDuel-NBA-2022-01-18-70430-entries-upload-template.csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
-
-    # TODO: 4 - 1/16/21
-    current_time = 7.6
     
-    # TODO: 5 - 1/16/21
-    to_re_optimize = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-16-70319-entries-upload-template (3).csv"
-    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, to_re_optimize, start_time_to_teams, current_time, [])
-
-    
+    current_time = 9.6
+    upload_template_path = "/Users/amichailevy/Downloads/spike_data/FanDuel-NBA-2022-01-18-70430-entries-upload-template copy.csv"
+    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 
     print("----\n------\n------\n-------\n")

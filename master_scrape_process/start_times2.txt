@@ -1,15 +1,7 @@
-PHO
-@DET
-1:00pm ET
+MIN
+@NY
+7:30pm ET
 
-HOU
-@SAC
-6:00pm ET
-
-UTA
-@DEN
-8:00pm ET
-
-GS
-@MIN
-8:00pm ET
+DET
+@GS
+10:00pm ET

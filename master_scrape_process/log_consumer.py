@@ -1,5 +1,7 @@
 
 
+
+
 log_path = "money_line_scrape_12_31_2021.txt"
 
 
@@ -14,7 +16,7 @@ player_projections = DynamoDBTableData()
 big_moves = DynamoDBTableData()
 open_arbitrage = DynamoDBTableData()
 
-def consume(line):
+def consume(line, date):
     parts = line.split("|")
     time = parts[0]
     site = parts[1]
@@ -26,9 +28,13 @@ def consume(line):
 
 log_file = open(log_path, "r")
 log_lines = log_file.readlines()
+date = "2022_12_31"
 for line in log_lines[:30]:
-    consume(line)
+    consume(line, date)
     print(line)
+
+    # write this data to a AWS table
+    # date - table_name - stat - site - player name - value - (timestamp) | team, timestamp, name, stat, vale
 
 
 
