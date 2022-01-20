@@ -523,7 +523,7 @@ def load_season_data(all_teams=None):
     yesterday = today - datetime.timedelta(days=1)
 
     # filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
-    filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
+    filename = "~/Downloads/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
 
 
     dfs = pd.read_excel(filename, sheet_name=None)
@@ -1315,13 +1315,15 @@ def fd_optimize(file_path, slate_name, slate_type, locks=[], excludes=[]):
 
 
 if __name__ == "__main__":
-    download_folder = "/Users/amichailevy/Downloads/spike_data/"
+    # download_folder = "/Users/amichailevy/Downloads/spike_data/"
+    download_folder = "/Users/amichailevy/Downloads/"
+
     folder = download_folder + "player_lists/"
     # ------
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
-    #main - TODO: 1 - 1/18/21
-    path = "FanDuel-NBA-2022 ET-01 ET-18 ET-70430-players-list.csv"
+    #main - TODO: 1 - 1/19/21
+    path = "FanDuel-NBA-2022 ET-01 ET-19 ET-70473-players-list.csv"
 
 
     fd_slate = (folder + path, "full", "main")
@@ -1371,19 +1373,19 @@ if __name__ == "__main__":
     
 
     print("-----")
-    # TODO: 2 - 1/17/21
+    # TODO: 2 - 1/19/21
     # update start_times.txt
     start_time_to_teams = load_start_times("start_times2.txt")
     
     print(start_time_to_teams)
 
-    # # TODO: 3 - 1/17/21
-    # upload_template_path = "/Users/amichailevy/Downloads/spike_data/FanDuel-NBA-2022-01-18-70430-entries-upload-template.csv"
+    # # TODO: 3 - 1/19/21
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-19-70473-entries-upload-template.csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
     
     current_time = 9.6
-    upload_template_path = "/Users/amichailevy/Downloads/spike_data/FanDuel-NBA-2022-01-18-70430-entries-upload-template copy.csv"
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-19-70473-entries-upload-template (3).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 

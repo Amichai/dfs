@@ -1,7 +1,51 @@
-MIN
-@NY
+BKN
+@WAS
+7:00pm ET
+
+ORL
+@PHI
+7:00pm ET
+
+POR
+@MIA
 7:30pm ET
 
-DET
-@GS
+MIN
+@ATL
+7:30pm ET
+
+CHA
+@BOS
+7:30pm ET
+
+CLE
+@CHI
+8:00pm ET
+
+MEM
+@MIL
+8:00pm ET
+
+TOR
+@DAL
+8:30pm ET
+
+OKC
+@SA
+8:30pm ET
+
+HOU
+@UTA
+9:00pm ET
+
+LAC
+@DEN
 10:00pm ET
+
+DET
+@SAC
+10:00pm ET
+
+IND
+@LAL
+10:30pm ET

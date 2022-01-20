@@ -1407,8 +1407,11 @@ def generate_rosters_by_exclusion(by_position, iter_count_slow, seed_rosters, en
     for i in range(len(entries) - 1):
         as_binary = "{0:b}".format(513 + i)[::-1]
         to_exclude = []
+        random.seed(i)
         for digit_idx in range(9):
-            if as_binary[digit_idx] == '1':
+            # if as_binary[digit_idx] == '1':
+            # if as_binary[digit_idx] == '0':
+            if random.uniform(0, 1) > 0.5:
                 print("Exclude: {}".format(sorted_players[digit_idx]))
                 to_exclude.append(sorted_players[digit_idx].name)
 
@@ -1691,7 +1694,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(50000 / 1/ 1)
+    iter_count_slow = int(50000 / 1)
     iter_count_fast = int(20000 / 2 / 1.2)
     all_results = []
 

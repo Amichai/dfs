@@ -1,0 +1,6 @@
+WARNING:root:Watch out!
+INFO:root:I told you so
+WARNING:__main__:Watch out!
+INFO:__main__:I told you so
+WARNING:log test!:Watch out!
+INFO:log test!:I told you so
