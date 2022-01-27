@@ -26,6 +26,11 @@ def consume(line, date):
     value = parts[5]
     pass
 
+
+
+# accurate status information? 
+# PP arbitrage
+
 log_file = open(log_path, "r")
 log_lines = log_file.readlines()
 date = "2022_12_31"

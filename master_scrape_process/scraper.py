@@ -1,4 +1,6 @@
-from os import path, write
+from os import name, path, write
+
+from bs4.element import NamespacedAttribute
 import fd_optimizer
 import pandas as pd
 import time
@@ -174,12 +176,54 @@ def write_arbitrage(site, player, team, stat_key, value, site_names, site_values
     # if write_count % 10 == 0:
     #     print("WRITING: {} - {}\n{}".format(write_count, to_write, result))
 
-def write_projection(dynamo_table, site, player, team, stat_key, value, fd_players):
+def update_status(dynamo_table, player, status):
+    global write_count
+    print("UPDATE STATUS: {} - {}".format(player, status))
+    timestamp = str(datetime.datetime.now())
+    date = timestamp.split(' ')[0]
+    stat = "MLE-Projected"
+    site = "MLE"
+
+    try:
+        dynamo_table.update_item(Key={
+            'date': date,
+            'date-stat-site-name': "{}-{}-{}-{}".format(date, stat, site, player),
+        },
+        UpdateExpression="set status=:s",
+        ExpressionAttributeValues={
+            ':s': status,
+        },
+        ReturnValues="UPDATED_NEW"
+        )
+
+        print("UPDATED count: {}".format(write_count))
+        write_count += 1
+
+    except Exception as err:
+        print("Error:", err)
+
+def write_projection(dynamo_table, site, player, team, stat_key, value, fd_players, name_to_status):
+    # if site == "RW":
+    #     status = ' '
+    #     if player in name_to_status:
+    #         status = name_to_status[player]
+    #         print("Update Status: {} {}".format(player, status))
+    #     # update_status(dynamo_table, player, status)
     if site == "MLE-Projected":
+        if not player in fd_players:
+            print("warning: {} Not Found!".format(player))
+            return
         player_data = fd_players[player]
         positions = player_data[1]
         fd_cost = player_data[2]
-        status = player_data[4]
+        status = " "
+
+        if name_to_status != None and player in name_to_status:
+            status = name_to_status[player]
+
+        # if name_to_status != None:
+        #     __import__('pdb').set_trace()
+        
         write_new_projection(dynamo_table, player, value, team, positions, fd_cost, status)
 
     return
@@ -282,14 +326,14 @@ def get_PP_projections(driver):
         
     return name_to_projections
 
-def print_projections(site, name, team, projections, output_file, dynamo_table, fd_players):
+def print_projections(site, name, team, projections, output_file, dynamo_table, fd_players, name_to_status):
     all_rows = []
     
     records_to_write = {}
     for stat_key, line_score in projections.items():
         all_rows.append((stat_key, line_score))
         log_line(output_file, site, name, team, stat_key, line_score)
-        write_projection(dynamo_table, site, name, team, stat_key, line_score, fd_players)
+        write_projection(dynamo_table, site, name, team, stat_key, line_score, fd_players, name_to_status)
 
         records_to_write["{}|{}|{}|{}".format(site, name, team, stat_key)] = line_score
 
@@ -338,7 +382,7 @@ def get_player_team(player, player_to_team):
 
 
 
-def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_table, fd_players):
+def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_table, fd_players, name_to_status):
     new_players = new_p.keys()
     old_players = old_p.keys()
 
@@ -353,7 +397,7 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
     for player in new_players:
         team = get_player_team(player, player_to_team)
         if not player in old_players:
-            print_projections(site, player, team, new_p[player], output_file, dynamo_table, fd_players)
+            print_projections(site, player, team, new_p[player], output_file, dynamo_table, fd_players, name_to_status)
 
         else:
             stats_new = new_p[player]
@@ -374,7 +418,7 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
             for stat_key in stats_new_keys:
                 if not stat_key in stats_old_keys:
                     last_val_before_remove = query_last_value_before_remove(site, player, stat_key)
-                    write_projection(dynamo_table, site, player, team, stat_key, stats_new[stat_key], fd_players)
+                    write_projection(dynamo_table, site, player, team, stat_key, stats_new[stat_key], fd_players, name_to_status)
                     if last_val_before_remove != '':
                         log_line(output_file, site, player, team, stat_key, stats_new[stat_key], "(cached: {})".format(last_val_before_remove))
                     else:
@@ -391,7 +435,7 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
                         except:
                             log_line(output_file, site, player, team, stat_key, new_val, "(old_val: {})".format(old_val))
                         finally:
-                            write_projection(dynamo_table, site, player, team, stat_key, new_val, fd_players)
+                            write_projection(dynamo_table, site, player, team, stat_key, new_val, fd_players, name_to_status)
 
 def get_projections(site, driver):
     if site == "PP":
@@ -807,7 +851,7 @@ def write_new_projection(dynamo_table, player, fantasy_score, team, positions, f
     except Exception as err:
         print("Error:", err)
 
-def produce_MLE_projections(sites, dynamo_table, fd_players):
+def produce_MLE_projections(sites, dynamo_table, fd_players, name_to_status):
     # dk_projections = sites["DK-Projected"]
     # betMGM_projections = sites["betMGM-Projected"]
     caesars_projections = sites["caesars-Projected"]
@@ -841,10 +885,10 @@ def produce_MLE_projections(sites, dynamo_table, fd_players):
     if site in sites:
         old_projections = sites[site]
     sites[site] = MLE_new_projections
-    diff_projections(site, MLE_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players)
+    diff_projections(site, MLE_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players, name_to_status)
 
 
-def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_team, dynamo_table, fd_players):
+def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_team, dynamo_table, fd_players, name_to_status):
     awesemo_fdp_projections = get_player_projections_awesemo(sites)
 
     betMGM_fdp_projections = get_player_projections_betMGM(sites)
@@ -902,7 +946,7 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
     if site in sites:
         old_projections = sites[site]
     sites[site] = awesemo_new_projections
-    diff_projections(site, awesemo_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players)
+    diff_projections(site, awesemo_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players, name_to_status)
 
     site = "betMGM-Projected"
     betMGM_new_projections = {}
@@ -915,7 +959,7 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
     if site in sites:
         old_projections = sites[site]
     sites[site] = betMGM_new_projections
-    diff_projections(site, betMGM_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players)
+    diff_projections(site, betMGM_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players, name_to_status)
 
 
     site = "caesars-Projected"
@@ -928,10 +972,10 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
     if site in sites:
         old_projections = sites[site]
     sites[site] = caesars_new_projections
-    diff_projections(site, caesars_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players)
+    diff_projections(site, caesars_new_projections, old_projections, output_file, player_to_team, dynamo_table, fd_players, name_to_status)
 
     #MONEY LINE EDGE PROJECTIONS – aggregate of known projections
-    produce_MLE_projections(sites, dynamo_table, fd_players)
+    produce_MLE_projections(sites, dynamo_table, fd_players, name_to_status)
     
     arbitrage_rows_sorted = sorted(arbitrage_rows, key=lambda a: max(abs(a[3]), abs(a[4])), reverse=True)
     new_table = DataTable(arbitrage_rows_sorted, ["name", "team", "PP proj", "betMGM diff", "caesars diff"])
@@ -1256,13 +1300,35 @@ def test_table():
     pass
 
 
+def get_name_to_status(sites):
+    name_to_status = {}
+    if not "RW" in sites:
+        return
+
+    rw = sites["RW"]
+    for name, stat_val in rw.items():
+        for stat, val in stat_val.items():
+            if stat != "status":
+                continue
+
+            last_char = val[-1]
+            if last_char == '%':
+                name_to_status[name] = "GTD"
+
+            if last_char == "O":
+                name_to_status[name] = "O"
+        # if not name in name_to_status:
+        #     name_to_status[name] = {}
+
+    return name_to_status
+
 if __name__ == "__main__":
     # folder = "/Users/amichailevy/Downloads/spike_data/player_lists/"
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
     dk_slate_file = folder + "DKSalaries_1_20_21.csv"
-    #TODO 1- 1/20/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-20 ET-70554-players-list.csv"
+    #TODO 1- 1/27/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-27 ET-70894-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
@@ -1276,7 +1342,7 @@ if __name__ == "__main__":
 
     # all_sites = ["betMGM", "TF", "PP", "RW", "Caesars", "Underdog"]
     # all_sites = ["RW", "betMGM", "PP", "Caesars"]
-    all_sites = ["Caesars", "RW", "PP"]
+    all_sites = ["Awesemo", "RW", "Caesars", "PP"]
 
 
 
@@ -1342,21 +1408,22 @@ if __name__ == "__main__":
     while True:
         for site in all_sites:
             
-
+            # print("Name to status: {}".format(name_to_status))
             
             log("{} - scraping {}".format(time_str(), site), output_file)
             new_projections = get_projections(site, driver)
+            name_to_status = get_name_to_status(sites)
             # try:
             # except:
             #     __import__('pdb').set_trace()
             #     continue
             if not site in sites:
                 sites[site] = {}
-            diff_projections(site, new_projections, sites[site], output_file, player_to_team, dynamo_table, fd_players)
+            diff_projections(site, new_projections, sites[site], output_file, player_to_team, dynamo_table, fd_players, name_to_status)
             
             sites[site] = new_projections
 
-            fp_arbitrage_rows_sorted = look_for_fantasy_point_arbitrage(fp_arbitrage_rows_sorted, sites, output_file, player_to_team, dynamo_table, fd_players)
+            fp_arbitrage_rows_sorted = look_for_fantasy_point_arbitrage(fp_arbitrage_rows_sorted, sites, output_file, player_to_team, dynamo_table, fd_players, name_to_status)
 
 
             # stat_rows_sorted = look_for_stat_arbitrage(stat_rows_sorted, sites)

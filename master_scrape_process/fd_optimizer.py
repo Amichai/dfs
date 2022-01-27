@@ -969,6 +969,23 @@ def boost_matchup(by_position, matchup, boost_factor=1.2):
     return to_return
 
 
+def boost_player(by_position, player_name, boost_factor=1.2):
+    to_return = {}
+    for pos, players in by_position.items():
+        if not pos in to_return:
+            to_return[pos] = []
+
+        for player in players:
+            if player.name == player_name:
+                player2 = Player(player.name, player.position, player.cost, player.team, player.value * boost_factor, player.matchup)
+                
+                to_return[pos].append(player2)
+            else:
+                to_return[pos].append(player)
+        
+
+    return to_return
+
 def exclude_matchup(by_position, matchup):
     to_return = {}
     for pos, players in by_position.items():
@@ -1152,7 +1169,6 @@ def print_lineups(lineups):
     __import__('pdb').set_trace()
 
 def regenerate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, current_time, exlcude):
-
     locked_teams = []
 
     for start_time, teams in start_time_to_teams.items():
@@ -1217,12 +1233,7 @@ def regenerate_MME_ensemble(by_position, csv_template_file, start_time_to_teams,
             else:
                 print("Filtered out: {} {}".format(player, player.team))
         
-    # __import__('pdb').set_trace()
-
-    
-
     generate_MME_ensemble(by_position_filtered_on_locked_teams, csv_template_file, start_time_to_teams, all_matchups, seed_rosters)
-    
 
 def serialize_player_pool(player_pool):
     dict_to_serialize = {}
@@ -1385,8 +1396,7 @@ def generate_rosters_3(by_position, iter_count_fast, iter_count_slow, seed_roste
 def to_roster_key(roster):
     return "|".join(sorted([a.name for a in roster.players]))
 
-def generate_rosters_by_exclusion(by_position, iter_count_slow, seed_rosters, entries):
-    # iter_count_slow = int(iter_count_slow / 2)
+def generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
     to_return = []
     roster_keys = []
     excluded = []
@@ -1395,23 +1405,26 @@ def generate_rosters_by_exclusion(by_position, iter_count_slow, seed_rosters, en
     if seed_rosters != None:
         seed_roster = seed_rosters[len(to_return)]
     
+    print("First roster!")
     result1 = generate_single_roster(by_position, [], iter_count_slow, seed_roster=seed_roster)
-    sorted_players = sorted(result1.players, key=lambda a: a.cost, reverse=True)
     to_return.append(result1)
     roster_keys.append(to_roster_key(result1))
     excluded.append('')
 
+    sorted_players = sorted(result1.players, key=lambda a: a.cost, reverse=True)
     # roster_key, roster, excludes
     # for each new roster - if we have seen this roster key, add a random new exclude (from the colided roster) and continue
-
     for i in range(len(entries) - 1):
         as_binary = "{0:b}".format(513 + i)[::-1]
         to_exclude = []
         random.seed(i)
         for digit_idx in range(9):
+            CUTTOFF = 0.7
+
+            # break
             # if as_binary[digit_idx] == '1':
             # if as_binary[digit_idx] == '0':
-            if random.uniform(0, 1) > 0.5:
+            if random.uniform(0, 1) > CUTTOFF:
                 print("Exclude: {}".format(sorted_players[digit_idx]))
                 to_exclude.append(sorted_players[digit_idx].name)
 
@@ -1420,7 +1433,12 @@ def generate_rosters_by_exclusion(by_position, iter_count_slow, seed_rosters, en
         if seed_rosters != None:
             seed_roster = seed_rosters[len(to_return)]
 
-        result = generate_single_roster(by_position, to_exclude, iter_count_slow, seed_roster=seed_roster)
+
+        # print("boosted: {}".format(locked_center))
+        # by_position2 = boost_player(by_position, locked_center, 10)
+        by_position2 = by_position
+
+        result = generate_single_roster(by_position2, to_exclude, iter_count_fast, seed_roster=seed_roster)
         roster_key = to_roster_key(result)
 
 
@@ -1433,7 +1451,7 @@ def generate_rosters_by_exclusion(by_position, iter_count_slow, seed_rosters, en
                 print("i idx: {} {}".format(i, new_exclude))
                 if not new_exclude in to_exclude and (seed_roster == None or not new_exclude in seed_roster):
                     to_exclude.append(new_exclude)
-                    result2 = generate_single_roster(by_position, to_exclude, iter_count_slow, seed_roster=seed_roster)
+                    result2 = generate_single_roster(by_position, to_exclude, iter_count_fast, seed_roster=seed_roster)
                     # untested
                     roster_key = to_roster_key(result2)
                     if roster_key in roster_keys:
@@ -1687,6 +1705,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
     player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [])
 
+
     by_position = remove_players_from_player_pool(by_position, players_to_remove)
     # parse this file
     # get all the games I'm exposed to
@@ -1694,8 +1713,8 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(50000 / 1)
-    iter_count_fast = int(20000 / 2 / 1.2)
+    iter_count_slow = int(50000 / 2.5)
+    iter_count_fast = int(50000 / 5)
     all_results = []
 
     matchup_to_start_time = {}
@@ -1729,7 +1748,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     # else:
     #     generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
     
-    (generated_rosters, excluded) = generate_rosters_by_exclusion(by_position, iter_count_slow, seed_rosters, entries)
+    (generated_rosters, excluded) = generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)
 
 
     print("RESOLVED ROSTERS:\n----------\n")
