@@ -6,9 +6,9 @@ def query_TF():
         'authority': 'api.thrivefantasy.com',
         'access-control-allow-origin': '*',
         'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="96", "Google Chrome";v="96"',
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
-        'token': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbWwiLCJhdWRpZW5jZSI6IklPUyIsInBhc3MiOiIkMmEkMTAkM1hmdWtVNWhlZ0d1a00xZG5PSjV4dW9uY2JJTXh1d3J1a0ZOYm5wVU4yWnhIZk9Pa0NpdU8iLCJjcmVhdGVkIjoxNjQwNDQwNzM2MTIwLCJleHAiOjE2NDEwNDU1MzZ9.sKJkg95BL442Wh9LHnVZ4a3jmRxp8qwONuBSEx_Wt8vIWqO4fAdfiMpsJdrn5vHKkfsMfSDKfoUk34dcFuckNQ',
+        'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+        'token': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbWwiLCJhdWRpZW5jZSI6IklPUyIsInBhc3MiOiIkMmEkMTAkTUdyR2FQbzhvZW91aEwuSnRjeWtBdWMzVVk1d1RNeFNtVm1XbmJyUDdpR1YzejhRb3V5MTIiLCJjcmVhdGVkIjoxNjQzODM0NzQ3MDYyLCJleHAiOjE2NDQ0Mzk1NDd9.pBsy3eb3y95QpHe96mLUeIdEdHb8AwCRi3F3NUBMY_fpbqHfHduc5kdXO_sGFGvIOngdBLuu43yorkPDL5Tjrw',
         'sec-ch-ua-platform': '"macOS"',
         'content-type': 'application/json',
         'accept': '*/*',
@@ -18,8 +18,8 @@ def query_TF():
         'sec-fetch-dest': 'empty',
         'referer': 'https://www.thrivefantasy.com/',
         'accept-language': 'en-US,en;q=0.9,he;q=0.8',
-        'sec-gpc': '1',
     }
+
 
 
     data = '{"currentPage":1,"currentSize":1000,"half":0,"Latitude":"40.9053143","Longitude":"-73.7857122"}'
@@ -28,6 +28,8 @@ def query_TF():
     as_json = response.json()
 
     to_return = {}
+
+    # __import__('pdb').set_trace()
 
     if as_json['response']['pagination']['totalPages'] > 1:
         print("WE NEED PAGINATION")

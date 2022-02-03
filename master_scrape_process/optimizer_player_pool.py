@@ -271,6 +271,9 @@ def get_player_projections_awesemo(projection_file_name):
         if not 'Blocks' in stat_to_values:
             continue
         blks = stat_to_values['Blocks']
+
+        if not 'Steals' in stat_to_values:
+            continue
         stls = stat_to_values['Steals']
 
         projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3
@@ -1322,8 +1325,8 @@ if __name__ == "__main__":
     # ------
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
-    #main - TODO: 1 - 1/27/21
-    path = "FanDuel-NBA-2022 ET-01 ET-27 ET-70894-players-list.csv"
+    #main - TODO: 1 - 1/31/21
+    path = "FanDuel-NBA-2022 ET-02 ET-01 ET-71094-players-list.csv"
 
 
     fd_slate = (folder + path, "full", "main")
@@ -1373,20 +1376,20 @@ if __name__ == "__main__":
     
 
     print("-----")
-    # TODO: 2 - 1/27/21
+    # TODO: 2 - 1/31/21
     # update start_times.txt
     start_time_to_teams = load_start_times("start_times2.txt")
     
     print(start_time_to_teams)
 
-    # TODO: 3 - 1/27/21
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-27-70894-entries-upload-template.csv"
-    fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
-    assert False
+    # TODO: 3 - 1/31/21
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-02-01-71094-entries-upload-template.csv"
+    # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
+    # assert False
     
-    current_time = 9.6
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-01-26-70851-entries-upload-template (4).csv"
-    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, ["James Harden"])
+    current_time = 8.3
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-02-01-71094-entries-upload-template (2).csv"
+    fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 
     print("----\n------\n------\n-------\n")

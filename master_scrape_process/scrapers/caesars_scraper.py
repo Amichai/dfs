@@ -22,7 +22,17 @@ def get_game_guids(driver, all_team_names):
     for team_name in all_team_names:
         team_keys.append(team_name.strip().lower().replace(" ", "-"))
 
+    # time.sleep(1)
+
+    # arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.expanded')
+    # arrow_elements[0].click()
+    # time.sleep(0.5)
+
+    # arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.unexpanded')
+    # arrow_elements[1].click()
+
     time.sleep(1)
+
     short_sleep = 0.5
     for i in range(3):
 
@@ -53,7 +63,6 @@ def get_game_guids(driver, all_team_names):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
         time.sleep(short_sleep)
-
 
     found_nba_links = []
 
@@ -129,7 +138,6 @@ def query(driver, game_guids, all_team_names):
         as_text = driver.find_element_by_tag_name('body').text
 
         as_json = json.loads(as_text)
-
         for market in as_json['markets']:
             selections = market['selections']
             name = market['name']

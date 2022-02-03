@@ -221,10 +221,23 @@ def write_projection(dynamo_table, site, player, team, stat_key, value, fd_playe
         if name_to_status != None and player in name_to_status:
             status = name_to_status[player]
 
-        # if name_to_status != None:
-        #     __import__('pdb').set_trace()
-        
-        write_new_projection(dynamo_table, player, value, team, positions, fd_cost, status)
+        stat = "MLE-Projected"
+        write_new_projection(dynamo_table, player, value, team, positions, fd_cost, status, stat, "MLE")
+    elif site == "PP":
+        if not player in fd_players:
+            print("warning: {} Not Found!".format(player))
+            return
+        player_data = fd_players[player]
+        positions = player_data[1]
+        fd_cost = player_data[2]
+        status = " "
+
+        if name_to_status != None and player in name_to_status:
+            status = name_to_status[player]
+
+        stat = "PP-{}".format(stat_key)
+        write_new_projection(dynamo_table, player, value, team, positions, fd_cost, status, stat, "PP")
+
 
     return
     if value == "REMOVED":
@@ -814,15 +827,13 @@ def write_projection_diff(dynamo_table, player, projection_diff, team, new_val):
     except Exception as err:
         print("Error:", err)
 
-def write_new_projection(dynamo_table, player, fantasy_score, team, positions, fd_cost, status):
+def write_new_projection(dynamo_table, player, fantasy_score, team, positions, fd_cost, status, stat, site):
     global write_count
     if team == '':
         print("No team for: {}".format(player))
         return
     timestamp = str(datetime.datetime.now())
     date = timestamp.split(' ')[0]
-    stat = "MLE-Projected"
-    site = "MLE"
     
     to_write = {
         'date': date,
@@ -1075,6 +1086,7 @@ def thrive_fantasy_arbitrage(sites, old_table, player_to_team):
     new_table = DataTable(arbitrage_rows_sorted, ["name", "team", "stat", "TF", "betMGM diff", "caesars diff"])
 
     def write_row_to_dynamo(row):
+        return
         #  write_arbitrage(site, player, team, stat_key, value, site_names, site_values, diff):
         write_arbitrage("TF", row[0], row[1], row[2], row[3], ["BetMGM", "Caesars"], [row[3] + row[4], row[3] + row[5]], max(row[4], row[5]))
 
@@ -1327,8 +1339,8 @@ if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
     dk_slate_file = folder + "DKSalaries_1_20_21.csv"
-    #TODO 1- 1/27/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-01 ET-27 ET-70894-players-list.csv"
+    #TODO 1- 2/3/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-03 ET-71166-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
@@ -1342,7 +1354,10 @@ if __name__ == "__main__":
 
     # all_sites = ["betMGM", "TF", "PP", "RW", "Caesars", "Underdog"]
     # all_sites = ["RW", "betMGM", "PP", "Caesars"]
-    all_sites = ["Awesemo", "RW", "Caesars", "PP"]
+    
+    
+    # all_sites = ["Awesemo", "RW", "Caesars", "PP"]
+    all_sites = ["TF", "Awesemo", "RW", "Caesars", "PP", "Underdog"]
 
 
 
@@ -1426,8 +1441,8 @@ if __name__ == "__main__":
             fp_arbitrage_rows_sorted = look_for_fantasy_point_arbitrage(fp_arbitrage_rows_sorted, sites, output_file, player_to_team, dynamo_table, fd_players, name_to_status)
 
 
-            # stat_rows_sorted = look_for_stat_arbitrage(stat_rows_sorted, sites)
-            # thrive_fantasy_table = thrive_fantasy_arbitrage(sites, thrive_fantasy_table, player_to_team)
+            stat_rows_sorted = look_for_stat_arbitrage(stat_rows_sorted, sites)
+            thrive_fantasy_table = thrive_fantasy_arbitrage(sites, thrive_fantasy_table, player_to_team)
 
             # stat_arbitrage_table = arbitrage_finder(sites, stat_arbitrage_table, player_to_team)
             if site == "Caesars":

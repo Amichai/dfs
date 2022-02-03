@@ -1,6 +1,7 @@
 import random
 import json
 import datetime
+from re import L
 import time
 
 from pdb import set_trace
@@ -778,7 +779,12 @@ def generate_single_roster(by_position, players_to_exclude, iter_count=1000000, 
         if to_remove == None:
             by_position_copied = by_position
 
+
+        # __import__('pdb').set_trace()
         random_lineup = build_random_line_up(by_position_copied)
+        #If the above line is throwing:
+        # random_lineup = build_random_line_up(by_position)
+
 
         is_full_locked = False
         if seed_roster != None:
@@ -1117,6 +1123,8 @@ def parse_upload_template(csv_template_file, exclude):
     name_to_team = {}
     players_to_remove = []
 
+    name_conversion = {"Nic Claxton": "Nicolas Claxton"}
+
     first_line = template_file_lines[0]
     for line in template_file_lines[1:]:
         parts = line.split(',')
@@ -1144,7 +1152,10 @@ def parse_upload_template(csv_template_file, exclude):
         fd_name = name_id[1]
         team = parts[23]
         salary = parts[21]
+        if fd_name in name_conversion:
+            fd_name = name_conversion[fd_name]
         name = normalize_name(fd_name)
+
         name_to_player_id[name] = player_id
         name_to_team[name] = team
         name_to_salary[name] = salary
@@ -1396,6 +1407,34 @@ def generate_rosters_3(by_position, iter_count_fast, iter_count_slow, seed_roste
 def to_roster_key(roster):
     return "|".join(sorted([a.name for a in roster.players]))
 
+def get_top_20_players_by_value_sorted_by_price(by_position):
+    seen_names = []
+    all_players = []
+    for pos, players in by_position.items():
+        for player in players:
+            if not player.name in seen_names:
+                all_players.append(player)
+                seen_names.append(player.name)
+
+    all_players_sorted_by_value = sorted(all_players, key=lambda a: a.value / a.cost, reverse=True)[:20]
+    to_return =  sorted(all_players_sorted_by_value, key=lambda a: a.cost, reverse=True)
+
+    return to_return
+
+
+def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
+
+    seed_roster = None
+    if seed_rosters != None:
+        seed_roster = seed_rosters[0]
+    
+    print("First roster!")
+    result1 = generate_single_roster(by_position, [], iter_count_slow, seed_roster=seed_roster)
+
+    to_return = [result1] * len(entries)
+
+    return (to_return, [])
+
 def generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
     to_return = []
     roster_keys = []
@@ -1411,22 +1450,29 @@ def generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast,
     roster_keys.append(to_roster_key(result1))
     excluded.append('')
 
+
     sorted_players = sorted(result1.players, key=lambda a: a.cost, reverse=True)
+    # sorted_players = get_top_20_players_by_value_sorted_by_price(by_position)
+    print("SORTED PLAYERS: {}".format(sorted_players))
     # roster_key, roster, excludes
     # for each new roster - if we have seen this roster key, add a random new exclude (from the colided roster) and continue
     for i in range(len(entries) - 1):
+        print("RESOLVED ENTRIRES: {}".format(len(to_return)))
         as_binary = "{0:b}".format(513 + i)[::-1]
         to_exclude = []
         random.seed(i)
-        for digit_idx in range(9):
-            CUTTOFF = 0.7
+        for digit_idx in range(len(sorted_players)):
+            # CUTTOFF = 0.79
+
+            # to_exclude.append(sorted_players[i].name)
+            break
 
             # break
             # if as_binary[digit_idx] == '1':
             # if as_binary[digit_idx] == '0':
-            if random.uniform(0, 1) > CUTTOFF:
-                print("Exclude: {}".format(sorted_players[digit_idx]))
-                to_exclude.append(sorted_players[digit_idx].name)
+            # if random.uniform(0, 1) > CUTTOFF:
+            #     print("Exclude: {}".format(sorted_players[digit_idx]))
+            #     to_exclude.append(sorted_players[digit_idx].name)
 
 
         seed_roster = None
@@ -1438,7 +1484,9 @@ def generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast,
         # by_position2 = boost_player(by_position, locked_center, 10)
         by_position2 = by_position
 
+
         result = generate_single_roster(by_position2, to_exclude, iter_count_fast, seed_roster=seed_roster)
+
         roster_key = to_roster_key(result)
 
 
@@ -1656,13 +1704,18 @@ def print_lineup_csv(csv_upload_file, csv_template_file):
     __import__('pdb').set_trace()
 
 
-def remove_players_from_player_pool(by_position, players_to_remove):
+def remove_players_from_player_pool(by_position, players_to_remove, overrides={}):
     to_return = {}
     for pos, players in by_position.items():
         to_return[pos] = []
+        print(players)
         for player in players:
             if player.name in players_to_remove:
+                print("REMOVING: {}".format(player.name))
                 continue
+
+            if player.name in overrides:
+                player.value = overrides[player.name]
 
             to_return[pos].append(player)
     return to_return
@@ -1705,6 +1758,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
     player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [])
 
+    # overrides = {"Talen Horton-Tucker": 19}
 
     by_position = remove_players_from_player_pool(by_position, players_to_remove)
     # parse this file
@@ -1713,7 +1767,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(50000 / 2.5)
+    iter_count_slow = int(50000 / 1)
     iter_count_fast = int(50000 / 5)
     all_results = []
 
@@ -1748,7 +1802,8 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     # else:
     #     generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
     
-    (generated_rosters, excluded) = generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)
+    (generated_rosters, excluded) = generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)
+    # (generated_rosters, excluded) = generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)
 
 
     print("RESOLVED ROSTERS:\n----------\n")
