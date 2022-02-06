@@ -25,7 +25,10 @@ def query_TF():
     data = '{"currentPage":1,"currentSize":1000,"half":0,"Latitude":"40.9053143","Longitude":"-73.7857122"}'
 
     response = requests.post('https://api.thrivefantasy.com/houseProp/upcomingHouseProps', headers=headers, data=data)
-    as_json = response.json()
+    try:
+        as_json = response.json()
+    except:
+        __import__('pdb').set_trace()
 
     to_return = {}
 

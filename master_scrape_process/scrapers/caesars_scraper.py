@@ -138,6 +138,7 @@ def query(driver, game_guids, all_team_names):
         as_text = driver.find_element_by_tag_name('body').text
 
         as_json = json.loads(as_text)
+        
         for market in as_json['markets']:
             selections = market['selections']
             name = market['name']

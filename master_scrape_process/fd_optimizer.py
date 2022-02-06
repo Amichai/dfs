@@ -1767,8 +1767,8 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(50000 / 1)
-    iter_count_fast = int(50000 / 5)
+    iter_count_slow = int(70000 / 1)
+    iter_count_fast = int(50000 / 3)
     all_results = []
 
     matchup_to_start_time = {}
@@ -1788,7 +1788,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
 
     # generate_roster_ensemble_exhaustive(by_position, seed_rosters)
-    matchups_sorted = sorted(all_matchups, key=lambda a: matchup_to_start_time[a])
+    # matchups_sorted = sorted(all_matchups, key=lambda a: matchup_to_start_time[a])
 
     #entries
     #[(entry_id, contest_id, contest_name)]

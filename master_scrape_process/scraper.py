@@ -284,6 +284,61 @@ def log(to_log, output_file):
     output_file.flush()
 
 
+def get_PP_projections_2H(driver):
+    
+    url = 'https://api.prizepicks.com/projections?league_id=80&per_page=500&single_stat=false'
+    driver.get(url)
+
+    as_text = driver.find_element_by_tag_name('body').text
+
+    as_json = json.loads(as_text)
+
+    assert as_json["meta"]["total_pages"] == 1
+
+    data = as_json['data']
+    included = as_json['included']
+
+    id_to_name = {}
+    player_ids = []
+    for player in included:
+        attr = player["attributes"]
+        player_name = attr['name']
+        player_name = optimizer_player_pool.normalize_name(player_name)
+        # team = attr['team']
+        
+        player_id = player['id']
+        player_ids.append(player_id)
+        id_to_name[player_id] = player_name
+
+    name_to_projections = {}
+
+    stats_from_promotions = []
+
+    for projection in data:
+        attr = projection['attributes']
+        stat_type = attr['stat_type']
+        created_at = attr["created_at"]
+        updated_at = attr["updated_at"]
+        line_score = attr["line_score"]
+        projection_type = attr["projection_type"]
+        player_id = projection['relationships']['new_player']['data']['id']
+        player_name = id_to_name[player_id]
+        promotion_stat_key = "{}-{}".format(stat_type, player_name)
+        if promotion_stat_key in stats_from_promotions:
+            continue
+
+        # flash_sale_line_score = attr['flash_sale_line_score']
+        # if flash_sale_line_score != '' and flash_sale_line_score != None:
+        #     line_score = flash_sale_line_score
+        #     stats_from_promotions.append(promotion_stat_key)
+        
+        if not player_name in name_to_projections:
+            name_to_projections[player_name] = {}
+
+        name_to_projections[player_name][stat_type] = line_score
+        
+    return name_to_projections
+
 def get_PP_projections(driver):
     
     url = 'https://api.prizepicks.com/projections?league_id=7&per_page=500&single_stat=false'
@@ -452,6 +507,8 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
 
 def get_projections(site, driver):
     if site == "PP":
+        return get_PP_projections(driver)
+    if site == "PP2H":
         return get_PP_projections(driver)
     elif site == "StatHero":
         return sh_query_prices()
@@ -1335,12 +1392,14 @@ def get_name_to_status(sites):
     return name_to_status
 
 if __name__ == "__main__":
+
+
     # folder = "/Users/amichailevy/Downloads/spike_data/player_lists/"
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
     dk_slate_file = folder + "DKSalaries_1_20_21.csv"
-    #TODO 1- 2/3/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-03 ET-71166-players-list.csv"
+    #TODO 1- 2/5/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-06 ET-71261-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
@@ -1357,10 +1416,8 @@ if __name__ == "__main__":
     
     
     # all_sites = ["Awesemo", "RW", "Caesars", "PP"]
-    all_sites = ["TF", "Awesemo", "RW", "Caesars", "PP", "Underdog"]
-
-
-
+    all_sites = ["Awesemo", "RW", "Caesars", "PP", "Underdog"]
+    # all_sites = ["PP2H"]
 
     if not path.exists(output_file_name):
         output_file = open(output_file_name, "a")
@@ -1442,7 +1499,7 @@ if __name__ == "__main__":
 
 
             stat_rows_sorted = look_for_stat_arbitrage(stat_rows_sorted, sites)
-            thrive_fantasy_table = thrive_fantasy_arbitrage(sites, thrive_fantasy_table, player_to_team)
+            # thrive_fantasy_table = thrive_fantasy_arbitrage(sites, thrive_fantasy_table, player_to_team)
 
             # stat_arbitrage_table = arbitrage_finder(sites, stat_arbitrage_table, player_to_team)
             if site == "Caesars":

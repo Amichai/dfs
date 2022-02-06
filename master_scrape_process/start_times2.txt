@@ -1,27 +1,11 @@
-NO
-@DET
-7:00pm ET
-
-MIA
-@TOR
-7:30pm ET
-
-WAS
-@MIL
-7:30pm ET
-
-ORL
+PHI
 @CHI
-8:00pm ET
-
-DEN
-@MIN
-8:00pm ET
-
-GS
-@SA
-8:30pm ET
+3:30pm ET
 
 BKN
-@PHO
-10:00pm ET
+@DEN
+3:30pm ET
+
+DET
+@MIN
+3:30pm ET
