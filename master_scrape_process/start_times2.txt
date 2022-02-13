@@ -1,11 +1,7 @@
-PHI
-@CHI
-3:30pm ET
+ATL
+@BOS
+2:00pm ET
 
-BKN
-@DEN
-3:30pm ET
-
-DET
-@MIN
-3:30pm ET
+MIN
+@IND
+3:00pm ET

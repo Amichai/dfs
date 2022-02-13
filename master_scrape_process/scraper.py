@@ -1398,8 +1398,8 @@ if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
     dk_slate_file = folder + "DKSalaries_1_20_21.csv"
-    #TODO 1- 2/5/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-06 ET-71261-players-list.csv"
+    #TODO 1- 2/9/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-13 ET-71565-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
@@ -1416,7 +1416,7 @@ if __name__ == "__main__":
     
     
     # all_sites = ["Awesemo", "RW", "Caesars", "PP"]
-    all_sites = ["Awesemo", "RW", "Caesars", "PP", "Underdog"]
+    all_sites = ["Awesemo", "RW", "Caesars", "PP"]
     # all_sites = ["PP2H"]
 
     if not path.exists(output_file_name):
@@ -1448,7 +1448,7 @@ if __name__ == "__main__":
 
     driver = webdriver.Chrome("../master_scrape_process/chromedriver6")
 
-    period = 22
+    period = 33
     log("starting up! PERIOD: {}".format(period), output_file)
 
     player_to_team = {}
