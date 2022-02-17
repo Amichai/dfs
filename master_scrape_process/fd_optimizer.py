@@ -6,6 +6,7 @@ from re import L
 import time
 
 from pdb import set_trace
+from tkinter import E
 
 import pandas as pd
 from hand_crafted_projections import read_projections
@@ -1236,7 +1237,6 @@ def parse_upload_template(csv_template_file, exclude):
         team = parts[23]
         salary = parts[21]
         if fd_name in name_conversion:
-            __import__('pdb').set_trace()
             fd_name = name_conversion[fd_name]
         name = normalize_name(fd_name)
 
@@ -1516,23 +1516,70 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
 
     max_take_count = max(entry_id_to_count.values())
 
-    seed_roster = None
-    if seed_rosters != None:
-        seed_roster = seed_rosters[0]
+    # __import__('pdb').set_trace()
 
-    results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=max_take_count)
-
-    seen_entry_ids = []
+    entry_id_to_roster_list = {}
     to_return = []
-    for entry in entries:
-        entry_id = entry[1]
-        if entry_id in seen_entry_ids:
-            continue
-        seen_entry_ids.append(entry_id)
-        count = entry_id_to_count[entry_id]
-        for i in range(count):
-            to_return.append(results[i])
+    if seed_rosters == None:
+        results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=None, to_take=max_take_count)
 
+        best_roster_value = results[0].value
+
+        seen_entry_ids = []
+        for entry in entries:
+            entry_id = entry[1]
+            if entry_id in seen_entry_ids:
+                continue
+
+            entry_rosters = []
+            seen_entry_ids.append(entry_id)
+            count = entry_id_to_count[entry_id]
+            print("{} {}".format(entry_id, count))
+            for i in range(count):
+                to_append = results[i]
+                if best_roster_value - to_append.value > 10:
+                    entry_rosters.append(results[0])
+                else:
+                    entry_rosters.append(to_append)
+
+            entry_id_to_roster_list[entry_id] = entry_rosters
+            
+        for entry in entries:
+            entry_id = entry[1]
+            to_return.append(entry_id_to_roster_list[entry_id].pop())
+
+    else:
+        # seed_roster_string_to_result = {}
+        # map entry_id + seed_roster combo to resolved roster
+        # check that map, to see if we need a modification?
+        # ---
+        # generate_n_best_rosters to separate n rosters with the same entry id and the same seed roster
+        entry_idx = 0
+        for entry in entries:
+            print("----{}".format(entry_idx))
+            seed_roster = seed_rosters[entry_idx]
+            # seed_roster_string = ""
+            # for a in seed_roster:
+            #     if a == "":
+            #         seed_roster_string += ","
+            #     else:
+            #         seed_roster_string += a.name + ","
+            # __import__('pdb').set_trace()
+
+            # if seed_roster_string in seed_roster_string_to_result:
+            #     matched_roster = seed_roster_string_to_result[seed_roster_string]
+                
+            #     to_return.append(Roster(list(matched_roster.players)))
+            #     continue
+
+            result1 = generate_single_roster(by_position, [], iter_count_slow, seed_roster=seed_roster)
+            # seed_roster_string_to_result[seed_roster_string] = result1
+            to_return.append(result1)
+
+            entry_idx += 1
+            pass
+        
+    # __import__('pdb').set_trace()
     return (to_return, [])
 
 def generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
@@ -1865,7 +1912,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(80000 / 1)
+    iter_count_slow = int(80000 / 4)
     iter_count_fast = int(50000 / 3)
     all_results = []
 
@@ -1988,7 +2035,7 @@ def generate_rosters(by_position, evaluator):
 if __name__ == "__main__":
     current_date = datetime.datetime.now()
     projection_file_name = "money_line_scrape_{}_{}_{}.txt".format(current_date.month, current_date.day, current_date.year)
-    # player_data_file_name = "salary_data/FanDuel-NBA-2021 ET-10 ET-28 ET-66075-players-list.csv"
+    # player_data_file_name = "salary_data–FanDuel-NBA-2021 ET-10 ET-28 ET-66075-players-list.csv"
     # player_data_file_name = "salary_data/FanDuel-NBA-2021 ET-10 ET-28 ET-66078-players-list.csv"
     player_data_file_name = "salary_data/FanDuel-NBA-2021 ET-11 ET-02 ET-66298-players-list.csv"
 

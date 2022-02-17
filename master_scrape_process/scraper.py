@@ -978,7 +978,7 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
 
     arbitrage_rows = []
     ##search for arbitrage:
-    ARBITRAGE_CUTTOFF = 3.3
+    ARBITRAGE_CUTTOFF = 2
     for name, projection in pp_fdp_projections.items():
         if not isinstance(projection, float):
             continue
@@ -989,8 +989,8 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
         v4 = 0
 
         
-        if name in betMGM_fdp_projections:
-            v3 = round(betMGM_fdp_projections[name], 2)
+        if name in awesemo_fdp_projections:
+            v3 = round(awesemo_fdp_projections[name], 2)
             diff3 = round(v3 - projection, 2)
 
         if name in caesars_fdp_projections:
@@ -1045,8 +1045,8 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
     #MONEY LINE EDGE PROJECTIONS – aggregate of known projections
     produce_MLE_projections(sites, dynamo_table, fd_players, name_to_status)
     
-    arbitrage_rows_sorted = sorted(arbitrage_rows, key=lambda a: max(abs(a[3]), abs(a[4])), reverse=True)
-    new_table = DataTable(arbitrage_rows_sorted, ["name", "team", "PP proj", "betMGM diff", "caesars diff"])
+    arbitrage_rows_sorted = sorted(arbitrage_rows, key=lambda a: abs(a[4]), reverse=True)
+    new_table = DataTable(arbitrage_rows_sorted, ["name", "team", "PP proj", "Awesemo diff", "caesars diff"])
 
     def write_row_to_dynamo(row):
         # write_arbitrage("PP", row[0], row[1], "Fantasy Score", row[2], ["Caesars"], [row[2] + row[4]], row[4])
@@ -1398,8 +1398,8 @@ if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
     dk_slate_file = folder + "DKSalaries_1_20_21.csv"
-    #TODO 1- 2/9/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-13 ET-71565-players-list.csv"
+    #TODO 1- 2/15/21
+    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-16 ET-71708-players-list.csv"
     
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 

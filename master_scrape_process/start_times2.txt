@@ -1,7 +1,43 @@
 ATL
-@BOS
-2:00pm ET
+@ORL
+7:00pm ET
 
-MIN
+DET
+@BOS
+7:30pm ET
+
+WAS
 @IND
-3:00pm ET
+7:30pm ET
+
+BKN
+@NY
+7:30pm ET
+
+SAC
+@CHI
+8:00pm ET
+
+SA
+@OKC
+8:00pm ET
+
+TOR
+@MIN
+8:00pm ET
+
+POR
+@MEM
+8:00pm ET
+
+HOU
+@PHO
+9:00pm ET
+
+UTA
+@LAL
+10:00pm ET
+
+DEN
+@GS
+10:00pm ET
