@@ -111,6 +111,8 @@ def normalize_name(name):
     
 
 game_guids = None
+# game_guids = ["a3fb1f43-5dbe-492e-976f-8c4b657d463e"]
+
 
 def query_betCaesars(driver):
     global game_guids

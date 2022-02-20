@@ -6,7 +6,6 @@ from re import L
 import time
 
 from pdb import set_trace
-from tkinter import E
 
 import pandas as pd
 from hand_crafted_projections import read_projections
@@ -1516,6 +1515,9 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
 
     max_take_count = max(entry_id_to_count.values())
 
+    if seed_rosters != None:
+        pass
+
     # __import__('pdb').set_trace()
 
     entry_id_to_roster_list = {}
@@ -1549,7 +1551,7 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
             to_return.append(entry_id_to_roster_list[entry_id].pop())
 
     else:
-        # seed_roster_string_to_result = {}
+        seed_roster_string_to_result = {}
         # map entry_id + seed_roster combo to resolved roster
         # check that map, to see if we need a modification?
         # ---
@@ -1558,22 +1560,24 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
         for entry in entries:
             print("----{}".format(entry_idx))
             seed_roster = seed_rosters[entry_idx]
-            # seed_roster_string = ""
-            # for a in seed_roster:
-            #     if a == "":
-            #         seed_roster_string += ","
-            #     else:
-            #         seed_roster_string += a.name + ","
+            seed_roster_string = ""
+            for a in seed_roster:
+                if a == "":
+                    seed_roster_string += ","
+                else:
+                    seed_roster_string += a.name + ","
             # __import__('pdb').set_trace()
-
-            # if seed_roster_string in seed_roster_string_to_result:
-            #     matched_roster = seed_roster_string_to_result[seed_roster_string]
+            # if len(seed_roster_string_to_result.keys()) > 10:
+            #     __import__('pdb').set_trace()
+            if seed_roster_string in seed_roster_string_to_result:
+                matched_roster = seed_roster_string_to_result[seed_roster_string]
                 
-            #     to_return.append(Roster(list(matched_roster.players)))
-            #     continue
+                to_return.append(Roster(list(matched_roster.players)))
+                entry_idx += 1
+                continue
 
             result1 = generate_single_roster(by_position, [], iter_count_slow, seed_roster=seed_roster)
-            # seed_roster_string_to_result[seed_roster_string] = result1
+            seed_roster_string_to_result[seed_roster_string] = result1
             to_return.append(result1)
 
             entry_idx += 1
@@ -1912,7 +1916,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(80000 / 4)
+    iter_count_slow = int(80000 / 1)
     iter_count_fast = int(50000 / 3)
     all_results = []
 
