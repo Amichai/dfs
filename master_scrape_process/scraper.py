@@ -29,8 +29,6 @@ import uuid
 import boto3
 from botocore.config import Config
 
-
-
 import os
 from twilio.rest import Client
 # Find these values at https://twilio.com/user/account
@@ -850,6 +848,7 @@ def look_for_stat_arbitrage(old_table_rows, sites):
 write_count = 0
 
 def write_projection_diff(dynamo_table, player, projection_diff, team, new_val):
+    return
     global write_count
     if team == '':
         print("No team for: {}".format(player))
@@ -885,6 +884,7 @@ def write_projection_diff(dynamo_table, player, projection_diff, team, new_val):
         print("Error:", err)
 
 def write_new_projection(dynamo_table, player, fantasy_score, team, positions, fd_cost, status, stat, site):
+    return
     global write_count
     if team == '':
         print("No team for: {}".format(player))
@@ -1398,9 +1398,10 @@ if __name__ == "__main__":
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
     dk_slate_file = folder + "DKSalaries_1_20_21.csv"
-    #TODO 1- 2/15/21
-    fd_slate_file = folder + "FanDuel-NBA-2022 ET-02 ET-20 ET-71840-players-list.csv"
-    
+    #TODO 1- 3/11/21
+    (_, fd_slate_file) = optimizer_player_pool.load_start_times_and_slate_path("start_times2.txt")
+    fd_slate_file = folder + fd_slate_file
+
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
     current_date = datetime.datetime.now()
@@ -1416,12 +1417,12 @@ if __name__ == "__main__":
     
     
     # all_sites = ["Awesemo", "RW", "Caesars", "PP"]
-    # all_sites = ["Awesemo", "RW", "Caesars", "PP"]
-    all_sites = ["Caesars"]
+    all_sites = ["Caesars", "RW", "PP"]
+    # all_sites = ["Caesars"]
     # all_sites = ["PP2H"]
 
     if not path.exists(output_file_name):
-        output_file = open(output_file_name, "a")
+        output_file = open(output_file_name, "a+")
     else:
         output_file = open(output_file_name, "r+")
 
@@ -1447,9 +1448,9 @@ if __name__ == "__main__":
         stat = parts[4]
         sites[site][player_name][stat] = str(val)
 
-    driver = webdriver.Chrome("../master_scrape_process/chromedriver6")
+    driver = webdriver.Chrome("../master_scrape_process/chromedriver7")
 
-    period = 63
+    period = 26
     log("starting up! PERIOD: {}".format(period), output_file)
 
     player_to_team = {}
@@ -1518,10 +1519,10 @@ if __name__ == "__main__":
 
                 to_write = json.loads(json.dumps(to_write), parse_float=Decimal)
 
-                result = dynamo_table.put_item(
-                    Item=to_write
-                    )
+                # result = dynamo_table.put_item(
+                #     Item=to_write
+                #     )
 
 
-            time.sleep(period)            
+            time.sleep(period)
 

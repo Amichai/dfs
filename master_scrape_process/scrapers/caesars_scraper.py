@@ -22,14 +22,17 @@ def get_game_guids(driver, all_team_names):
     for team_name in all_team_names:
         team_keys.append(team_name.strip().lower().replace(" ", "-"))
 
-    # time.sleep(1)
 
-    # arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.expanded')
-    # arrow_elements[0].click()
-    # time.sleep(0.5)
+    # --- if college basketball is the front page
+    time.sleep(1)
 
-    # arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.unexpanded')
-    # arrow_elements[1].click()
+    arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.expanded')
+    arrow_elements[0].click()
+    time.sleep(0.5)
+
+    arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.unexpanded')
+    arrow_elements[1].click()
+    # -----
 
     time.sleep(1)
 

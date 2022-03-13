@@ -527,8 +527,6 @@ def load_season_data(all_teams=None):
 
     # filename = "~/Downloads/spike_data/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
     filename = "~/Downloads/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
-
-
     dfs = pd.read_excel(filename, sheet_name=None)
     if 'NBA-DFS-SEASON-FEED' in dfs:
         feed = dfs['NBA-DFS-SEASON-FEED']
@@ -1250,9 +1248,10 @@ def adjust_players_by_position(by_position, new_player_val, team_adjustment):
                 dk_players_by_position[pos].append(pl)
 
 
-def load_start_times(path):
+def load_start_times_and_slate_path(path):
     start_times = open(path, "r")
     lines = start_times.readlines()
+    slate_path = lines[0].strip()
     first_team = None
     second_team = None
     time_conversion = {
@@ -1270,7 +1269,7 @@ def load_start_times(path):
         '11:00pm ET': 11, '11:30pm ET': 11.5}
 
     time_to_teams = {}
-    for line in lines:
+    for line in lines[1:]:
         line = line.strip().strip('\n')
 
         if line == "":
@@ -1290,7 +1289,7 @@ def load_start_times(path):
 
         first_team = line
 
-    return time_to_teams
+    return (time_to_teams, slate_path)
 
 
 def fd_optimize(file_path, slate_name, slate_type, locks=[], excludes=[]):
@@ -1325,9 +1324,11 @@ if __name__ == "__main__":
     # ------
     dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
-    #main - TODO: 1 - 2/20/21 - early
-    path = "FanDuel-NBA-2022 ET-02 ET-20 ET-71840-players-list.csv"
-
+    # TODO: 1 - 3/11/22 -early
+    # update start_times.txt
+    (start_time_to_teams, path) = load_start_times_and_slate_path("start_times2.txt")
+    
+    print(start_time_to_teams)
 
     fd_slate = (folder + path, "full", "main")
 
@@ -1373,23 +1374,20 @@ if __name__ == "__main__":
     
     print_rosters_and_projections(excluded_players, fd_slate[2])
 
-    
-
     print("-----")
-    # TODO: 2 - 2/17/21 -early
-    # update start_times.txt
-    start_time_to_teams = load_start_times("start_times2.txt")
-    
-    print(start_time_to_teams)
 
-    # TODO: 3 - 2/17/21 -early
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-02-17-71761-entries-upload-template (1).csv"
+    __import__('pdb').set_trace()
+
+    # TODO: 2 - 3/11/22 -early
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-13-72861-entries-upload-template (1).csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
 
+
     
-    current_time = 8.1
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-02-17-71761-entries-upload-template (5).csv"
+    
+    current_time = 2.6
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-13-72861-entries-upload-template (2).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 

@@ -1,19 +1,12 @@
-MIA
-@CHA
-7:00pm ET
-
-WAS
+FanDuel-NBA-2022 ET-03 ET-13 ET-72861-players-list.csv
+NY
 @BKN
-7:30pm ET
+1:00pm ET
+
+LAC
+@DET
+3:00pm ET
 
 DAL
-@NO
-8:00pm ET
-
-PHI
-@MIL
-8:30pm ET
-
-HOU
-@LAC
-10:30pm ET
+@BOS
+3:30pm ET
