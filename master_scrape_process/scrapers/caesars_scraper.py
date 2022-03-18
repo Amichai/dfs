@@ -31,7 +31,7 @@ def get_game_guids(driver, all_team_names):
     time.sleep(0.5)
 
     arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.unexpanded')
-    arrow_elements[1].click()
+    arrow_elements[2].click()
     # -----
 
     time.sleep(1)

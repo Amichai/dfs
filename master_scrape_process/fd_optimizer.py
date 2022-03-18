@@ -1309,11 +1309,15 @@ def parse_upload_template(csv_template_file, exclude):
         if name in exclude:
             players_to_remove.append(name)
             continue
-
+        
         if injury_status == 'O':
             print("{} is OUT".format(name))
             players_to_remove.append(name)
             continue
+
+    if len(player_id_to_name) == 0:
+        # why??
+        __import__('pdb').set_trace()
 
     return player_id_to_name, name_to_team, name_to_salary, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name
 
@@ -2059,6 +2063,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
     player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [])
 
+
     # overrides = {"Talen Horton-Tucker": 19}
 
     by_position = remove_players_from_player_pool(by_position, players_to_remove)
@@ -2104,6 +2109,17 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #     generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
     # 
     # 
+
+
+    #SINGLE ROSTER ----
+    # result = generate_roster_for_single_game(by_position, to_exclude=[])
+    # generated_rosters = []
+    # for i in range(len(entries)):
+    # # generated_rosters = result * len(entries)
+    #     generated_rosters.append(list(result))
+    # excluded = []
+    # ----
+
     # generate_best_roster_mme(by_position, iter_count_slow, seed_rosters, entries)
     (generated_rosters, excluded) = generate_best_roster(by_position, iter_count_slow, seed_rosters, entries)
     # (generated_rosters, excluded) = generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)

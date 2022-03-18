@@ -1376,18 +1376,16 @@ if __name__ == "__main__":
 
     print("-----")
 
-    __import__('pdb').set_trace()
-
-    # TODO: 2 - 3/11/22 -early
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-13-72861-entries-upload-template (1).csv"
+    # TODO: 2 - 3/18/22 -early
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-18-73111-entries-upload-template (2).csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
 
 
     
     
-    current_time = 2.6
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-13-72861-entries-upload-template (2).csv"
+    current_time = 7.1 # todo read this number from the computer clock
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-18-73111-entries-upload-template (3).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 
