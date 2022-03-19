@@ -4,7 +4,7 @@ import json
 import datetime
 from re import L
 import time
-
+from tabulate import tabulate
 from pdb import set_trace
 from unittest import result
 
@@ -1112,11 +1112,13 @@ def filter_player_pool_on_matchups(by_position, matchups):
 def validate_results(rosters, seed_rosters):
     player_to_count = {}
     roster_key_to_count = {}
+    player_to_team = {}
     for roster in rosters:
         players = roster.players
         for player in players:
             if not player.name in player_to_count:
                 player_to_count[player.name] = 0
+                player_to_team[player.name] = player.team
             player_to_count[player.name] += 1
 
 
@@ -1139,11 +1141,16 @@ def validate_results(rosters, seed_rosters):
                     assert seed_roster[j].name == roster.players[j].name
 
     player_to_count_sorted = sorted(player_to_count.items(), key=lambda a: a[1], reverse=True)
+    all_rows = []
     for player_and_count in player_to_count_sorted:
         name = player_and_count[0]
+        team = player_to_team[name]
         ct = player_and_count[1]
         perct = round(float(ct) / len(rosters), 3)
-        print("{},{},{}".format(name, ct, perct))
+        # print("{},{},{} - {}".format(name, ct, perct, team))
+        all_rows.append([name, ct, perct, team])
+
+    print(tabulate(all_rows, headers=["name", "ct", "%", "team"]))
 
 def construct_upload_template_file(rosters, first_line, entries, player_to_id, seed_rosters, excluded, player_id_to_name):
 
@@ -2022,6 +2029,7 @@ def remove_players_from_player_pool(by_position, players_to_remove, overrides={}
                 continue
 
             if player.name in overrides:
+                print("OVERRIDING: {} {} -> {}".format(player.name, player.value, overrides[player.name]))
                 player.value = overrides[player.name]
 
             to_return[pos].append(player)
@@ -2064,16 +2072,16 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [])
 
 
-    # overrides = {"Talen Horton-Tucker": 19}
+    overrides = {"Darius Garland": 44, "Luka Doncic": 56}
 
-    by_position = remove_players_from_player_pool(by_position, players_to_remove)
+    by_position = remove_players_from_player_pool(by_position, players_to_remove, overrides)
     # parse this file
     # get all the games I'm exposed to
     # get player id mapping
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(80000 / 4.0)
+    iter_count_slow = int(80000 / 1.0)
     iter_count_fast = int(50000 / 3)
     all_results = []
 
