@@ -1,4 +1,5 @@
 from json.encoder import py_encode_basestring_ascii
+from pickletools import TAKEN_FROM_ARGUMENT8U
 import random
 import json
 import datetime
@@ -742,7 +743,7 @@ def generate_n_rosters(by_position, n, iter_count=1000000):
     return all_rosters_sorted[:n]
 
 
-def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000, seed_roster=None, to_take=1):
+def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000, seed_roster=None, to_take=1, should_normalize_result=True):
     names_to_exclude = players_to_exclude
     if seed_roster != None:
         names_to_exclude += [a.name for a in seed_roster if a != '']
@@ -824,9 +825,10 @@ def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000,
         seen_rosters.append(result)
     
     to_return = sorted(seen_rosters, key=lambda a: a.value, reverse=True)[:to_take]
-
+    
     # new normalization step
-    to_return = [normalize_roster(roster) for roster in to_return]
+    if should_normalize_result:
+        to_return = [normalize_roster(roster) for roster in to_return]
 
     return to_return
 
@@ -1112,13 +1114,13 @@ def filter_player_pool_on_matchups(by_position, matchups):
 def validate_results(rosters, seed_rosters):
     player_to_count = {}
     roster_key_to_count = {}
-    player_to_team = {}
+    player_to_team_value_cost = {}
     for roster in rosters:
         players = roster.players
         for player in players:
             if not player.name in player_to_count:
                 player_to_count[player.name] = 0
-                player_to_team[player.name] = player.team
+                player_to_team_value_cost[player.name] = (player.team, player.value, player.cost)
             player_to_count[player.name] += 1
 
 
@@ -1144,13 +1146,15 @@ def validate_results(rosters, seed_rosters):
     all_rows = []
     for player_and_count in player_to_count_sorted:
         name = player_and_count[0]
-        team = player_to_team[name]
+        team = player_to_team_value_cost[name][0]
+        value = player_to_team_value_cost[name][1]
+        cost = player_to_team_value_cost[name][2]
         ct = player_and_count[1]
         perct = round(float(ct) / len(rosters), 3)
         # print("{},{},{} - {}".format(name, ct, perct, team))
-        all_rows.append([name, ct, perct, team])
+        all_rows.append([name, ct, perct, team, value, cost])
 
-    print(tabulate(all_rows, headers=["name", "ct", "%", "team"]))
+    print(tabulate(all_rows, headers=["name", "ct", "%", "team", "value", "cost"]))
 
 def construct_upload_template_file(rosters, first_line, entries, player_to_id, seed_rosters, excluded, player_id_to_name):
 
@@ -1654,8 +1658,11 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
 
     max_take_count = max(entry_id_to_count.values())
 
-    if seed_rosters != None:
-        pass
+    if seed_rosters == None:
+        seed_rosters = []
+        for entry in entries:
+            seed_roster = ['', '', '', '', '', '', '', '', '']
+            seed_rosters.append(seed_roster)
 
     # __import__('pdb').set_trace()
 
@@ -1690,12 +1697,6 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
             to_return.append(entry_id_to_roster_list[entry_id].pop())
 
     else:
-        seed_roster_string_to_result = {}
-        # map entry_id + seed_roster combo to resolved roster
-        # check that map, to see if we need a modification?
-        # ---
-        # generate_n_best_rosters to separate n rosters with the same entry id and the same seed roster
-        
         seed_roster_string_to_top_n = {}
         seed_roster_string_to_take_index = {}
         entry_idx = 0
@@ -1709,43 +1710,43 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
                 else:
                     seed_roster_string += a.name + ","
             
-            
+            print("SEED ROSTER STRING: {}".format(seed_roster_string))
             if seed_roster_string in seed_roster_string_to_top_n:
-                top_n = seed_roster_string_to_top_n[seed_roster_string]
+                results = seed_roster_string_to_top_n[seed_roster_string]
                 take_index = seed_roster_string_to_take_index[seed_roster_string]
-                seed_roster_string_to_take_index[seed_roster_string] = (take_index + 1) % len(top_n)
-
-                __import__('pdb').set_trace()
+                seed_roster_string_to_take_index[seed_roster_string] = (take_index + 1) % len(results)
             else:
                 take_index = 0
-                seed_roster_string_to_take_index[seed_roster_string] = 1
-            
-            # __import__('pdb').set_trace()
-            # if len(seed_roster_string_to_result.keys()) > 10:
-            #     __import__('pdb').set_trace()
-            if seed_roster_string in seed_roster_string_to_result:
-                matched_roster = seed_roster_string_to_result[seed_roster_string]
-                
-                to_return.append(Roster(list(matched_roster.players)))
-                entry_idx += 1
-                continue
+                results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=250, should_normalize_result=False)
 
+                acceptable_results = []
+                best_result_val = results[0].value
+                for result in results:
+                    val_diff = best_result_val - result.value
+                    if val_diff > 4.5:
+                        break
 
+                    acceptable_results.append(result)
 
-            result1 = generate_single_roster(by_position, [], iter_count_slow, seed_roster=seed_roster)
+                seed_roster_string_to_top_n[seed_roster_string] = acceptable_results
+                results = acceptable_results
+                seed_roster_string_to_take_index[seed_roster_string] = 1 % len(results)
 
-            # results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=5)
-            
-            # result1 = results[take_index]
-            
-
-
-            seed_roster_string_to_result[seed_roster_string] = result1
+            print("TAKE INDEX: {}/{}".format(take_index, len(results)))
+            result1 = results[take_index]
             to_return.append(result1)
 
             entry_idx += 1
             pass
-        
+    
+    results = []
+    players_to_exclude = ["Domantas Sabonis", "Theo Maledon"]
+    for player_to_exclude in players_to_exclude:
+        result = generate_single_roster(by_position, [player_to_exclude], int(iter_count_slow / 4))
+        results.append(result)
+
+
+    to_return[int(len(results) * -1):] = results
     # __import__('pdb').set_trace()
     return (to_return, [])
 
@@ -2018,7 +2019,7 @@ def print_lineup_csv(csv_upload_file, csv_template_file):
     __import__('pdb').set_trace()
 
 
-def remove_players_from_player_pool(by_position, players_to_remove, overrides={}):
+def remove_players_from_player_pool(by_position, players_to_remove, overrides={}, diffs={}):
     to_return = {}
     for pos, players in by_position.items():
         to_return[pos] = []
@@ -2031,6 +2032,11 @@ def remove_players_from_player_pool(by_position, players_to_remove, overrides={}
             if player.name in overrides:
                 print("OVERRIDING: {} {} -> {}".format(player.name, player.value, overrides[player.name]))
                 player.value = overrides[player.name]
+
+            if player.name in diffs:
+                new_value = player.value + diffs[player.name]
+                print("ADJUSTING: {} {} -> {}".format(player.name, player.value, new_value))
+                player.value = new_value
 
             to_return[pos].append(player)
     return to_return
@@ -2072,9 +2078,11 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [])
 
 
-    overrides = {"Darius Garland": 44, "Luka Doncic": 56}
+    overrides = {}
+    diffs = {"Domantas Sabonis": -2, "Theo Maledon": -2, "Julius Randle": -1}
+    diffs = {}
 
-    by_position = remove_players_from_player_pool(by_position, players_to_remove, overrides)
+    by_position = remove_players_from_player_pool(by_position, players_to_remove, overrides, diffs)
     # parse this file
     # get all the games I'm exposed to
     # get player id mapping
