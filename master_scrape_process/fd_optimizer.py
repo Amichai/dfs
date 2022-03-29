@@ -16,7 +16,7 @@ from hand_crafted_projections import read_projections
 from requests.api import get
 
 
-name_transform = {"Guillermo Hernangomez": 'Willy Hernangomez', "Cam Thomas": "Cameron Thomas", "Moe Harkless": 'Maurice Harkless', 'Juancho Hernangómez':"Juancho Hernangomez", "Guillermo Hernangómez": 'Willy Hernangomez', 'Timothé Luwawu-Cabarrot': 'Timothe Luwawu-Cabarrot', 'Enes Kanter': 'Enes Freedom', 'Kenyon Martin Jr.': 'KJ Martin'}
+name_transform = {"Guillermo Hernangomez": 'Willy Hernangomez', "Cam Thomas": "Cameron Thomas", "Moe Harkless": 'Maurice Harkless', 'Juancho Hernangómez':"Juancho Hernangomez", "Guillermo Hernangómez": 'Willy Hernangomez', 'Timothé Luwawu-Cabarrot': 'Timothe Luwawu-Cabarrot', 'Enes Kanter': 'Enes Freedom', 'Kenyon Martin Jr.': 'KJ Martin', "Nah'Shon Hyland": 'Bones Hyland'}
 
 def normalize_name(name):
     name = name.replace("  ", " ")
@@ -743,7 +743,7 @@ def generate_n_rosters(by_position, n, iter_count=1000000):
     return all_rosters_sorted[:n]
 
 
-def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000, seed_roster=None, to_take=1, should_normalize_result=True):
+def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000, seed_roster=None, to_take=1):
     names_to_exclude = players_to_exclude
     if seed_roster != None:
         names_to_exclude += [a.name for a in seed_roster if a != '']
@@ -793,7 +793,7 @@ def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000,
 
         if is_full_locked:
             print("ROSTER FULLY LOCKED")
-            return random_lineup
+            return [random_lineup]
 
         if random_lineup.cost > 60000 or not random_lineup.is_valid:
             continue
@@ -826,9 +826,12 @@ def generate_n_best_rosters(by_position, players_to_exclude, iter_count=1000000,
     
     to_return = sorted(seen_rosters, key=lambda a: a.value, reverse=True)[:to_take]
     
+    # __import__('pdb').set_trace()
     # new normalization step
-    if should_normalize_result:
-        to_return = [normalize_roster(roster) for roster in to_return]
+
+    
+    to_return = [normalize_roster(roster) for roster in to_return]
+    
 
     return to_return
 
@@ -1111,7 +1114,7 @@ def filter_player_pool_on_matchups(by_position, matchups):
 
     return to_return
 
-def validate_results(rosters, seed_rosters):
+def validate_results(rosters, seed_rosters, player_to_actual=None):
     player_to_count = {}
     roster_key_to_count = {}
     player_to_team_value_cost = {}
@@ -1144,17 +1147,24 @@ def validate_results(rosters, seed_rosters):
 
     player_to_count_sorted = sorted(player_to_count.items(), key=lambda a: a[1], reverse=True)
     all_rows = []
+    row_ct = 0
     for player_and_count in player_to_count_sorted:
+        row_ct += 1
         name = player_and_count[0]
         team = player_to_team_value_cost[name][0]
         value = player_to_team_value_cost[name][1]
         cost = player_to_team_value_cost[name][2]
         ct = player_and_count[1]
         perct = round(float(ct) / len(rosters), 3)
-        # print("{},{},{} - {}".format(name, ct, perct, team))
-        all_rows.append([name, ct, perct, team, value, cost])
 
-    print(tabulate(all_rows, headers=["name", "ct", "%", "team", "value", "cost"]))
+        actual = 0
+        if player_to_actual != None:
+            actual = player_to_actual[name]
+
+        # print("{},{},{} - {}".format(name, ct, perct, team))
+        all_rows.append([row_ct, name, ct, perct, team, value, cost, value / cost * 1000, actual])
+
+    print(tabulate(all_rows, headers=["row", "name", "ct", "%", "team", "value", "cost", "val/$", "actual"]))
 
 def construct_upload_template_file(rosters, first_line, entries, player_to_id, seed_rosters, excluded, player_id_to_name):
 
@@ -1579,76 +1589,33 @@ def get_top_20_players_by_value_sorted_by_price(by_position):
     return to_return
 
 
-def sort_two_players(pl1, pl2):
+def sort_two_players_(pl1, pl2):
     return sorted([pl1, pl2], key=lambda a: a.name)
+
+def sort_two_players(players, locked_indices, idx1, idx2):
+    p1 = players[idx1]
+    p2 = players[idx2]
+    if idx1 in locked_indices or idx2 in locked_indices:
+        return [p1, p2]
+    else:
+        return sort_two_players_(p1, p2)
 
 def normalize_roster(roster):
     players = roster.players
     players_new = []
+    locked_indices = roster.locked_indices
     players_new.append(players[0])
-    players_new += sort_two_players(players[1], players[2])
-    players_new += sort_two_players(players[3], players[4])
-    players_new += sort_two_players(players[5], players[6])
-    players_new += sort_two_players(players[7], players[8])
+    players_new += sort_two_players(players, locked_indices, 1, 2)
+    players_new += sort_two_players(players, locked_indices, 3, 4)
+    players_new += sort_two_players(players, locked_indices, 5, 6)
+    players_new += sort_two_players(players, locked_indices, 7, 8)
 
     roster.players = players_new
 
     return roster
 
-def generate_best_roster_mme(by_position, iter_count, seed_rosters, entries):
-    def seed_roster_to_seed_roster_key(seed_roster):
-        player_names = []
-        for seed_roster_name in seed_roster:
-            if seed_roster_name == '':
-                player_names.append(seed_roster_name)
-            else:
-                player_names.append(seed_roster_name.name)
-        to_return = []
-        to_return.append(player_names[0])
-        to_return += sorted([player_names[1], player_names[2]])
-        to_return += sorted([player_names[3], player_names[4]])
-        to_return += sorted([player_names[5], player_names[6]])
-        to_return += sorted([player_names[7], player_names[8]])
-        return ",".join(to_return)
-
-    all_seed_roster_keys = []
-    seed_roster_key_to_count = {}
-    for seed_roster in seed_rosters:
-        seed_roster_key = seed_roster_to_seed_roster_key(seed_roster)
-        all_seed_roster_keys.append(seed_roster_key)
-        if not seed_roster_key in seed_roster_key_to_count:
-            seed_roster_key_to_count[seed_roster_key] = []
-        seed_roster_key_to_count[seed_roster_key].append(seed_roster)
-
-    for seed_roster_key, matched_seed_rosters in seed_roster_key_to_count.items():
-        seed_roster = matched_seed_rosters[0]
-        take_count = len(matched_seed_rosters)
-        results = generate_n_best_rosters(by_position, [], iter_count, seed_roster=seed_roster, to_take=take_count)
-        best_value = results[0].value
-        min_acceptable_value = best_value - 7.5
-        results_within_value_range = []
-        for i in range(take_count):
-            result = results[i]
-            if result.value >= min_acceptable_value:
-                results_within_value_range.append(result)
-
-        if len(results_within_value_range) != take_count:
-            __import__('pdb').set_trace()
-
-        # put these results back
-            pass
-
-        __import__('pdb').set_trace()
-        pass
-    
-    __import__('pdb').set_trace()
-    # normalize and bin the seed rosters
-    # generate n rosters for each of the normalized bined seed rosters
-    # put everything back where it came from
-
-    assert False
-
-def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
+def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
+    # generate roster keys to track uniuqe rosters and use this to suppress duplicates
     entry_id_to_count = {}
     for entry in entries:
         entry_id = entry[1]
@@ -1657,19 +1624,18 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
         entry_id_to_count[entry_id] += 1
 
     max_take_count = max(entry_id_to_count.values())
-
+    is_initial_optimization = False
     if seed_rosters == None:
         seed_rosters = []
         for entry in entries:
             seed_roster = ['', '', '', '', '', '', '', '', '']
             seed_rosters.append(seed_roster)
-
-    # __import__('pdb').set_trace()
+            is_initial_optimization = True
 
     entry_id_to_roster_list = {}
-    to_return = []
+    collected_rosters = []
     if seed_rosters == None:
-        results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=None, to_take=max_take_count)
+        results = generate_n_best_rosters(by_position, [], iter_count_fast, seed_roster=None, to_take=max_take_count)
 
         best_roster_value = results[0].value
 
@@ -1694,7 +1660,7 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
             
         for entry in entries:
             entry_id = entry[1]
-            to_return.append(entry_id_to_roster_list[entry_id].pop())
+            collected_rosters.append(entry_id_to_roster_list[entry_id].pop())
 
     else:
         seed_roster_string_to_top_n = {}
@@ -1717,13 +1683,13 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
                 seed_roster_string_to_take_index[seed_roster_string] = (take_index + 1) % len(results)
             else:
                 take_index = 0
-                results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=250, should_normalize_result=False)
+                results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=250)
 
                 acceptable_results = []
                 best_result_val = results[0].value
                 for result in results:
                     val_diff = best_result_val - result.value
-                    if val_diff > 4.5:
+                    if val_diff > 4.5 and not is_initial_optimization:
                         break
 
                     acceptable_results.append(result)
@@ -1734,21 +1700,166 @@ def generate_best_roster(by_position, iter_count_slow, seed_rosters, entries):
 
             print("TAKE INDEX: {}/{}".format(take_index, len(results)))
             result1 = results[take_index]
-            to_return.append(result1)
+            collected_rosters.append(result1)
 
             entry_idx += 1
             pass
     
-    results = []
-    players_to_exclude = ["Domantas Sabonis", "Theo Maledon"]
-    for player_to_exclude in players_to_exclude:
-        result = generate_single_roster(by_position, [player_to_exclude], int(iter_count_slow / 4))
-        results.append(result)
+
+    # best_roster = generate_single_roster(by_position, [], iter_count_slow)
+    if is_initial_optimization:
+        to_return = []
+
+        print("MY BEST ROSTER: \n{}".format(collected_rosters[0]))
+
+        contest_type_to_indices = {}
+        idx = 0
+        for entry in entries:
+            to_return.append(None)
+            contest_type = entry[2]
+            if not contest_type in contest_type_to_indices:
+                contest_type_to_indices[contest_type] = []
+
+            contest_type_to_indices[contest_type].append(idx)
+            idx += 1
+            pass
+
+        for index_list in contest_type_to_indices.values():
+            idx_count = 0
+            for idx in index_list:
+                to_return[idx] = collected_rosters[idx_count]
+                idx_count += 1
+    else:
+        to_return = collected_rosters
+        # todo distribute MME and SE rosters differnetly
+
+    
+    for roster in to_return:
+        assert roster != None
+
+    # players_to_exclude = ["Domantas Sabonis", "Tre Mann"]
+    # player_count = {}
+    # for roster in to_return:
+    #     for player in roster.players:
+    #         if player not in player_count:
+    #             player_count[player] = 1
+    #         else:
+    #             player_count[player] += 1
+
+    # player_to_exclude2 = []
+    # for player, count in player_count.items():
+    #     if count == len(to_return):
+    #         player_to_exclude2.append(player)
 
 
-    to_return[int(len(results) * -1):] = results
     # __import__('pdb').set_trace()
+    # results = []
+    # for player_to_exclude in players_to_exclude:
+    #     result = generate_single_roster(by_position, [player_to_exclude], int(iter_count_slow / 4))
+    #     results.append(result)
+
+
+    # to_return[int(len(results) * -1):] = results
+    # __import__('pdb').set_trace()
+
+    # TODO: TREAT SINGLE ENTRY LINEUPS AS SPECIAL. ONLY GIVE THEM THE BEST ROSTERS
+    # TODO: DETERMINE WHCIH PLAYERS HAVE 100% REPRESENTATION AND MANUALLY EXCLUDE THEM
     return (to_return, [])
+
+
+def generate_best_roster2(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
+    entry_id_to_count = {}
+    for entry in entries:
+        entry_id = entry[1]
+        if not entry_id in entry_id_to_count:
+            entry_id_to_count[entry_id] = 0
+        entry_id_to_count[entry_id] += 1
+
+    is_initial_optimization = False
+    if seed_rosters == None:
+        seed_rosters = []
+        for entry in entries:
+            seed_roster = ['', '', '', '', '', '', '', '', '']
+            seed_rosters.append(seed_roster)
+            #initial optimization run
+            is_initial_optimization = True
+
+    collected_rosters = []
+
+    seed_roster_string_to_top_n = {}
+    seed_roster_string_to_take_index = {}
+    entry_idx = 0
+    for entry in entries:
+        print("----{}/{}".format(entry_idx, len(entries)))
+        seed_roster = seed_rosters[entry_idx]
+        seed_roster_string = ""
+        for a in seed_roster:
+            if a == "":
+                seed_roster_string += ","
+            else:
+                seed_roster_string += a.name + ","
+        
+        print("SEED ROSTER STRING: {}".format(seed_roster_string))
+        if seed_roster_string in seed_roster_string_to_top_n:
+            results = seed_roster_string_to_top_n[seed_roster_string]
+            take_index = seed_roster_string_to_take_index[seed_roster_string]
+            seed_roster_string_to_take_index[seed_roster_string] = (take_index + 1) % len(results)
+        else:
+            take_index = 0
+            results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=250)
+
+            acceptable_results = []
+            best_result_val = results[0].value
+            for result in results:
+                val_diff = best_result_val - result.value
+                if val_diff > 5.1 and not is_initial_optimization:
+                    break
+
+                acceptable_results.append(result)
+
+            seed_roster_string_to_top_n[seed_roster_string] = acceptable_results
+            results = acceptable_results
+            seed_roster_string_to_take_index[seed_roster_string] = 1 % len(results)
+
+        print("TAKE INDEX: {}/{}".format(take_index, len(results)))
+        result1 = results[take_index]
+        collected_rosters.append(result1)
+
+        entry_idx += 1
+        pass
+
+    # best_roster = generate_single_roster(by_position, [], iter_count_slow)
+    if is_initial_optimization:
+        to_return = []
+
+        print("MY BEST ROSTER: \n{}".format(collected_rosters[0]))
+
+        contest_type_to_indices = {}
+        idx = 0
+        for entry in entries:
+            to_return.append(None)
+            contest_type = entry[2]
+            if not contest_type in contest_type_to_indices:
+                contest_type_to_indices[contest_type] = []
+
+            contest_type_to_indices[contest_type].append(idx)
+            idx += 1
+            pass
+
+        for index_list in contest_type_to_indices.values():
+            idx_count = 0
+            for idx in index_list:
+                to_return[idx] = collected_rosters[idx_count]
+                idx_count += 1
+    else:
+        to_return = collected_rosters
+
+    
+    for roster in to_return:
+        assert roster != None
+    return (to_return, [])
+
+
 
 def generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
     to_return = []
@@ -2079,8 +2190,8 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
 
     overrides = {}
-    diffs = {"Domantas Sabonis": -2, "Theo Maledon": -2, "Julius Randle": -1}
     diffs = {}
+    diffs = {"Nikola Jokic": -3.6}
 
     by_position = remove_players_from_player_pool(by_position, players_to_remove, overrides, diffs)
     # parse this file
@@ -2089,9 +2200,10 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count_slow = int(80000 / 1.0)
-    iter_count_fast = int(50000 / 3)
-    all_results = []
+    iter_count = int(80000 / 5)
+
+    iter_count_slow = iter_count
+    iter_count_fast = iter_count
 
     matchup_to_start_time = {}
     start_time_to_matchup = {}
@@ -2109,24 +2221,6 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
             pass
 
 
-    # generate_roster_ensemble_exhaustive(by_position, seed_rosters)
-    # matchups_sorted = sorted(all_matchups, key=lambda a: matchup_to_start_time[a])
-
-    #entries
-    #[(entry_id, contest_id, contest_name)]
-
-    # __import__('pdb').set_trace()
-
-    # if len(entries) == 3:
-    #     generated_rosters = generate_rosters_3(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
-    # elif len(entries) == 25:
-    #     pass
-    # else:
-    #     generated_rosters = generate_rosters_strategic(by_position, iter_count_fast, iter_count_slow, seed_rosters, matchups_sorted, start_time_to_matchup, entries)
-    # 
-    # 
-
-
     #SINGLE ROSTER ----
     # result = generate_roster_for_single_game(by_position, to_exclude=[])
     # generated_rosters = []
@@ -2136,8 +2230,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     # excluded = []
     # ----
 
-    # generate_best_roster_mme(by_position, iter_count_slow, seed_rosters, entries)
-    (generated_rosters, excluded) = generate_best_roster(by_position, iter_count_slow, seed_rosters, entries)
+    (generated_rosters, excluded) = generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)
     # (generated_rosters, excluded) = generate_rosters_by_exclusion(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries)
 
 

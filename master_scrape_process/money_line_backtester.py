@@ -54,7 +54,9 @@ def get_fd_points(player_name, target_date, feed):
 # at each change
 
 
-money_line_path = "money_line_scrape_12_3_2021.txt"
+# money_line_path = "money_line_scrape_12_3_2021.txt"
+# todo 1 
+money_line_path = "money_line_scrapes/money_line_scrape_3_19_2022.txt"
 
 input_file = open(money_line_path, "r")
 
@@ -65,7 +67,7 @@ known_fdp = {}
 today = datetime.datetime.now()
 yesterday = today - datetime.timedelta(days=1)
 
-filename = "~/Downloads/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(yesterday.month, str(yesterday.day).zfill(2), yesterday.year)
+filename = "~/Downloads/season_data/{}-{}-{}-nba-season-dfs-feed.xlsx".format(str(yesterday.month).zfill(2), str(yesterday.day).zfill(2), yesterday.year)
 
 dfs = pd.read_excel(filename, sheet_name=None)
 if 'NBA-DFS-SEASON-FEED' in dfs:
@@ -75,7 +77,6 @@ else:
 
 lines = input_file.readlines()
 seen_players = []
-player_ct = 135
 for line in lines:
     # if line_idx > 5000:
     #     break
@@ -91,7 +92,7 @@ for line in lines:
     player_name = parts[2]
     name = normalize_name(player_name)
 
-    if len(seen_players) < player_ct and name not in seen_players:
+    if name not in seen_players:
         seen_players.append(name)
 
     if name not in seen_players:
@@ -111,7 +112,8 @@ for line in lines:
     if name in known_fdp:
         fdp = known_fdp[name]
     else:
-        fdp = get_fd_points(player_name, "12/03/2021", feed)
+        # todo 2
+        fdp = get_fd_points(player_name, "03/19/2022", feed)
         known_fdp[name] = fdp
 
     if not name in by_player:
@@ -157,12 +159,13 @@ for player, site_data in by_player.items():
         y_vals = []
         current_val = 0
         for time_key in all_time_keys:
-            if time_key > offline_time:
-                break
+            # if time_key > offline_time:
+            #     break
             if time_key in val_data:
                 new_val = val_data[time_key].strip()
                 if new_val == "REMOVED":
-                    current_val = 0
+                    # current_val = 0
+                    continue
 
                 else:
                     current_val = float(new_val)
@@ -174,6 +177,23 @@ for player, site_data in by_player.items():
         # import pdb; pdb.set_trace()
         pass
     
+    print("----" * 5)
+    print('{} proj'.format(player))
+    
+    # site_to_over_under_count = {}
+
+    for idx in range(len(site_name)):
+        site = site_name[2 - idx]
+        # if not site in site_to_over_under_count:
+        #     site_to_over_under_count[site] = [0, 0]
+        y_vals = all_y_vals[2 - idx]
+        if len(y_vals) == 0:
+            __import__('pdb').set_trace()
+
+        print("{} - {}".format(site, round(y_vals[-1], 2)))
+    
+    
+    continue
 
     colors = ["black", "tab:blue", "tab:red", "tab:green", "tab:orange", "yellow"]
     plt.rc('font', size=12)

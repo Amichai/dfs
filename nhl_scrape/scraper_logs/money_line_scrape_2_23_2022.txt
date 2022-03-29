@@ -1,0 +1,1389 @@
+starting up! PERIOD: 35
+2022-02-23 23:43:34 - scraping Caesars
+2022-02-23 23:44:07|Caesars|Total Match||Live|7.159774436090226
+2022-02-23 23:44:07|Caesars|2nd Period||Live|3.876506024096386
+2022-02-23 23:44:07|Caesars|3rd Period||Live|1.6522556390977443
+2022-02-23 23:44:07|Caesars|Toronto Maple||Goals|3.462566844919786
+2022-02-23 23:44:07|Caesars|Minnesota Wild||Goals|2.6711886304909562
+2022-02-23 23:44:07|Caesars|Brandon Duhaime|MIN|Assists|0.32598371777476254
+2022-02-23 23:44:07|Caesars|Brandon Duhaime|MIN|Shots|0.5729665071770335
+2022-02-23 23:44:07|Caesars|Brandon Duhaime|MIN|Points|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Joel Eriksson|MIN|Assists|0.39750542299349245
+2022-02-23 23:44:07|Caesars|Joel Eriksson|MIN|Shots|2.4732620320855614
+2022-02-23 23:44:07|Caesars|Joel Eriksson|MIN|Points|0.49
+2022-02-23 23:44:07|Caesars|Joel Eriksson|MIN|Power Play Points|0.3785140562248996
+2022-02-23 23:44:07|Caesars|Calen Addison|MIN|Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Calen Addison|MIN|Shots|0.5829439252336448
+2022-02-23 23:44:07|Caesars|Calen Addison|MIN|Points|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Marcus Foligno|MIN|Assists|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Marcus Foligno|MIN|Shots|1.47
+2022-02-23 23:44:07|Caesars|Marcus Foligno|MIN|Points|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Mats Zuccarello|MIN|Assists|0.5204485488126649
+2022-02-23 23:44:07|Caesars|Mats Zuccarello|MIN|Shots|1.6522556390977443
+2022-02-23 23:44:07|Caesars|Mats Zuccarello|MIN|Points|0.5794117647058823
+2022-02-23 23:44:07|Caesars|Mats Zuccarello|MIN|Power Play Points|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Frederick Gaudreau|MIN|Assists|0.3785140562248996
+2022-02-23 23:44:07|Caesars|Frederick Gaudreau|MIN|Shots|1.4386543535620053
+2022-02-23 23:44:07|Caesars|Frederick Gaudreau|MIN|Points|0.44211822660098526
+2022-02-23 23:44:07|Caesars|Jordan Greenway|MIN|Assists|0.3454692556634304
+2022-02-23 23:44:07|Caesars|Jordan Greenway|MIN|Shots|1.423228346456693
+2022-02-23 23:44:07|Caesars|Jordan Greenway|MIN|Points|0.39750542299349245
+2022-02-23 23:44:07|Caesars|Mason Shaw|MIN|Assists|0.3158682634730539
+2022-02-23 23:44:07|Caesars|Mason Shaw|MIN|Shots|0.5794117647058823
+2022-02-23 23:44:07|Caesars|Mason Shaw|MIN|Points|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Kirill Kaprizov|MIN|Assists|0.5204485488126649
+2022-02-23 23:44:07|Caesars|Kirill Kaprizov|MIN|Shots|3.462566844919786
+2022-02-23 23:44:07|Caesars|Kirill Kaprizov|MIN|Points|1.2921686746987953
+2022-02-23 23:44:07|Caesars|Kirill Kaprizov|MIN|Power Play Points|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Connor Dewar|MIN|Assists|0.32598371777476254
+2022-02-23 23:44:07|Caesars|Connor Dewar|MIN|Shots|1.3125
+2022-02-23 23:44:07|Caesars|Connor Dewar|MIN|Points|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Jon Merrill|MIN|Assists|0.33272859216255446
+2022-02-23 23:44:07|Caesars|Jon Merrill|MIN|Shots|0.5433673469387754
+2022-02-23 23:44:07|Caesars|Jon Merrill|MIN|Blocked Shots|1.5457559681697612
+2022-02-23 23:44:07|Caesars|Jon Merrill|MIN|Points|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Jared Spurgeon|MIN|Assists|0.4270334928229665
+2022-02-23 23:44:07|Caesars|Jared Spurgeon|MIN|Shots|1.5613456464379947
+2022-02-23 23:44:07|Caesars|Jared Spurgeon|MIN|Blocked Shots|1.3972868217054264
+2022-02-23 23:44:07|Caesars|Jared Spurgeon|MIN|Points|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Jared Spurgeon|MIN|Power Play Points|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Alex Goligoski|MIN|Assists|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Alex Goligoski|MIN|Shots|0.5729665071770335
+2022-02-23 23:44:07|Caesars|Alex Goligoski|MIN|Blocked Shots|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Alex Goligoski|MIN|Points|0.39750542299349245
+2022-02-23 23:44:07|Caesars|Jonas Brodin|MIN|Assists|0.4270334928229665
+2022-02-23 23:44:07|Caesars|Jonas Brodin|MIN|Shots|1.5
+2022-02-23 23:44:07|Caesars|Jonas Brodin|MIN|Blocked Shots|1.6027131782945736
+2022-02-23 23:44:07|Caesars|Jonas Brodin|MIN|Points|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Dmitry Kulikov|MIN|Assists|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Dmitry Kulikov|MIN|Shots|0.5299479166666667
+2022-02-23 23:44:07|Caesars|Dmitry Kulikov|MIN|Blocked Shots|1.3698979591836735
+2022-02-23 23:44:07|Caesars|Dmitry Kulikov|MIN|Points|0.3785140562248996
+2022-02-23 23:44:07|Caesars|Nico Sturm|MIN|Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Nico Sturm|MIN|Shots|0.5625
+2022-02-23 23:44:07|Caesars|Nico Sturm|MIN|Points|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Ryan Hartman|MIN|Assists|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Ryan Hartman|MIN|Shots|2.4732620320855614
+2022-02-23 23:44:07|Caesars|Ryan Hartman|MIN|Points|0.5
+2022-02-23 23:44:07|Caesars|Ryan Hartman|MIN|Power Play Points|0.34183673469387754
+2022-02-23 23:44:07|Caesars|Matt Boldy|MIN|Assists|0.4040178571428571
+2022-02-23 23:44:07|Caesars|Matt Boldy|MIN|Shots|2.2831632653061225
+2022-02-23 23:44:07|Caesars|Matt Boldy|MIN|Points|0.4744094488188977
+2022-02-23 23:44:07|Caesars|Matt Boldy|MIN|Power Play Points|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Kevin Fiala|MIN|Assists|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Kevin Fiala|MIN|Shots|2.7537593984962405
+2022-02-23 23:44:07|Caesars|Kevin Fiala|MIN|Points|0.5433673469387754
+2022-02-23 23:44:07|Caesars|Kevin Fiala|MIN|Power Play Points|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Nick Bjugstad|MIN|Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Nick Bjugstad|MIN|Shots|1.4386543535620053
+2022-02-23 23:44:07|Caesars|Nick Bjugstad|MIN|Points|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Cam Talbot|MIN|Saves|31.109999999999996
+2022-02-23 23:44:07|Caesars|Kaapo Kahkonen|MIN|Saves|29.89
+2022-02-23 23:44:07|Caesars|Timothy Liljegren||Assists|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Timothy Liljegren||Shots|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Timothy Liljegren||Blocked Shots|1.261764705882353
+2022-02-23 23:44:07|Caesars|Timothy Liljegren||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Timothy Liljegren||Points|0.39059196617336156
+2022-02-23 23:44:07|Caesars|Ilya Mikheyev||Assists|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Ilya Mikheyev||Shots|1.6027131782945736
+2022-02-23 23:44:07|Caesars|Ilya Mikheyev||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Ilya Mikheyev||Points|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Travis Dermott||Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Travis Dermott||Shots|0.5255905511811023
+2022-02-23 23:44:07|Caesars|Travis Dermott||Plus/Minus|0.44211822660098526
+2022-02-23 23:44:07|Caesars|Travis Dermott||Points|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Pierre Engvall||Assists|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Pierre Engvall||Shots|1.516042780748663
+2022-02-23 23:44:07|Caesars|Pierre Engvall||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Pierre Engvall||Points|0.4170560747663551
+2022-02-23 23:44:07|Caesars|John Tavares||Assists|0.4795514511873351
+2022-02-23 23:44:07|Caesars|John Tavares||Shots|2.6711886304909562
+2022-02-23 23:44:07|Caesars|John Tavares||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:07|Caesars|John Tavares||Points|0.5625
+2022-02-23 23:44:07|Caesars|John Tavares||Power Play Points|0.4270334928229665
+2022-02-23 23:44:07|Caesars|Ilya Lyubushkin||Assists|0.3454692556634304
+2022-02-23 23:44:07|Caesars|Ilya Lyubushkin||Shots|0.5299479166666667
+2022-02-23 23:44:07|Caesars|Ilya Lyubushkin||Blocked Shots|1.3263546798029557
+2022-02-23 23:44:07|Caesars|Ilya Lyubushkin||Plus/Minus|0.4375
+2022-02-23 23:44:07|Caesars|Ilya Lyubushkin||Points|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Ondrej Kase||Assists|0.3861746361746362
+2022-02-23 23:44:07|Caesars|Ondrej Kase||Shots|2.2462406015037595
+2022-02-23 23:44:07|Caesars|Ondrej Kase||Plus/Minus|0.4375
+2022-02-23 23:44:07|Caesars|Ondrej Kase||Points|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Morgan Rielly||Assists|0.5255905511811023
+2022-02-23 23:44:07|Caesars|Morgan Rielly||Shots|2.5
+2022-02-23 23:44:07|Caesars|Morgan Rielly||Blocked Shots|1.2811004784688995
+2022-02-23 23:44:07|Caesars|Morgan Rielly||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Morgan Rielly||Points|0.5507518796992481
+2022-02-23 23:44:07|Caesars|Morgan Rielly||Power Play Points|0.39750542299349245
+2022-02-23 23:44:07|Caesars|Jason Spezza||Assists|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Jason Spezza||Shots|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Jason Spezza||Plus/Minus|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Jason Spezza||Points|0.4170560747663551
+2022-02-23 23:44:07|Caesars|Auston Matthews||Assists|0.5053475935828877
+2022-02-23 23:44:07|Caesars|Auston Matthews||Shots|3.8035714285714284
+2022-02-23 23:44:07|Caesars|Auston Matthews||Plus/Minus|0.4657622739018088
+2022-02-23 23:44:07|Caesars|Auston Matthews||Points|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Auston Matthews||Power Play Points|0.4492481203007519
+2022-02-23 23:44:07|Caesars|TJ Brodie||Assists|0.36904761904761907
+2022-02-23 23:44:07|Caesars|TJ Brodie||Shots|0.5692771084337349
+2022-02-23 23:44:07|Caesars|TJ Brodie||Blocked Shots|1.3263546798029557
+2022-02-23 23:44:07|Caesars|TJ Brodie||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|TJ Brodie||Points|0.4040178571428571
+2022-02-23 23:44:07|Caesars|David Kampf||Assists|0.37209302325581395
+2022-02-23 23:44:07|Caesars|David Kampf||Shots|1.3125
+2022-02-23 23:44:07|Caesars|David Kampf||Plus/Minus|0.4375
+2022-02-23 23:44:07|Caesars|David Kampf||Points|0.4205882352941176
+2022-02-23 23:44:07|Caesars|Alexander Kerfoot||Assists|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Alexander Kerfoot||Shots|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Alexander Kerfoot||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Alexander Kerfoot||Points|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Mitch Marner||Assists|0.5255905511811023
+2022-02-23 23:44:07|Caesars|Mitch Marner||Shots|2.7168367346938775
+2022-02-23 23:44:07|Caesars|Mitch Marner||Plus/Minus|0.4744094488188977
+2022-02-23 23:44:07|Caesars|Mitch Marner||Points|1.261764705882353
+2022-02-23 23:44:07|Caesars|Mitch Marner||Power Play Points|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Jake Muzzin||Assists|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Jake Muzzin||Shots|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Jake Muzzin||Blocked Shots|1.261764705882353
+2022-02-23 23:44:07|Caesars|Jake Muzzin||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Jake Muzzin||Points|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Kyle Clifford||Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Kyle Clifford||Shots|0.5507518796992481
+2022-02-23 23:44:07|Caesars|Kyle Clifford||Plus/Minus|0.39059196617336156
+2022-02-23 23:44:07|Caesars|Kyle Clifford||Points|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Justin Holl||Assists|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Justin Holl||Shots|0.5625
+2022-02-23 23:44:07|Caesars|Justin Holl||Blocked Shots|1.3263546798029557
+2022-02-23 23:44:07|Caesars|Justin Holl||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Justin Holl||Points|0.3861746361746362
+2022-02-23 23:44:07|Caesars|Michael Bunting||Assists|0.4205882352941176
+2022-02-23 23:44:07|Caesars|Michael Bunting||Shots|2.2831632653061225
+2022-02-23 23:44:07|Caesars|Michael Bunting||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Michael Bunting||Points|0.51
+2022-02-23 23:44:07|Caesars|Wayne Simmonds||Assists|0.33272859216255446
+2022-02-23 23:44:07|Caesars|Wayne Simmonds||Shots|0.5794117647058823
+2022-02-23 23:44:07|Caesars|Wayne Simmonds||Plus/Minus|0.4270334928229665
+2022-02-23 23:44:07|Caesars|Wayne Simmonds||Points|0.3861746361746362
+2022-02-23 23:44:07|Caesars|Rasmus Sandin||Assists|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Rasmus Sandin||Shots|0.5625
+2022-02-23 23:44:07|Caesars|Rasmus Sandin||Blocked Shots|0.5729665071770335
+2022-02-23 23:44:07|Caesars|Rasmus Sandin||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Rasmus Sandin||Points|0.3861746361746362
+2022-02-23 23:44:07|Caesars|William Nylander||Assists|0.4795514511873351
+2022-02-23 23:44:07|Caesars|William Nylander||Shots|2.627952755905512
+2022-02-23 23:44:07|Caesars|William Nylander||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|William Nylander||Points|0.5507518796992481
+2022-02-23 23:44:07|Caesars|William Nylander||Power Play Points|0.4170560747663551
+2022-02-23 23:44:07|Caesars|Jack Campbell||Saves|26.783422459893046
+2022-02-23 23:44:07|Caesars|Florida Panthers||Goals|4.315963060686016
+2022-02-23 23:44:07|Caesars|Columbus Blue||Goals|2.3720472440944884
+2022-02-23 23:44:07|Caesars|Brendan Gaunce||Assists|0.3158682634730539
+2022-02-23 23:44:07|Caesars|Brendan Gaunce||Shots|0.5433673469387754
+2022-02-23 23:44:07|Caesars|Brendan Gaunce||Points|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Emil Bemstrom|CBJ|Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Emil Bemstrom|CBJ|Shots|1.3698979591836735
+2022-02-23 23:44:07|Caesars|Emil Bemstrom|CBJ|Points|0.37209302325581395
+2022-02-23 23:44:07|Caesars|Gavin Bayreuther|CBJ|Assists|0.3158682634730539
+2022-02-23 23:44:07|Caesars|Gavin Bayreuther|CBJ|Shots|0.5625
+2022-02-23 23:44:07|Caesars|Cole Sillinger|CBJ|Assists|0.34183673469387754
+2022-02-23 23:44:07|Caesars|Cole Sillinger|CBJ|Shots|1.4839572192513368
+2022-02-23 23:44:07|Caesars|Cole Sillinger|CBJ|Points|0.4124713958810069
+2022-02-23 23:44:07|Caesars|Dean Kukan|CBJ|Assists|0.3158682634730539
+2022-02-23 23:44:07|Caesars|Dean Kukan|CBJ|Shots|0.5625
+2022-02-23 23:44:07|Caesars|Dean Kukan|CBJ|Blocked Shots|0.5794117647058823
+2022-02-23 23:44:07|Caesars|Kevin Stenlund|CBJ|Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Kevin Stenlund|CBJ|Shots|1.2811004784688995
+2022-02-23 23:44:07|Caesars|Kevin Stenlund|CBJ|Points|0.3785140562248996
+2022-02-23 23:44:07|Caesars|Vladislav Gavrikov|CBJ|Assists|0.39059196617336156
+2022-02-23 23:44:07|Caesars|Vladislav Gavrikov|CBJ|Shots|1.2511682242990654
+2022-02-23 23:44:07|Caesars|Vladislav Gavrikov|CBJ|Blocked Shots|1.5767716535433072
+2022-02-23 23:44:07|Caesars|Vladislav Gavrikov|CBJ|Points|0.4205882352941176
+2022-02-23 23:44:07|Caesars|Sean Kuraly|CBJ|Assists|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Sean Kuraly|CBJ|Shots|1.47
+2022-02-23 23:44:07|Caesars|Sean Kuraly|CBJ|Points|0.4170560747663551
+2022-02-23 23:44:07|Caesars|Patrik Laine|CBJ|Assists|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Patrik Laine|CBJ|Shots|2.6022427440633242
+2022-02-23 23:44:07|Caesars|Patrik Laine|CBJ|Points|0.5342377260981912
+2022-02-23 23:44:07|Caesars|Patrik Laine|CBJ|Power Play Points|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Jack Roslovic|CBJ|Assists|0.32598371777476254
+2022-02-23 23:44:07|Caesars|Jack Roslovic|CBJ|Shots|1.3263546798029557
+2022-02-23 23:44:07|Caesars|Jack Roslovic|CBJ|Points|0.39059196617336156
+2022-02-23 23:44:07|Caesars|Gustav Nyquist|CBJ|Assists|0.4124713958810069
+2022-02-23 23:44:07|Caesars|Gustav Nyquist|CBJ|Shots|1.3698979591836735
+2022-02-23 23:44:07|Caesars|Gustav Nyquist|CBJ|Points|0.4795514511873351
+2022-02-23 23:44:07|Caesars|Oliver Bjorkstrand|CBJ|Assists|0.4040178571428571
+2022-02-23 23:44:07|Caesars|Oliver Bjorkstrand|CBJ|Shots|2.2831632653061225
+2022-02-23 23:44:07|Caesars|Oliver Bjorkstrand|CBJ|Points|0.48474801061007955
+2022-02-23 23:44:07|Caesars|Oliver Bjorkstrand|CBJ|Power Play Points|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Boone Jenner|CBJ|Assists|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Boone Jenner|CBJ|Shots|2.576259946949602
+2022-02-23 23:44:07|Caesars|Boone Jenner|CBJ|Blocked Shots|1.2511682242990654
+2022-02-23 23:44:07|Caesars|Boone Jenner|CBJ|Points|0.5152519893899203
+2022-02-23 23:44:07|Caesars|Boone Jenner|CBJ|Power Play Points|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Adam Boqvist|CBJ|Assists|0.3364661654135338
+2022-02-23 23:44:07|Caesars|Adam Boqvist|CBJ|Shots|1.3263546798029557
+2022-02-23 23:44:07|Caesars|Adam Boqvist|CBJ|Blocked Shots|0.5729665071770335
+2022-02-23 23:44:07|Caesars|Adam Boqvist|CBJ|Points|0.3861746361746362
+2022-02-23 23:44:07|Caesars|Max Domi|CBJ|Assists|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Max Domi|CBJ|Shots|1.47
+2022-02-23 23:44:07|Caesars|Max Domi|CBJ|Points|0.4205882352941176
+2022-02-23 23:44:07|Caesars|Max Domi|CBJ|Power Play Points|0.3158682634730539
+2022-02-23 23:44:07|Caesars|Andrew Peeke|CBJ|Assists|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Andrew Peeke|CBJ|Shots|0.5794117647058823
+2022-02-23 23:44:07|Caesars|Andrew Peeke|CBJ|Blocked Shots|2.3288113695090438
+2022-02-23 23:44:07|Caesars|Andrew Peeke|CBJ|Points|0.39750542299349245
+2022-02-23 23:44:07|Caesars|Jakub Voracek|CBJ|Assists|0.4700520833333333
+2022-02-23 23:44:07|Caesars|Jakub Voracek|CBJ|Shots|1.5767716535433072
+2022-02-23 23:44:07|Caesars|Jakub Voracek|CBJ|Points|0.51
+2022-02-23 23:44:07|Caesars|Jakub Voracek|CBJ|Power Play Points|0.3861746361746362
+2022-02-23 23:44:07|Caesars|Zach Werenski|CBJ|Assists|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Zach Werenski|CBJ|Shots|2.7168367346938775
+2022-02-23 23:44:07|Caesars|Zach Werenski|CBJ|Blocked Shots|1.5
+2022-02-23 23:44:07|Caesars|Zach Werenski|CBJ|Points|0.5
+2022-02-23 23:44:07|Caesars|Zach Werenski|CBJ|Power Play Points|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Yegor Chinakhov|CBJ|Assists|0.33272859216255446
+2022-02-23 23:44:07|Caesars|Yegor Chinakhov|CBJ|Shots|1.5613456464379947
+2022-02-23 23:44:07|Caesars|Yegor Chinakhov|CBJ|Points|0.4040178571428571
+2022-02-23 23:44:07|Caesars|Justin Danforth||Assists|0.3158682634730539
+2022-02-23 23:44:07|Caesars|Justin Danforth||Shots|1.3125
+2022-02-23 23:44:07|Caesars|Justin Danforth||Points|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Jake Christiansen|CBJ|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:07|Caesars|Elvis Merzlikins|CBJ|Saves|33.5
+2022-02-23 23:44:07|Caesars|Jean-Francois Berube||Saves|32.8475935828877
+2022-02-23 23:44:07|Caesars|MacKenzie Weegar|FLA|Assists|0.4657622739018088
+2022-02-23 23:44:07|Caesars|MacKenzie Weegar|FLA|Shots|2.3288113695090438
+2022-02-23 23:44:07|Caesars|MacKenzie Weegar|FLA|Blocked Shots|1.5613456464379947
+2022-02-23 23:44:07|Caesars|MacKenzie Weegar|FLA|Plus/Minus|0.4700520833333333
+2022-02-23 23:44:07|Caesars|MacKenzie Weegar|FLA|Points|0.5053475935828877
+2022-02-23 23:44:07|Caesars|Aaron Ekblad|FLA|Assists|0.5255905511811023
+2022-02-23 23:44:07|Caesars|Aaron Ekblad|FLA|Shots|3.290364583333333
+2022-02-23 23:44:07|Caesars|Aaron Ekblad|FLA|Blocked Shots|1.3125
+2022-02-23 23:44:07|Caesars|Aaron Ekblad|FLA|Plus/Minus|0.4657622739018088
+2022-02-23 23:44:07|Caesars|Aaron Ekblad|FLA|Points|0.5829439252336448
+2022-02-23 23:44:07|Caesars|Aaron Ekblad|FLA|Power Play Points|0.4375
+2022-02-23 23:44:07|Caesars|Sam Bennett|FLA|Assists|0.4124713958810069
+2022-02-23 23:44:07|Caesars|Sam Bennett|FLA|Shots|2.6497395833333335
+2022-02-23 23:44:07|Caesars|Sam Bennett|FLA|Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Sam Bennett|FLA|Points|0.5204485488126649
+2022-02-23 23:44:07|Caesars|Sam Bennett|FLA|Power Play Points|0.34183673469387754
+2022-02-23 23:44:07|Caesars|Gustav Forsling|FLA|Assists|0.4170560747663551
+2022-02-23 23:44:07|Caesars|Gustav Forsling|FLA|Shots|1.4839572192513368
+2022-02-23 23:44:07|Caesars|Gustav Forsling|FLA|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:07|Caesars|Gustav Forsling|FLA|Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Gustav Forsling|FLA|Points|0.4657622739018088
+2022-02-23 23:44:07|Caesars|Noel Acciari|FLA|Assists|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Noel Acciari|FLA|Shots|1.3125
+2022-02-23 23:44:07|Caesars|Noel Acciari|FLA|Blocked Shots|0.5625
+2022-02-23 23:44:07|Caesars|Noel Acciari|FLA|Plus/Minus|0.4375
+2022-02-23 23:44:07|Caesars|Noel Acciari|FLA|Points|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Brandon Montour|FLA|Assists|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Brandon Montour|FLA|Shots|1.5299999999999998
+2022-02-23 23:44:07|Caesars|Brandon Montour|FLA|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:07|Caesars|Brandon Montour|FLA|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:07|Caesars|Brandon Montour|FLA|Points|0.40909090909090906
+2022-02-23 23:44:07|Caesars|Carter Verhaeghe|FLA|Assists|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Carter Verhaeghe|FLA|Shots|2.1875
+2022-02-23 23:44:07|Caesars|Carter Verhaeghe|FLA|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Carter Verhaeghe|FLA|Points|0.5204485488126649
+2022-02-23 23:44:07|Caesars|Patric Hornqvist|FLA|Assists|0.3785140562248996
+2022-02-23 23:44:07|Caesars|Patric Hornqvist|FLA|Shots|2.4732620320855614
+2022-02-23 23:44:07|Caesars|Patric Hornqvist|FLA|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:07|Caesars|Patric Hornqvist|FLA|Points|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Patric Hornqvist|FLA|Power Play Points|0.32598371777476254
+2022-02-23 23:44:07|Caesars|Jonathan Huberdeau|FLA|Assists|1.2921686746987953
+2022-02-23 23:44:07|Caesars|Jonathan Huberdeau|FLA|Shots|2.7168367346938775
+2022-02-23 23:44:07|Caesars|Jonathan Huberdeau|FLA|Plus/Minus|0.45663265306122447
+2022-02-23 23:44:07|Caesars|Jonathan Huberdeau|FLA|Points|1.5
+2022-02-23 23:44:07|Caesars|Jonathan Huberdeau|FLA|Power Play Points|0.4946524064171123
+2022-02-23 23:44:07|Caesars|Radko Gudas|FLA|Assists|0.36904761904761907
+2022-02-23 23:44:07|Caesars|Radko Gudas|FLA|Shots|1.2921686746987953
+2022-02-23 23:44:07|Caesars|Radko Gudas|FLA|Blocked Shots|1.3698979591836735
+2022-02-23 23:44:07|Caesars|Radko Gudas|FLA|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:07|Caesars|Radko Gudas|FLA|Points|0.4040178571428571
+2022-02-23 23:44:07|Caesars|Lucas Carlsson|FLA|Assists|0.32061068702290074
+2022-02-23 23:44:07|Caesars|Lucas Carlsson|FLA|Shots|0.5578817733990148
+2022-02-23 23:44:07|Caesars|Lucas Carlsson|FLA|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:07|Caesars|Lucas Carlsson|FLA|Points|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Ryan Lomberg|FLA|Assists|0.3454692556634304
+2022-02-23 23:44:07|Caesars|Ryan Lomberg|FLA|Shots|1.4542440318302385
+2022-02-23 23:44:07|Caesars|Ryan Lomberg|FLA|Plus/Minus|0.4375
+2022-02-23 23:44:07|Caesars|Ryan Lomberg|FLA|Points|0.39750542299349245
+2022-02-23 23:44:07|Caesars|Sam Reinhart|FLA|Assists|0.4744094488188977
+2022-02-23 23:44:07|Caesars|Sam Reinhart|FLA|Shots|2.3502604166666665
+2022-02-23 23:44:07|Caesars|Sam Reinhart|FLA|Plus/Minus|0.4657622739018088
+2022-02-23 23:44:07|Caesars|Sam Reinhart|FLA|Points|0.5578817733990148
+2022-02-23 23:44:07|Caesars|Sam Reinhart|FLA|Power Play Points|0.4124713958810069
+2022-02-23 23:44:07|Caesars|Eetu Luostarinen|FLA|Assists|0.3585409252669039
+2022-02-23 23:44:07|Caesars|Eetu Luostarinen|FLA|Shots|0.5692771084337349
+2022-02-23 23:44:07|Caesars|Eetu Luostarinen|FLA|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Eetu Luostarinen|FLA|Points|0.4040178571428571
+2022-02-23 23:44:07|Caesars|Frank Vatrano|FLA|Assists|0.35084033613445376
+2022-02-23 23:44:07|Caesars|Frank Vatrano|FLA|Shots|1.6301020408163265
+2022-02-23 23:44:07|Caesars|Frank Vatrano|FLA|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:07|Caesars|Frank Vatrano|FLA|Points|0.4270334928229665
+2022-02-23 23:44:07|Caesars|Aleksander Barkov|FLA|Assists|0.51
+2022-02-23 23:44:07|Caesars|Aleksander Barkov|FLA|Shots|3.356860158311346
+2022-02-23 23:44:07|Caesars|Aleksander Barkov|FLA|Plus/Minus|0.4657622739018088
+2022-02-23 23:44:07|Caesars|Aleksander Barkov|FLA|Points|1.3263546798029557
+2022-02-23 23:44:07|Caesars|Aleksander Barkov|FLA|Power Play Points|0.4375
+2022-02-23 23:44:07|Caesars|Maxim Mamin|FLA|Assists|0.34183673469387754
+2022-02-23 23:44:07|Caesars|Maxim Mamin|FLA|Shots|1.3477443609022557
+2022-02-23 23:44:07|Caesars|Maxim Mamin|FLA|Plus/Minus|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Maxim Mamin|FLA|Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Anthony Duclair|FLA|Assists|0.4375
+2022-02-23 23:44:08|Caesars|Anthony Duclair|FLA|Shots|1.6522556390977443
+2022-02-23 23:44:08|Caesars|Anthony Duclair|FLA|Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Anthony Duclair|FLA|Points|0.5299479166666667
+2022-02-23 23:44:08|Caesars|Anthony Duclair|FLA|Power Play Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Mason Marchment|FLA|Assists|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Mason Marchment|FLA|Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Mason Marchment|FLA|Plus/Minus|0.4657622739018088
+2022-02-23 23:44:08|Caesars|Mason Marchment|FLA|Points|0.4946524064171123
+2022-02-23 23:44:08|Caesars|Anton Lundell|FLA|Assists|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Anton Lundell|FLA|Shots|1.6027131782945736
+2022-02-23 23:44:08|Caesars|Anton Lundell|FLA|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Anton Lundell|FLA|Points|0.5152519893899203
+2022-02-23 23:44:08|Caesars|Sergei Bobrovsky|FLA|Saves|25.227272727272727
+2022-02-23 23:44:08|Caesars|New York||Goals|2.7168367346938775
+2022-02-23 23:44:08|Caesars|Washington Capitals||Goals|2.627952755905512
+2022-02-23 23:44:08|Caesars|Evgeny Kuznetsov||Assists|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Evgeny Kuznetsov||Shots|2.45
+2022-02-23 23:44:08|Caesars|Evgeny Kuznetsov||Points|0.5152519893899203
+2022-02-23 23:44:08|Caesars|Evgeny Kuznetsov||Power Play Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Connor McMichael||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Connor McMichael||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Connor McMichael||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Nick Jensen||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Nick Jensen||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Nick Jensen||Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Nick Jensen||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|TJ Oshie||Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|TJ Oshie||Shots|1.516042780748663
+2022-02-23 23:44:08|Caesars|TJ Oshie||Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|TJ Oshie||Power Play Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Justin Schultz||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Justin Schultz||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Justin Schultz||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Garnet Hathaway||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Garnet Hathaway||Shots|1.4839572192513368
+2022-02-23 23:44:08|Caesars|Garnet Hathaway||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Alexander Alexeyev||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Alexander Alexeyev||Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Alexander Alexeyev||Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Brett Leason||Assists|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Brett Leason||Shots|1.3125
+2022-02-23 23:44:08|Caesars|Brett Leason||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Alex Ovechkin||Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Alex Ovechkin||Shots|4.10969387755102
+2022-02-23 23:44:08|Caesars|Alex Ovechkin||Points|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Alex Ovechkin||Power Play Points|0.4657622739018088
+2022-02-23 23:44:08|Caesars|Daniel Sprong||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Daniel Sprong||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Daniel Sprong||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|John Carlson||Assists|0.4700520833333333
+2022-02-23 23:44:08|Caesars|John Carlson||Shots|2.526737967914438
+2022-02-23 23:44:08|Caesars|John Carlson||Blocked Shots|1.3125
+2022-02-23 23:44:08|Caesars|John Carlson||Points|0.5152519893899203
+2022-02-23 23:44:08|Caesars|John Carlson||Power Play Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Trevor van||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Trevor van||Shots|0.5625
+2022-02-23 23:44:08|Caesars|Trevor van||Blocked Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Trevor van||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Tom Wilson||Assists|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Tom Wilson||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Tom Wilson||Points|0.4946524064171123
+2022-02-23 23:44:08|Caesars|Tom Wilson||Power Play Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Dmitry Orlov||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Dmitry Orlov||Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Dmitry Orlov||Blocked Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Dmitry Orlov||Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Nicklas Backstrom||Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Nicklas Backstrom||Shots|1.5457559681697612
+2022-02-23 23:44:08|Caesars|Nicklas Backstrom||Points|0.51
+2022-02-23 23:44:08|Caesars|Nicklas Backstrom||Power Play Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Lars Eller||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Lars Eller||Shots|1.3125
+2022-02-23 23:44:08|Caesars|Lars Eller||Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Carl Hagelin||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Carl Hagelin||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Carl Hagelin||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Conor Sheary||Assists|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Conor Sheary||Shots|1.58984375
+2022-02-23 23:44:08|Caesars|Conor Sheary||Points|0.4700520833333333
+2022-02-23 23:44:08|Caesars|Conor Sheary||Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Joe Snively||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Joe Snively||Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Joe Snively||Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Michal Kempny||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Michal Kempny||Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Michal Kempny||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Martin Fehervary||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Martin Fehervary||Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Martin Fehervary||Blocked Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Martin Fehervary||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Nic Dowd||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Nic Dowd||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Nic Dowd||Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Ilya Samsonov||Saves|26.783422459893046
+2022-02-23 23:44:08|Caesars|Matthew Robertson|NYR|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Matthew Robertson|NYR|Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Matthew Robertson|NYR|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Matthew Robertson|NYR|Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Matthew Robertson|NYR|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Tim Gettinger|NYR|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Tim Gettinger|NYR|Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Tim Gettinger|NYR|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Mika Zibanejad|NYR|Assists|0.4946524064171123
+2022-02-23 23:44:08|Caesars|Mika Zibanejad|NYR|Shots|2.7168367346938775
+2022-02-23 23:44:08|Caesars|Mika Zibanejad|NYR|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Mika Zibanejad|NYR|Points|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Mika Zibanejad|NYR|Power Play Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|K'Andre Miller|NYR|Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|K'Andre Miller|NYR|Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|K'Andre Miller|NYR|Blocked Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|K'Andre Miller|NYR|Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|K'Andre Miller|NYR|Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Filip Chytil|NYR|Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Filip Chytil|NYR|Shots|1.4839572192513368
+2022-02-23 23:44:08|Caesars|Filip Chytil|NYR|Plus/Minus|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Filip Chytil|NYR|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Braden Schneider|NYR|Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Braden Schneider|NYR|Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Braden Schneider|NYR|Blocked Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Braden Schneider|NYR|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Braden Schneider|NYR|Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Barclay Goodrow|NYR|Assists|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Barclay Goodrow|NYR|Shots|1.47
+2022-02-23 23:44:08|Caesars|Barclay Goodrow|NYR|Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Barclay Goodrow|NYR|Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Greg McKegg|NYR|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Greg McKegg|NYR|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Julien Gauthier|NYR|Assists|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Julien Gauthier|NYR|Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Julien Gauthier|NYR|Plus/Minus|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Julien Gauthier|NYR|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Artemi Panarin|NYR|Assists|0.5433673469387754
+2022-02-23 23:44:08|Caesars|Artemi Panarin|NYR|Shots|2.6711886304909562
+2022-02-23 23:44:08|Caesars|Artemi Panarin|NYR|Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Artemi Panarin|NYR|Points|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Artemi Panarin|NYR|Power Play Points|0.4700520833333333
+2022-02-23 23:44:08|Caesars|Lauri Pajuniemi|NYR|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Lauri Pajuniemi|NYR|Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Lauri Pajuniemi|NYR|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Ryan Strome|NYR|Assists|0.4744094488188977
+2022-02-23 23:44:08|Caesars|Ryan Strome|NYR|Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Ryan Strome|NYR|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Ryan Strome|NYR|Points|0.5342377260981912
+2022-02-23 23:44:08|Caesars|Ryan Strome|NYR|Power Play Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Morgan Barron|NYR|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Morgan Barron|NYR|Shots|0.5578817733990148
+2022-02-23 23:44:08|Caesars|Morgan Barron|NYR|Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Alexis Lafreniere|NYR|Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Alexis Lafreniere|NYR|Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Alexis Lafreniere|NYR|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Alexis Lafreniere|NYR|Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Ryan Reaves|NYR|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Ryan Reaves|NYR|Shots|0.5255905511811023
+2022-02-23 23:44:08|Caesars|Ryan Reaves|NYR|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Chris Kreider|NYR|Assists|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Chris Kreider|NYR|Shots|2.7537593984962405
+2022-02-23 23:44:08|Caesars|Chris Kreider|NYR|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Chris Kreider|NYR|Points|0.5433673469387754
+2022-02-23 23:44:08|Caesars|Chris Kreider|NYR|Power Play Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Adam Fox|NYR|Assists|0.5255905511811023
+2022-02-23 23:44:08|Caesars|Adam Fox|NYR|Shots|1.5
+2022-02-23 23:44:08|Caesars|Adam Fox|NYR|Blocked Shots|1.5613456464379947
+2022-02-23 23:44:08|Caesars|Adam Fox|NYR|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Adam Fox|NYR|Points|0.5433673469387754
+2022-02-23 23:44:08|Caesars|Adam Fox|NYR|Power Play Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Kevin Rooney|NYR|Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Kevin Rooney|NYR|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Kevin Rooney|NYR|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Ryan Lindgren|NYR|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Ryan Lindgren|NYR|Shots|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Ryan Lindgren|NYR|Blocked Shots|1.6027131782945736
+2022-02-23 23:44:08|Caesars|Ryan Lindgren|NYR|Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Ryan Lindgren|NYR|Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Dryden Hunt|NYR|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Dryden Hunt|NYR|Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Dryden Hunt|NYR|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Jacob Trouba|NYR|Assists|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Jacob Trouba|NYR|Shots|2.3977572559366758
+2022-02-23 23:44:08|Caesars|Jacob Trouba|NYR|Blocked Shots|2.210591133004926
+2022-02-23 23:44:08|Caesars|Jacob Trouba|NYR|Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Jacob Trouba|NYR|Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jacob Trouba|NYR|Power Play Points|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Libor Hajek||Blocked Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Igor Shesterkin|NYR|Saves|27.93
+2022-02-23 23:44:08|Caesars|Pittsburgh Penguins||Goals|3.739664082687338
+2022-02-23 23:44:08|Caesars|New Jersey||Goals|2.3288113695090438
+2022-02-23 23:44:08|Caesars|Ryan Graves||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Ryan Graves||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Ryan Graves||Blocked Shots|1.58984375
+2022-02-23 23:44:08|Caesars|Ryan Graves||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Jonas Siegenthaler||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Jonas Siegenthaler||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Jonas Siegenthaler||Blocked Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Jonas Siegenthaler||Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Nico Hischier||Assists|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Nico Hischier||Shots|1.58984375
+2022-02-23 23:44:08|Caesars|Nico Hischier||Points|0.48474801061007955
+2022-02-23 23:44:08|Caesars|Nico Hischier||Power Play Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Dawson Mercer||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Dawson Mercer||Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Dawson Mercer||Points|0.4375
+2022-02-23 23:44:08|Caesars|Jimmy Vesey||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Jimmy Vesey||Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Jimmy Vesey||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Pavel Zacha||Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Pavel Zacha||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Pavel Zacha||Points|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Pavel Zacha||Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|PK Subban||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|PK Subban||Shots|1.41015625
+2022-02-23 23:44:08|Caesars|PK Subban||Blocked Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|PK Subban||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Dougie Hamilton||Assists|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Dougie Hamilton||Shots|2.6711886304909562
+2022-02-23 23:44:08|Caesars|Dougie Hamilton||Blocked Shots|1.423228346456693
+2022-02-23 23:44:08|Caesars|Dougie Hamilton||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Dougie Hamilton||Power Play Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Damon Severson||Assists|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Damon Severson||Shots|1.6027131782945736
+2022-02-23 23:44:08|Caesars|Damon Severson||Blocked Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Damon Severson||Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Damon Severson||Power Play Points|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Marian Studenic||Assists|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Marian Studenic||Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Marian Studenic||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Yegor Sharangovich||Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Yegor Sharangovich||Shots|1.6522556390977443
+2022-02-23 23:44:08|Caesars|Yegor Sharangovich||Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Jack Hughes||Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jack Hughes||Shots|2.6711886304909562
+2022-02-23 23:44:08|Caesars|Jack Hughes||Points|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Jack Hughes||Power Play Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Michael McLeod||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Michael McLeod||Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Michael McLeod||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Nathan Bastian||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Nathan Bastian||Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Nathan Bastian||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Nathan Bastian||Power Play Points|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Ty Smith||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Ty Smith||Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Ty Smith||Blocked Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Ty Smith||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Jesper Boqvist||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Jesper Boqvist||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Jesper Boqvist||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Kevin Bahl||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Kevin Bahl||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Kevin Bahl||Blocked Shots|0.5625
+2022-02-23 23:44:08|Caesars|Kevin Bahl||Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Tomas Tatar||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Tomas Tatar||Shots|1.47
+2022-02-23 23:44:08|Caesars|Tomas Tatar||Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Andreas Johnsson||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Andreas Johnsson||Shots|1.47
+2022-02-23 23:44:08|Caesars|Andreas Johnsson||Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Jesper Bratt||Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jesper Bratt||Shots|2.3720472440944884
+2022-02-23 23:44:08|Caesars|Jesper Bratt||Points|0.51
+2022-02-23 23:44:08|Caesars|Jesper Bratt||Power Play Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Jon Gillies||Saves|29.81550802139037
+2022-02-23 23:44:08|Caesars|Marcus Pettersson|PIT|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Marcus Pettersson|PIT|Shots|0.5342377260981912
+2022-02-23 23:44:08|Caesars|Marcus Pettersson|PIT|Blocked Shots|0.5625
+2022-02-23 23:44:08|Caesars|Marcus Pettersson|PIT|Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Marcus Pettersson|PIT|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Kasperi Kapanen|PIT|Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Kasperi Kapanen|PIT|Shots|1.47
+2022-02-23 23:44:08|Caesars|Kasperi Kapanen|PIT|Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Kris Letang|PIT|Assists|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Kris Letang|PIT|Shots|2.576259946949602
+2022-02-23 23:44:08|Caesars|Kris Letang|PIT|Blocked Shots|1.6522556390977443
+2022-02-23 23:44:08|Caesars|Kris Letang|PIT|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Kris Letang|PIT|Points|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Kris Letang|PIT|Power Play Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Evan Rodrigues|PIT|Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Evan Rodrigues|PIT|Shots|2.3502604166666665
+2022-02-23 23:44:08|Caesars|Evan Rodrigues|PIT|Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Evan Rodrigues|PIT|Points|0.4795514511873351
+2022-02-23 23:44:08|Caesars|Evan Rodrigues|PIT|Power Play Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Danton Heinen|PIT|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Danton Heinen|PIT|Shots|1.5457559681697612
+2022-02-23 23:44:08|Caesars|Danton Heinen|PIT|Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Danton Heinen|PIT|Points|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Filip Hallander|PIT|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Filip Hallander|PIT|Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Filip Hallander|PIT|Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Filip Hallander|PIT|Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Zachary Aston-Reese||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Zachary Aston-Reese||Shots|0.5625
+2022-02-23 23:44:08|Caesars|Zachary Aston-Reese||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Jason Zucker|PIT|Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Jason Zucker|PIT|Shots|2.3502604166666665
+2022-02-23 23:44:08|Caesars|Jason Zucker|PIT|Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jason Zucker|PIT|Power Play Points|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Jake Guentzel|PIT|Assists|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Jake Guentzel|PIT|Shots|3.4299999999999997
+2022-02-23 23:44:08|Caesars|Jake Guentzel|PIT|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jake Guentzel|PIT|Points|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Jake Guentzel|PIT|Power Play Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|John Marino|PIT|Assists|0.3785140562248996
+2022-02-23 23:44:08|Caesars|John Marino|PIT|Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|John Marino|PIT|Blocked Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|John Marino|PIT|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|John Marino|PIT|Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Michael Matheson||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Michael Matheson||Shots|1.5457559681697612
+2022-02-23 23:44:08|Caesars|Michael Matheson||Blocked Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Michael Matheson||Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Michael Matheson||Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Brock McGinn|PIT|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Brock McGinn|PIT|Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Brock McGinn|PIT|Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Bryan Rust|PIT|Assists|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Bryan Rust|PIT|Shots|3.2603359173126614
+2022-02-23 23:44:08|Caesars|Bryan Rust|PIT|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Bryan Rust|PIT|Points|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Bryan Rust|PIT|Power Play Points|0.4700520833333333
+2022-02-23 23:44:08|Caesars|Dominik Simon|PIT|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Dominik Simon|PIT|Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Dominik Simon|PIT|Plus/Minus|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Dominik Simon|PIT|Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Brian Boyle|PIT|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Brian Boyle|PIT|Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Brian Boyle|PIT|Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Evgeni Malkin|PIT|Assists|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Evgeni Malkin|PIT|Shots|2.45
+2022-02-23 23:44:08|Caesars|Evgeni Malkin|PIT|Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Evgeni Malkin|PIT|Points|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Evgeni Malkin|PIT|Power Play Points|0.5
+2022-02-23 23:44:08|Caesars|Brian Dumoulin|PIT|Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Brian Dumoulin|PIT|Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Brian Dumoulin|PIT|Blocked Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Brian Dumoulin|PIT|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Brian Dumoulin|PIT|Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Jeff Carter|PIT|Assists|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Jeff Carter|PIT|Shots|2.5
+2022-02-23 23:44:08|Caesars|Jeff Carter|PIT|Points|0.5053475935828877
+2022-02-23 23:44:08|Caesars|Jeff Carter|PIT|Power Play Points|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Kasper Bjorkqvist|PIT|Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Kasper Bjorkqvist|PIT|Shots|1.3125
+2022-02-23 23:44:08|Caesars|Kasper Bjorkqvist|PIT|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Chad Ruhwedel|PIT|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Chad Ruhwedel|PIT|Shots|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Chad Ruhwedel|PIT|Blocked Shots|0.5625
+2022-02-23 23:44:08|Caesars|Chad Ruhwedel|PIT|Plus/Minus|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Chad Ruhwedel|PIT|Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Sidney Crosby|PIT|Assists|0.5625
+2022-02-23 23:44:08|Caesars|Sidney Crosby|PIT|Shots|2.7537593984962405
+2022-02-23 23:44:08|Caesars|Sidney Crosby|PIT|Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Sidney Crosby|PIT|Points|1.423228346456693
+2022-02-23 23:44:08|Caesars|Sidney Crosby|PIT|Power Play Points|0.4795514511873351
+2022-02-23 23:44:08|Caesars|Tristan Jarry|PIT|Saves|26.783422459893046
+2022-02-23 23:44:08|Caesars|Nashville Predators||Goals|3.1447368421052633
+2022-02-23 23:44:08|Caesars|Dallas Stars||Goals|2.526737967914438
+2022-02-23 23:44:08|Caesars|John Klingberg|DAL|Assists|0.45663265306122447
+2022-02-23 23:44:08|Caesars|John Klingberg|DAL|Shots|1.5767716535433072
+2022-02-23 23:44:08|Caesars|John Klingberg|DAL|Blocked Shots|1.3125
+2022-02-23 23:44:08|Caesars|John Klingberg|DAL|Points|0.48474801061007955
+2022-02-23 23:44:08|Caesars|John Klingberg|DAL|Power Play Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Luke Glendening|DAL|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Luke Glendening|DAL|Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Luke Glendening|DAL|Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Esa Lindell|DAL|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Esa Lindell|DAL|Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Esa Lindell|DAL|Blocked Shots|1.4839572192513368
+2022-02-23 23:44:08|Caesars|Esa Lindell|DAL|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Jacob Peterson|DAL|Assists|0.30947136563876654
+2022-02-23 23:44:08|Caesars|Jacob Peterson|DAL|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Jacob Peterson|DAL|Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Miro Heiskanen|DAL|Assists|0.4375
+2022-02-23 23:44:08|Caesars|Miro Heiskanen|DAL|Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Miro Heiskanen|DAL|Blocked Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Miro Heiskanen|DAL|Points|0.4744094488188977
+2022-02-23 23:44:08|Caesars|Miro Heiskanen|DAL|Power Play Points|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Tyler Seguin|DAL|Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Tyler Seguin|DAL|Shots|2.4732620320855614
+2022-02-23 23:44:08|Caesars|Tyler Seguin|DAL|Points|0.4657622739018088
+2022-02-23 23:44:08|Caesars|Tyler Seguin|DAL|Power Play Points|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Denis Gurianov|DAL|Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Denis Gurianov|DAL|Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Denis Gurianov|DAL|Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Denis Gurianov|DAL|Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Jason Robertson|DAL|Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jason Robertson|DAL|Shots|2.576259946949602
+2022-02-23 23:44:08|Caesars|Jason Robertson|DAL|Points|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Jason Robertson|DAL|Power Play Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Joel Kiviranta|DAL|Assists|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Joel Kiviranta|DAL|Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Joel Kiviranta|DAL|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Joe Pavelski|DAL|Assists|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Joe Pavelski|DAL|Shots|2.627952755905512
+2022-02-23 23:44:08|Caesars|Joe Pavelski|DAL|Points|0.5299479166666667
+2022-02-23 23:44:08|Caesars|Joe Pavelski|DAL|Power Play Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Riley Tufte|DAL|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Riley Tufte|DAL|Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Riley Tufte|DAL|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Ryan Suter|DAL|Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Ryan Suter|DAL|Shots|1.5457559681697612
+2022-02-23 23:44:08|Caesars|Ryan Suter|DAL|Blocked Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Ryan Suter|DAL|Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Ryan Suter|DAL|Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Roope Hintz|DAL|Assists|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Roope Hintz|DAL|Shots|2.6022427440633242
+2022-02-23 23:44:08|Caesars|Roope Hintz|DAL|Points|0.5053475935828877
+2022-02-23 23:44:08|Caesars|Roope Hintz|DAL|Power Play Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Jamie Benn|DAL|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Jamie Benn|DAL|Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Jamie Benn|DAL|Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Jamie Benn|DAL|Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Radek Faksa|DAL|Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Radek Faksa|DAL|Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Radek Faksa|DAL|Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Alexander Radulov|DAL|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Alexander Radulov|DAL|Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Alexander Radulov|DAL|Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Alexander Radulov|DAL|Power Play Points|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Michael Raffl|DAL|Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Michael Raffl|DAL|Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Michael Raffl|DAL|Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Blake Comeau|DAL|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Blake Comeau|DAL|Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Blake Comeau|DAL|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Thomas Harley|DAL|Shots|0.5625
+2022-02-23 23:44:08|Caesars|Jani Hakanpaa|DAL|Blocked Shots|1.2374141876430205
+2022-02-23 23:44:08|Caesars|Jake Oettinger|DAL|Saves|26.5
+2022-02-23 23:44:08|Caesars|Filip Forsberg||Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Filip Forsberg||Shots|2.6711886304909562
+2022-02-23 23:44:08|Caesars|Filip Forsberg||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Filip Forsberg||Points|0.5578817733990148
+2022-02-23 23:44:08|Caesars|Filip Forsberg||Power Play Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Luke Kunin||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Luke Kunin||Shots|1.5
+2022-02-23 23:44:08|Caesars|Luke Kunin||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Luke Kunin||Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Philippe Myers||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Philippe Myers||Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Philippe Myers||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Philippe Myers||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Phillip Tomasino||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Phillip Tomasino||Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Phillip Tomasino||Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Phillip Tomasino||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Colton Sissons||Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Colton Sissons||Shots|0.5625
+2022-02-23 23:44:08|Caesars|Colton Sissons||Plus/Minus|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Colton Sissons||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Mikael Granlund||Assists|0.4946524064171123
+2022-02-23 23:44:08|Caesars|Mikael Granlund||Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Mikael Granlund||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Mikael Granlund||Points|0.5433673469387754
+2022-02-23 23:44:08|Caesars|Mikael Granlund||Power Play Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Ryan Johansen||Assists|0.4375
+2022-02-23 23:44:08|Caesars|Ryan Johansen||Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Ryan Johansen||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Ryan Johansen||Points|0.4946524064171123
+2022-02-23 23:44:08|Caesars|Ryan Johansen||Power Play Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Tanner Jeannot||Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Tanner Jeannot||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Tanner Jeannot||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Tanner Jeannot||Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Roman Josi||Assists|0.5152519893899203
+2022-02-23 23:44:08|Caesars|Roman Josi||Shots|3.1964285714285716
+2022-02-23 23:44:08|Caesars|Roman Josi||Blocked Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Roman Josi||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Roman Josi||Points|0.5578817733990148
+2022-02-23 23:44:08|Caesars|Roman Josi||Power Play Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Matt Duchene||Assists|0.4375
+2022-02-23 23:44:08|Caesars|Matt Duchene||Shots|2.6022427440633242
+2022-02-23 23:44:08|Caesars|Matt Duchene||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Matt Duchene||Points|0.5255905511811023
+2022-02-23 23:44:08|Caesars|Matt Duchene||Power Play Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Alexandre Carrier||Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Alexandre Carrier||Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Alexandre Carrier||Blocked Shots|1.4386543535620053
+2022-02-23 23:44:08|Caesars|Alexandre Carrier||Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Alexandre Carrier||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Dante Fabbro||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Dante Fabbro||Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Dante Fabbro||Blocked Shots|1.4386543535620053
+2022-02-23 23:44:08|Caesars|Dante Fabbro||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Dante Fabbro||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Matt Luff||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Matt Luff||Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Matt Luff||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Eeli Tolvanen||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Eeli Tolvanen||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Eeli Tolvanen||Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Eeli Tolvanen||Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Eeli Tolvanen||Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Yakov Trenin||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Yakov Trenin||Shots|1.5767716535433072
+2022-02-23 23:44:08|Caesars|Yakov Trenin||Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Yakov Trenin||Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Michael McCarron||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Michael McCarron||Shots|0.5578817733990148
+2022-02-23 23:44:08|Caesars|Michael McCarron||Plus/Minus|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Michael McCarron||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Matt Benning||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Matt Benning||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Matt Benning||Blocked Shots|0.5625
+2022-02-23 23:44:08|Caesars|Matt Benning||Plus/Minus|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Matt Benning||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Mattias Ekholm||Assists|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Mattias Ekholm||Shots|1.5
+2022-02-23 23:44:08|Caesars|Mattias Ekholm||Blocked Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Mattias Ekholm||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Mattias Ekholm||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Mark Borowiecki||Blocked Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Mark Borowiecki||Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Juuse Saros||Saves|27.794117647058822
+2022-02-23 23:44:08|Caesars|Seattle Kraken||Goals|2.423740053050398
+2022-02-23 23:44:08|Caesars|Boston Bruins||Goals|3.3932360742705567
+2022-02-23 23:44:08|Caesars|Nick Foligno||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Nick Foligno||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Nick Foligno||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Taylor Hall||Assists|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Taylor Hall||Shots|2.4732620320855614
+2022-02-23 23:44:08|Caesars|Taylor Hall||Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Taylor Hall||Points|0.49
+2022-02-23 23:44:08|Caesars|Taylor Hall||Power Play Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Tomas Nosek||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Tomas Nosek||Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Tomas Nosek||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Mike Reilly||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Mike Reilly||Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Mike Reilly||Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Mike Reilly||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|David Pastrnak||Assists|0.4307228915662651
+2022-02-23 23:44:08|Caesars|David Pastrnak||Shots|3.606763925729443
+2022-02-23 23:44:08|Caesars|David Pastrnak||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|David Pastrnak||Points|0.5342377260981912
+2022-02-23 23:44:08|Caesars|David Pastrnak||Power Play Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Brandon Carlo||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Brandon Carlo||Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Brandon Carlo||Blocked Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Brandon Carlo||Plus/Minus|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Brandon Carlo||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Matt Grzelcyk||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Matt Grzelcyk||Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Matt Grzelcyk||Blocked Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Matt Grzelcyk||Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Matt Grzelcyk||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Brad Marchand||Assists|0.51
+2022-02-23 23:44:08|Caesars|Brad Marchand||Shots|2.55
+2022-02-23 23:44:08|Caesars|Brad Marchand||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Brad Marchand||Points|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Brad Marchand||Power Play Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Jesper Froden||Assists|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Jesper Froden||Shots|0.5578817733990148
+2022-02-23 23:44:08|Caesars|Jesper Froden||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Charlie McAvoy||Assists|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Charlie McAvoy||Shots|1.5613456464379947
+2022-02-23 23:44:08|Caesars|Charlie McAvoy||Blocked Shots|1.4386543535620053
+2022-02-23 23:44:08|Caesars|Charlie McAvoy||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Charlie McAvoy||Points|0.4700520833333333
+2022-02-23 23:44:08|Caesars|Charlie McAvoy||Power Play Points|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Erik Haula||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Erik Haula||Shots|1.47
+2022-02-23 23:44:08|Caesars|Erik Haula||Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Trent Frederic||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Trent Frederic||Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Trent Frederic||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Craig Smith||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Craig Smith||Shots|2.423740053050398
+2022-02-23 23:44:08|Caesars|Craig Smith||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Craig Smith||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Derek Forbort||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Derek Forbort||Blocked Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Derek Forbort||Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|John Moore||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|John Moore||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|John Moore||Blocked Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|John Moore||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Jake DeBrusk||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Jake DeBrusk||Shots|1.6027131782945736
+2022-02-23 23:44:08|Caesars|Jake DeBrusk||Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Charlie Coyle||Assists|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Charlie Coyle||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Charlie Coyle||Points|0.4375
+2022-02-23 23:44:08|Caesars|Charlie Coyle||Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Jack Studnicka||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Jack Studnicka||Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Jack Studnicka||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Patrice Bergeron||Assists|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Patrice Bergeron||Shots|3.2603359173126614
+2022-02-23 23:44:08|Caesars|Patrice Bergeron||Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Patrice Bergeron||Points|0.5152519893899203
+2022-02-23 23:44:08|Caesars|Patrice Bergeron||Power Play Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Curtis Lazar||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Curtis Lazar||Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Curtis Lazar||Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Connor Clifton||Shots|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Connor Clifton||Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Jeremy Swayman||Saves|25.227272727272727
+2022-02-23 23:44:08|Caesars|Adam Larsson||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Adam Larsson||Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Adam Larsson||Blocked Shots|1.5
+2022-02-23 23:44:08|Caesars|Adam Larsson||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Jamie Oleksiak||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Jamie Oleksiak||Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Jamie Oleksiak||Blocked Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Jamie Oleksiak||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Calle Jarnkrok||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Calle Jarnkrok||Shots|1.516042780748663
+2022-02-23 23:44:08|Caesars|Calle Jarnkrok||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Calle Jarnkrok||Power Play Points|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Jared McCann||Assists|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Jared McCann||Shots|2.627952755905512
+2022-02-23 23:44:08|Caesars|Jared McCann||Points|0.48474801061007955
+2022-02-23 23:44:08|Caesars|Jared McCann||Power Play Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Mark Giordano||Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Mark Giordano||Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Mark Giordano||Blocked Shots|1.6875
+2022-02-23 23:44:08|Caesars|Mark Giordano||Points|0.4375
+2022-02-23 23:44:08|Caesars|Mark Giordano||Power Play Points|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Jaden Schwartz||Assists|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Jaden Schwartz||Shots|2.1875
+2022-02-23 23:44:08|Caesars|Jaden Schwartz||Points|0.4700520833333333
+2022-02-23 23:44:08|Caesars|Jaden Schwartz||Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Colin Blackwell||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Colin Blackwell||Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Colin Blackwell||Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Vince Dunn||Assists|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Vince Dunn||Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Vince Dunn||Blocked Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Vince Dunn||Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Vince Dunn||Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Jeremy Lauzon||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Jeremy Lauzon||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Jeremy Lauzon||Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Jeremy Lauzon||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Haydn Fleury||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Haydn Fleury||Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Haydn Fleury||Blocked Shots|1.5
+2022-02-23 23:44:08|Caesars|Haydn Fleury||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Riley Sheahan||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Riley Sheahan||Shots|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Riley Sheahan||Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Yanni Gourde||Assists|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Yanni Gourde||Shots|1.423228346456693
+2022-02-23 23:44:08|Caesars|Yanni Gourde||Points|0.4700520833333333
+2022-02-23 23:44:08|Caesars|Yanni Gourde||Power Play Points|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Mason Appleton||Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Mason Appleton||Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Mason Appleton||Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Joonas Donskoi||Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Joonas Donskoi||Shots|1.3125
+2022-02-23 23:44:08|Caesars|Joonas Donskoi||Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Alexander Wennberg||Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Alexander Wennberg||Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Alexander Wennberg||Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Alexander Wennberg||Power Play Points|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Austin Czarnik||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Austin Czarnik||Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Austin Czarnik||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Ryan Donato||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Ryan Donato||Shots|2.2831632653061225
+2022-02-23 23:44:08|Caesars|Ryan Donato||Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Ryan Donato||Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Marcus Johansson||Assists|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Marcus Johansson||Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Marcus Johansson||Points|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Marcus Johansson||Power Play Points|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Jordan Eberle||Assists|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Jordan Eberle||Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Jordan Eberle||Points|0.4795514511873351
+2022-02-23 23:44:08|Caesars|Jordan Eberle||Power Play Points|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Morgan Geekie||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Morgan Geekie||Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Morgan Geekie||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Morgan Geekie||Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Philipp Grubauer||Saves|26.95
+2022-02-23 23:44:08|Caesars|Vancouver Canucks||Goals|2.526737967914438
+2022-02-23 23:44:08|Caesars|Calgary Flames||Goals|3.290364583333333
+2022-02-23 23:44:08|Caesars|Mikael Backlund||Assists|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Mikael Backlund||Shots|2.4732620320855614
+2022-02-23 23:44:08|Caesars|Mikael Backlund||Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Mikael Backlund||Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Elias Lindholm||Assists|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Elias Lindholm||Shots|2.5
+2022-02-23 23:44:08|Caesars|Elias Lindholm||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Elias Lindholm||Points|0.5152519893899203
+2022-02-23 23:44:08|Caesars|Elias Lindholm||Power Play Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Blake Coleman||Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Blake Coleman||Shots|2.526737967914438
+2022-02-23 23:44:08|Caesars|Blake Coleman||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Blake Coleman||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Matthew Tkachuk||Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Matthew Tkachuk||Shots|3.1964285714285716
+2022-02-23 23:44:08|Caesars|Matthew Tkachuk||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Matthew Tkachuk||Points|0.5299479166666667
+2022-02-23 23:44:08|Caesars|Matthew Tkachuk||Power Play Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Johnny Gaudreau||Assists|0.5053475935828877
+2022-02-23 23:44:08|Caesars|Johnny Gaudreau||Shots|3.356860158311346
+2022-02-23 23:44:08|Caesars|Johnny Gaudreau||Plus/Minus|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Johnny Gaudreau||Points|0.5625
+2022-02-23 23:44:08|Caesars|Johnny Gaudreau||Power Play Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Michael Stone||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Michael Stone||Shots|1.4839572192513368
+2022-02-23 23:44:08|Caesars|Michael Stone||Blocked Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Michael Stone||Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Michael Stone||Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Andrew Mangiapane||Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Andrew Mangiapane||Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Andrew Mangiapane||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Andrew Mangiapane||Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Andrew Mangiapane||Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Nikita Zadorov||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Nikita Zadorov||Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Nikita Zadorov||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Nikita Zadorov||Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Adam Ruzicka||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Adam Ruzicka||Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Adam Ruzicka||Plus/Minus|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Adam Ruzicka||Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Oliver Kylington||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Oliver Kylington||Shots|1.5
+2022-02-23 23:44:08|Caesars|Oliver Kylington||Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Oliver Kylington||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Oliver Kylington||Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Trevor Lewis||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Trevor Lewis||Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Trevor Lewis||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Rasmus Andersson||Assists|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Rasmus Andersson||Shots|1.6875
+2022-02-23 23:44:08|Caesars|Rasmus Andersson||Blocked Shots|1.516042780748663
+2022-02-23 23:44:08|Caesars|Rasmus Andersson||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Rasmus Andersson||Points|0.4657622739018088
+2022-02-23 23:44:08|Caesars|Rasmus Andersson||Power Play Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Dillon Dube||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Dillon Dube||Shots|1.3698979591836735
+2022-02-23 23:44:08|Caesars|Dillon Dube||Plus/Minus|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Dillon Dube||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Sean Monahan||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Sean Monahan||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Sean Monahan||Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Sean Monahan||Power Play Points|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Milan Lucic||Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Milan Lucic||Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Milan Lucic||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Tyler Toffoli||Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Tyler Toffoli||Shots|2.423740053050398
+2022-02-23 23:44:08|Caesars|Tyler Toffoli||Points|0.4657622739018088
+2022-02-23 23:44:08|Caesars|Tyler Toffoli||Power Play Points|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Erik Gudbranson||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Erik Gudbranson||Shots|1.5
+2022-02-23 23:44:08|Caesars|Erik Gudbranson||Blocked Shots|1.3125
+2022-02-23 23:44:08|Caesars|Erik Gudbranson||Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Erik Gudbranson||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Noah Hanifin||Assists|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Noah Hanifin||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Noah Hanifin||Blocked Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Noah Hanifin||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Noah Hanifin||Points|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Christopher Tanev||Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Christopher Tanev||Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Christopher Tanev||Blocked Shots|1.5613456464379947
+2022-02-23 23:44:08|Caesars|Christopher Tanev||Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Christopher Tanev||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Jacob Markstrom||Saves|26.783422459893046
+2022-02-23 23:44:08|Caesars|JT Miller||Assists|0.5342377260981912
+2022-02-23 23:44:08|Caesars|JT Miller||Shots|2.3288113695090438
+2022-02-23 23:44:08|Caesars|JT Miller||Points|1.2511682242990654
+2022-02-23 23:44:08|Caesars|JT Miller||Power Play Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Jason Dickinson||Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Jason Dickinson||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Jason Dickinson||Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Brad Hunt||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Brad Hunt||Shots|1.3477443609022557
+2022-02-23 23:44:08|Caesars|Brad Hunt||Blocked Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Brad Hunt||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Quinn Hughes||Assists|0.51
+2022-02-23 23:44:08|Caesars|Quinn Hughes||Shots|1.6522556390977443
+2022-02-23 23:44:08|Caesars|Quinn Hughes||Blocked Shots|0.5625
+2022-02-23 23:44:08|Caesars|Quinn Hughes||Points|0.5342377260981912
+2022-02-23 23:44:08|Caesars|Quinn Hughes||Power Play Points|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Luke Schenn||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Luke Schenn||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Luke Schenn||Blocked Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Luke Schenn||Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Tanner Pearson||Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Tanner Pearson||Shots|1.6522556390977443
+2022-02-23 23:44:08|Caesars|Tanner Pearson||Points|0.4375
+2022-02-23 23:44:08|Caesars|Tanner Pearson||Power Play Points|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Juho Lammikko||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Juho Lammikko||Shots|0.5625
+2022-02-23 23:44:08|Caesars|Juho Lammikko||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Brock Boeser||Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Brock Boeser||Shots|2.627952755905512
+2022-02-23 23:44:08|Caesars|Brock Boeser||Points|0.49
+2022-02-23 23:44:08|Caesars|Brock Boeser||Power Play Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Travis Hamonic||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Travis Hamonic||Shots|1.47
+2022-02-23 23:44:08|Caesars|Travis Hamonic||Blocked Shots|1.6736453201970445
+2022-02-23 23:44:08|Caesars|Travis Hamonic||Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Tyler Motte||Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Tyler Motte||Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Tyler Motte||Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Oliver Ekman-Larsson||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Oliver Ekman-Larsson||Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Oliver Ekman-Larsson||Blocked Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Oliver Ekman-Larsson||Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Bo Horvat||Assists|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Bo Horvat||Shots|2.526737967914438
+2022-02-23 23:44:08|Caesars|Bo Horvat||Points|0.49
+2022-02-23 23:44:08|Caesars|Bo Horvat||Power Play Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Vasily Podkolzin||Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Vasily Podkolzin||Shots|1.3125
+2022-02-23 23:44:08|Caesars|Vasily Podkolzin||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Nils Hoglander||Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Nils Hoglander||Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Nils Hoglander||Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Matthew Highmore||Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Matthew Highmore||Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Matthew Highmore||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Elias Pettersson||Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Elias Pettersson||Shots|1.58984375
+2022-02-23 23:44:08|Caesars|Elias Pettersson||Points|0.4744094488188977
+2022-02-23 23:44:08|Caesars|Elias Pettersson||Power Play Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Conor Garland||Assists|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Conor Garland||Shots|2.5
+2022-02-23 23:44:08|Caesars|Conor Garland||Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Conor Garland||Power Play Points|0.30947136563876654
+2022-02-23 23:44:08|Caesars|Brandon Sutter||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Brandon Sutter||Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Brandon Sutter||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Tyler Myers||Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Tyler Myers||Shots|1.4839572192513368
+2022-02-23 23:44:08|Caesars|Tyler Myers||Blocked Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Tyler Myers||Points|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Tucker Poolman||Assists|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Tucker Poolman||Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Tucker Poolman||Blocked Shots|1.5613456464379947
+2022-02-23 23:44:08|Caesars|Thatcher Demko||Saves|30.17379679144385
+2022-02-23 23:44:08|Caesars|San Jose||Goals|2.55
+2022-02-23 23:44:08|Caesars|Anthony Beauvillier|NYI|Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Anthony Beauvillier|NYI|Shots|1.6301020408163265
+2022-02-23 23:44:08|Caesars|Anthony Beauvillier|NYI|Points|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Anthony Beauvillier|NYI|Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Matt Martin|NYI|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Matt Martin|NYI|Shots|1.2921686746987953
+2022-02-23 23:44:08|Caesars|Matt Martin|NYI|Plus/Minus|0.40909090909090906
+2022-02-23 23:44:08|Caesars|Matt Martin|NYI|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Jean-Gabriel Pageau|NYI|Assists|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Jean-Gabriel Pageau|NYI|Shots|1.516042780748663
+2022-02-23 23:44:08|Caesars|Jean-Gabriel Pageau|NYI|Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Jean-Gabriel Pageau|NYI|Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Jean-Gabriel Pageau|NYI|Power Play Points|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Anders Lee|NYI|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Anders Lee|NYI|Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Anders Lee|NYI|Plus/Minus|0.4375
+2022-02-23 23:44:08|Caesars|Anders Lee|NYI|Points|0.45663265306122447
+2022-02-23 23:44:08|Caesars|Anders Lee|NYI|Power Play Points|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Robin Salo|NYI|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Robin Salo|NYI|Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Robin Salo|NYI|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Robin Salo|NYI|Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Casey Cizikas|NYI|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Casey Cizikas|NYI|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Casey Cizikas|NYI|Plus/Minus|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Casey Cizikas|NYI|Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Josh Bailey|NYI|Assists|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Josh Bailey|NYI|Shots|1.3263546798029557
+2022-02-23 23:44:08|Caesars|Josh Bailey|NYI|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Josh Bailey|NYI|Points|0.4795514511873351
+2022-02-23 23:44:08|Caesars|Josh Bailey|NYI|Power Play Points|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Cal Clutterbuck|NYI|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Cal Clutterbuck|NYI|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Cal Clutterbuck|NYI|Plus/Minus|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Cal Clutterbuck|NYI|Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Sebastian Aho|NYI|Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Sebastian Aho|NYI|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Sebastian Aho|NYI|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Sebastian Aho|NYI|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Sebastian Aho|NYI|Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Ryan Pulock|NYI|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Ryan Pulock|NYI|Shots|1.47
+2022-02-23 23:44:08|Caesars|Ryan Pulock|NYI|Blocked Shots|1.6736453201970445
+2022-02-23 23:44:08|Caesars|Ryan Pulock|NYI|Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Michael Dal|NYI|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Michael Dal|NYI|Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|Michael Dal|NYI|Points|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Kieffer Bellows|NYI|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Kieffer Bellows|NYI|Shots|1.5457559681697612
+2022-02-23 23:44:08|Caesars|Kieffer Bellows|NYI|Plus/Minus|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Kieffer Bellows|NYI|Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Zdeno Chara|NYI|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Zdeno Chara|NYI|Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Zdeno Chara|NYI|Blocked Shots|1.3125
+2022-02-23 23:44:08|Caesars|Zdeno Chara|NYI|Points|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Kyle Palmieri|NYI|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Kyle Palmieri|NYI|Shots|2.2462406015037595
+2022-02-23 23:44:08|Caesars|Kyle Palmieri|NYI|Points|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Scott Mayfield|NYI|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Scott Mayfield|NYI|Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Scott Mayfield|NYI|Blocked Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Scott Mayfield|NYI|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Scott Mayfield|NYI|Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Adam Pelech|NYI|Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Adam Pelech|NYI|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Adam Pelech|NYI|Blocked Shots|1.3125
+2022-02-23 23:44:08|Caesars|Adam Pelech|NYI|Plus/Minus|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Adam Pelech|NYI|Points|0.4040178571428571
+2022-02-23 23:44:08|Caesars|Brock Nelson|NYI|Assists|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Brock Nelson|NYI|Shots|2.2831632653061225
+2022-02-23 23:44:08|Caesars|Brock Nelson|NYI|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Brock Nelson|NYI|Points|0.4744094488188977
+2022-02-23 23:44:08|Caesars|Brock Nelson|NYI|Power Play Points|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Zach Parise|NYI|Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Zach Parise|NYI|Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Zach Parise|NYI|Plus/Minus|0.4270334928229665
+2022-02-23 23:44:08|Caesars|Zach Parise|NYI|Points|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Zach Parise|NYI|Power Play Points|0.3158682634730539
+2022-02-23 23:44:08|Caesars|Mathew Barzal|NYI|Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Mathew Barzal|NYI|Shots|2.3288113695090438
+2022-02-23 23:44:08|Caesars|Mathew Barzal|NYI|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Mathew Barzal|NYI|Points|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Mathew Barzal|NYI|Power Play Points|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Noah Dobson|NYI|Assists|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Noah Dobson|NYI|Shots|2.3720472440944884
+2022-02-23 23:44:08|Caesars|Noah Dobson|NYI|Blocked Shots|1.5299999999999998
+2022-02-23 23:44:08|Caesars|Noah Dobson|NYI|Plus/Minus|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Noah Dobson|NYI|Points|0.4375
+2022-02-23 23:44:08|Caesars|Noah Dobson|NYI|Power Play Points|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Ilya Sorokin|NYI|Saves|26.21657754010695
+2022-02-23 23:44:08|Caesars|Ryan Dzingel||Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Ryan Dzingel||Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Ryan Dzingel||Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Jonah Gadjovich|SJ|Assists|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Jonah Gadjovich|SJ|Shots|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Jonah Gadjovich|SJ|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Noah Gregor|SJ|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Noah Gregor|SJ|Shots|2.2831632653061225
+2022-02-23 23:44:08|Caesars|Noah Gregor|SJ|Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Kevin Labanc|SJ|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Kevin Labanc|SJ|Shots|1.3972868217054264
+2022-02-23 23:44:08|Caesars|Kevin Labanc|SJ|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Kevin Labanc|SJ|Power Play Points|0.30947136563876654
+2022-02-23 23:44:08|Caesars|Logan Couture|SJ|Assists|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Logan Couture|SJ|Shots|2.3977572559366758
+2022-02-23 23:44:08|Caesars|Logan Couture|SJ|Points|0.5204485488126649
+2022-02-23 23:44:08|Caesars|Logan Couture|SJ|Power Play Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Tomas Hertl|SJ|Assists|0.4307228915662651
+2022-02-23 23:44:08|Caesars|Tomas Hertl|SJ|Shots|2.526737967914438
+2022-02-23 23:44:08|Caesars|Tomas Hertl|SJ|Points|0.5299479166666667
+2022-02-23 23:44:08|Caesars|Tomas Hertl|SJ|Power Play Points|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Jonathan Dahlen|SJ|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Jonathan Dahlen|SJ|Shots|1.5
+2022-02-23 23:44:08|Caesars|Jonathan Dahlen|SJ|Points|0.4170560747663551
+2022-02-23 23:44:08|Caesars|Jonathan Dahlen|SJ|Power Play Points|0.31344586728754364
+2022-02-23 23:44:08|Caesars|Rudolfs Balcers|SJ|Assists|0.35084033613445376
+2022-02-23 23:44:08|Caesars|Rudolfs Balcers|SJ|Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Rudolfs Balcers|SJ|Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Andrew Cogliano|SJ|Assists|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Andrew Cogliano|SJ|Shots|1.261764705882353
+2022-02-23 23:44:08|Caesars|Andrew Cogliano|SJ|Points|0.39059196617336156
+2022-02-23 23:44:08|Caesars|Ryan Merkley|SJ|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Ryan Merkley|SJ|Shots|0.5794117647058823
+2022-02-23 23:44:08|Caesars|Marc-Edouard Vlasic|SJ|Assists|0.32598371777476254
+2022-02-23 23:44:08|Caesars|Marc-Edouard Vlasic|SJ|Shots|0.5342377260981912
+2022-02-23 23:44:08|Caesars|Marc-Edouard Vlasic|SJ|Blocked Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Nikolai Knyzhov|SJ|Assists|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Nikolai Knyzhov|SJ|Shots|0.5829439252336448
+2022-02-23 23:44:08|Caesars|Nikolai Knyzhov|SJ|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Erik Karlsson|SJ|Assists|0.4375
+2022-02-23 23:44:08|Caesars|Erik Karlsson|SJ|Shots|2.2831632653061225
+2022-02-23 23:44:08|Caesars|Erik Karlsson|SJ|Blocked Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Erik Karlsson|SJ|Points|0.4795514511873351
+2022-02-23 23:44:08|Caesars|Erik Karlsson|SJ|Power Play Points|0.3454692556634304
+2022-02-23 23:44:08|Caesars|Brent Burns|SJ|Assists|0.4795514511873351
+2022-02-23 23:44:08|Caesars|Brent Burns|SJ|Shots|2.627952755905512
+2022-02-23 23:44:08|Caesars|Brent Burns|SJ|Blocked Shots|1.5457559681697612
+2022-02-23 23:44:08|Caesars|Brent Burns|SJ|Points|0.5152519893899203
+2022-02-23 23:44:08|Caesars|Brent Burns|SJ|Power Play Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Mario Ferraro|SJ|Assists|0.37209302325581395
+2022-02-23 23:44:08|Caesars|Mario Ferraro|SJ|Shots|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Mario Ferraro|SJ|Blocked Shots|1.6736453201970445
+2022-02-23 23:44:08|Caesars|Mario Ferraro|SJ|Points|0.39750542299349245
+2022-02-23 23:44:08|Caesars|Matt Nieto|SJ|Assists|0.34183673469387754
+2022-02-23 23:44:08|Caesars|Matt Nieto|SJ|Shots|1.2511682242990654
+2022-02-23 23:44:08|Caesars|Matt Nieto|SJ|Points|0.3861746361746362
+2022-02-23 23:44:08|Caesars|Jasper Weatherby|SJ|Assists|0.32061068702290074
+2022-02-23 23:44:08|Caesars|Jasper Weatherby|SJ|Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Jasper Weatherby|SJ|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Nicolas Meloche|SJ|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Nicolas Meloche|SJ|Shots|1.3125
+2022-02-23 23:44:08|Caesars|Nicolas Meloche|SJ|Blocked Shots|0.5729665071770335
+2022-02-23 23:44:08|Caesars|Nicolas Meloche|SJ|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Alexander Barabanov|SJ|Assists|0.4205882352941176
+2022-02-23 23:44:08|Caesars|Alexander Barabanov|SJ|Shots|1.58984375
+2022-02-23 23:44:08|Caesars|Alexander Barabanov|SJ|Points|0.4744094488188977
+2022-02-23 23:44:08|Caesars|Alexander Barabanov|SJ|Power Play Points|0.3364661654135338
+2022-02-23 23:44:08|Caesars|Jacob Middleton|SJ|Assists|0.33272859216255446
+2022-02-23 23:44:08|Caesars|Jacob Middleton|SJ|Shots|1.2811004784688995
+2022-02-23 23:44:08|Caesars|Jacob Middleton|SJ|Blocked Shots|1.41015625
+2022-02-23 23:44:08|Caesars|Jacob Middleton|SJ|Points|0.36904761904761907
+2022-02-23 23:44:08|Caesars|Nick Bonino|SJ|Assists|0.3585409252669039
+2022-02-23 23:44:08|Caesars|Nick Bonino|SJ|Shots|1.4542440318302385
+2022-02-23 23:44:08|Caesars|Nick Bonino|SJ|Blocked Shots|0.5625
+2022-02-23 23:44:08|Caesars|Nick Bonino|SJ|Points|0.4124713958810069
+2022-02-23 23:44:08|Caesars|Timo Meier|SJ|Assists|0.4492481203007519
+2022-02-23 23:44:08|Caesars|Timo Meier|SJ|Shots|4.191860465116279
+2022-02-23 23:44:08|Caesars|Timo Meier|SJ|Plus/Minus|0.44211822660098526
+2022-02-23 23:44:08|Caesars|Timo Meier|SJ|Points|0.5507518796992481
+2022-02-23 23:44:08|Caesars|Timo Meier|SJ|Power Play Points|0.3785140562248996
+2022-02-23 23:44:08|Caesars|Radim Simek|SJ|Blocked Shots|0.5692771084337349
+2022-02-23 23:44:08|Caesars|James Reimer|SJ|Saves|25.97
+2022-02-23 23:44:43 - scraping Caesars
+2022-02-23 23:45:00|Caesars|Total Match||Live|7.063775510204081|(diff: -0.1)
+2022-02-23 23:45:00|Caesars|2nd Period||Live|3.7852941176470587|(diff: -0.09)
+2022-02-23 23:45:35 - scraping Caesars
+2022-02-23 23:45:53|Caesars|Total Match||Live|6.945090439276486|(diff: -0.12)
+2022-02-23 23:45:53|Caesars|2nd Period||Live|3.577548806941432|(diff: -0.21)
+2022-02-23 23:45:53|Caesars|Tyler Seguin|DAL|Assists|0.39750542299349245|(diff: 0.01)
+2022-02-23 23:45:53|Caesars|Tyler Seguin|DAL|Points|0.4795514511873351|(diff: 0.01)
+2022-02-23 23:45:53|Caesars|Tyler Seguin|DAL|Power Play Points|0.3585409252669039|(diff: 0.01)
+2022-02-23 23:45:53|Caesars|Jason Robertson|DAL|Assists|0.4657622739018088|(diff: 0.02)
+2022-02-23 23:45:53|Caesars|Jason Robertson|DAL|Points|0.5507518796992481|(diff: 0.03)
+2022-02-23 23:45:53|Caesars|Jason Robertson|DAL|Power Play Points|0.40909090909090906|(diff: 0.02)
+2022-02-23 23:45:53|Caesars|Joe Pavelski|DAL|Assists|0.4657622739018088|(diff: 0.01)
+2022-02-23 23:45:53|Caesars|Joe Pavelski|DAL|Points|0.5433673469387754|(diff: 0.01)
+2022-02-23 23:45:53|Caesars|Joe Pavelski|DAL|Power Play Points|0.4170560747663551|(diff: 0.01)
+2022-02-23 23:45:53|Caesars|Roope Hintz|DAL|Assists|0.4492481203007519|(diff: 0.02)
+2022-02-23 23:45:53|Caesars|Roope Hintz|DAL|Points|0.5342377260981912|(diff: 0.03)
+2022-02-23 23:45:53|Caesars|Roope Hintz|DAL|Power Play Points|0.39750542299349245|(diff: 0.02)
+2022-02-23 23:45:53|Caesars|Jamie Benn|DAL|Assists|0.3785140562248996|(diff: 0.02)
+2022-02-23 23:45:53|Caesars|Jamie Benn|DAL|Points|0.45663265306122447|(diff: 0.03)
+2022-02-23 23:45:53|Caesars|Jamie Benn|DAL|Power Play Points|0.33272859216255446|(diff: 0.01)
+2022-02-23 23:46:28 - scraping Caesars
+2022-02-23 23:46:47|Caesars|Total Match||Live|6.889322916666667|(diff: -0.06)
+2022-02-23 23:46:47|Caesars|2nd Period||Live|3.3488372093023253|(diff: -0.23)
+2022-02-23 23:47:22 - scraping Caesars
+2022-02-23 23:47:40|Caesars|Total Match||Live|6.698275862068965|(diff: -0.19)
+2022-02-23 23:47:40|Caesars|2nd Period||Live|2.9338534599728634|(diff: -0.41)
+2022-02-23 23:48:15 - scraping Caesars
+starting up! PERIOD: 35
+2022-02-23 23:49:49 - scraping Caesars
+2022-02-23 23:50:22|Caesars|2nd Period||Live|REMOVED
+2022-02-23 23:50:22|Caesars|Total Match||Live|6.5|(diff: -0.2)
+2022-02-23 23:50:22|Caesars|3rd Period||Live|2.1536144578313254|(diff: 0.5)
+2022-02-23 23:50:22|Caesars|Joe Pavelski|DAL|Assists|0.45663265306122447|(diff: -0.01)
+2022-02-23 23:50:22|Caesars|Roope Hintz|DAL|Power Play Points|0.40909090909090906|(diff: 0.01)
+2022-02-23 23:50:22|Caesars|Filip Forsberg|NSH|Assists|0.4657622739018088|(diff: 0.02)
+2022-02-23 23:50:22|Caesars|Filip Forsberg|NSH|Points|0.5729665071770335|(diff: 0.02)
+2022-02-23 23:50:22|Caesars|Filip Forsberg|NSH|Power Play Points|0.4307228915662651|(diff: 0.01)
+2022-02-23 23:50:22|Caesars|Mikael Granlund|NSH|Assists|0.4795514511873351|(diff: -0.02)
+2022-02-23 23:50:22|Caesars|Mikael Granlund|NSH|Points|0.5342377260981912|(diff: -0.01)
+2022-02-23 23:50:22|Caesars|Matt Duchene|NSH|Assists|0.4492481203007519|(diff: 0.01)
+2022-02-23 23:50:22|Caesars|Matt Duchene|NSH|Points|0.5433673469387754|(diff: 0.02)
+2022-02-23 23:50:22|Caesars|Matt Duchene|NSH|Power Play Points|0.4205882352941176|(diff: 0.01)
+2022-02-23 23:50:57 - scraping Caesars
+starting up! PERIOD: 35
+starting up! PERIOD: 35
+starting up! PERIOD: 35

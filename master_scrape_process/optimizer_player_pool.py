@@ -43,7 +43,7 @@ from roto_wire_overlay_optimizer import roto_wire_scrape
 # player superdraft salary cap
 # optimize for yahoo fd
 
-name_transform = {"Guillermo Hernangomez": 'Willy Hernangomez', "Cam Thomas": "Cameron Thomas", "Moe Harkless": 'Maurice Harkless', 'Juancho Hernangómez':"Juancho Hernangomez", "Guillermo Hernangómez": 'Willy Hernangomez', 'Timothé Luwawu-Cabarrot': 'Timothe Luwawu-Cabarrot', 'Enes Kanter': 'Enes Freedom', 'Kenyon Martin Jr.': 'KJ Martin', 'Nic Claxton': 'Nicolas Claxton', 'Kenyon Martin': 'KJ Martin'}
+name_transform = {"Guillermo Hernangomez": 'Willy Hernangomez', "Cam Thomas": "Cameron Thomas", "Moe Harkless": 'Maurice Harkless', 'Juancho Hernangómez':"Juancho Hernangomez", "Guillermo Hernangómez": 'Willy Hernangomez', 'Timothé Luwawu-Cabarrot': 'Timothe Luwawu-Cabarrot', 'Enes Kanter': 'Enes Freedom', 'Kenyon Martin Jr.': 'KJ Martin', 'Nic Claxton': 'Nicolas Claxton', 'Kenyon Martin': 'KJ Martin', "Nah'Shon Hyland": 'Bones Hyland'}
 
 def normalize_name(name):
     name = name.replace("  ", " ")
@@ -1377,15 +1377,15 @@ if __name__ == "__main__":
     print("-----")
 
     # TODO: 2 - 3/18/22 -early
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-18-73111-entries-upload-template (2).csv"
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-28-73634-entries-upload-template.csv"
     # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
     # assert False
 
 
     
-    
-    current_time = 7.1 # todo read this number from the computer clock
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-18-73111-entries-upload-template (3).csv"
+    # todo read this number from the computer clock
+    current_time = 9.6
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-28-73634-entries-upload-template (3).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 

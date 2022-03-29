@@ -83,6 +83,11 @@ def get_game_guids(driver, all_team_names):
     for l in found_nba_links:
         game_guids.append(l.split('/')[7])
         
+    print("GAME GUIDS:")
+    print(game_guids)
+
+    # 3/25/22
+    # ['6301a9cb-397b-4aaa-9391-28e254e07055', '58a3d81e-7ce7-4904-bd89-daafdfcb0014', 'e2dcab3c-0618-4084-abd9-8fbc55ace0e7', '8377fe7a-b7b5-4214-9063-a177aaa4e40e', '40ca0972-ed23-4ee3-972b-f49c72f9a3f9', '758e2ff6-da8e-472b-a9c8-c2c6c319d0f0', 'db34f857-4865-461e-8c6b-0ee984080025']
     return game_guids
 
 
@@ -116,6 +121,17 @@ def normalize_name(name):
 game_guids = None
 # game_guids = ["a3fb1f43-5dbe-492e-976f-8c4b657d463e"]
 
+
+
+game_guids = ["75b0a5fb-5e4d-41ab-b7d5-36eeb7f1b7e1",
+"1d5ee1b0-d5a1-4b34-9fe7-049bdfbbd94d",
+"39308512-6c57-4568-a4b9-724754788f1d",
+"d2fca64e-2776-4618-8570-ac19247f8f7c",
+"3748648a-a73d-4a2c-9572-376f8e176788",
+"c253276e-278b-4c64-b7f6-34038c53addd",
+"e50580fa-c84d-4cb2-9fdc-42cf253a1e69",
+"7fe95f60-fdfd-4a97-a706-27616cd430a4",
+"4855fa18-f613-42b5-bb59-50fcc875ae35"]
 
 def query_betCaesars(driver):
     global game_guids
