@@ -2,11 +2,14 @@ from os import link
 import logging
 import time
 import datetime
+from tkinter.tix import Tree
+from tracemalloc import start
 from bs4.element import NamespacedAttribute
 from tabulate import tabulate
 import json
 import requests
 from selenium import webdriver
+import dateutil.parser
 
 # logging.basicConfig(filename='master_scraper.log', encoding='utf-8', level=logging.INFO)
 # logger = logging.getLogger("Caesars")
@@ -14,7 +17,39 @@ from selenium import webdriver
 def time_str():
     return str(datetime.datetime.now()).split('.')[0]
 
-def get_game_guids(driver, all_team_names):
+def assert_start_times_are_sorted(start_times):
+    #dateutil.parser.isoparse('2022-03-30T02:00:00Z')
+    times_parsed = [dateutil.parser.isoparse(a) for a in start_times]
+
+    times_sorted = sorted(times_parsed)
+    for i in range(len(times_sorted)):
+        assert times_sorted[i] == times_parsed[i]
+
+def get_game_guids():
+    url = "https://www.williamhill.com/us/az/bet/api/v3/sports/basketball/events/schedule"
+    result = requests.get(url)
+    as_json = result.json()
+    events = as_json['competitions'][0]['events']
+    counter = 1
+    all_event_ids = []
+    all_start_times = []
+    for event in events:
+        event_id = event["id"]
+        name = event["name"]
+        start_time = event["startTime"]
+        all_event_ids.append(event_id)
+        all_start_times.append(start_time)
+        print("{} - {}, {}, {}".format(counter, name, start_time, event_id))
+        counter += 1
+
+    assert_start_times_are_sorted(all_start_times)
+    result = input('events to take?')
+
+    to_return = all_event_ids[:int(result)]
+    assert len(to_return) == int(result)
+    return to_return
+
+def get_game_guids_(driver, all_team_names):
     url = "https://www.williamhill.com/us/az/bet/basketball/events/all"
     driver.get(url)
 
@@ -24,14 +59,14 @@ def get_game_guids(driver, all_team_names):
 
 
     # --- if college basketball is the front page
-    time.sleep(1)
+    # time.sleep(1)
 
-    arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.expanded')
-    arrow_elements[0].click()
-    time.sleep(0.5)
+    # arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.expanded')
+    # arrow_elements[0].click()
+    # time.sleep(0.5)
 
-    arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.unexpanded')
-    arrow_elements[2].click()
+    # arrow_elements = driver.find_elements_by_css_selector('.ArrowInCircleUp.unexpanded')
+    # arrow_elements[2].click()
     # -----
 
     time.sleep(1)
@@ -77,7 +112,7 @@ def get_game_guids(driver, all_team_names):
                 if link_url not in found_nba_links:
                     found_nba_links.append(link_url)
                 break
-        
+    __import__('pdb').set_trace()
 
     game_guids = []
     for l in found_nba_links:
@@ -122,17 +157,6 @@ game_guids = None
 # game_guids = ["a3fb1f43-5dbe-492e-976f-8c4b657d463e"]
 
 
-
-game_guids = ["75b0a5fb-5e4d-41ab-b7d5-36eeb7f1b7e1",
-"1d5ee1b0-d5a1-4b34-9fe7-049bdfbbd94d",
-"39308512-6c57-4568-a4b9-724754788f1d",
-"d2fca64e-2776-4618-8570-ac19247f8f7c",
-"3748648a-a73d-4a2c-9572-376f8e176788",
-"c253276e-278b-4c64-b7f6-34038c53addd",
-"e50580fa-c84d-4cb2-9fdc-42cf253a1e69",
-"7fe95f60-fdfd-4a97-a706-27616cd430a4",
-"4855fa18-f613-42b5-bb59-50fcc875ae35"]
-
 def query_betCaesars(driver):
     global game_guids
 
@@ -140,7 +164,9 @@ def query_betCaesars(driver):
     # all_team_names = open('team_names.txt', "r").readlines()
 
     if game_guids == None:
-        game_guids = get_game_guids(driver, all_team_names)
+        # game_guids = get_game_guids(driver, all_team_names)
+        game_guids = get_game_guids()
+        
         
     result = query(driver, game_guids, all_team_names)
     return result

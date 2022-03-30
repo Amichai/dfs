@@ -1,36 +1,44 @@
-FanDuel-NBA-2022 ET-03 ET-28 ET-73634-players-list.csv
-DEN
-@CHA
-7:00pm ET
-
-ATL
-@IND
-7:00pm ET
-
+FanDuel-NBA-2022 ET-03 ET-30 ET-73741-players-list.csv
 ORL
+@WAS
+7:00pm ET
+
+DAL
 @CLE
 7:00pm ET
 
-BOS
-@TOR
-7:30pm ET
+DEN
+@IND
+7:00pm ET
 
-SAC
-@MIA
-7:30pm ET
-
-CHI
+CHA
 @NY
 7:30pm ET
 
-GS
-@MEM
+MIN
+@TOR
+7:30pm ET
+
+MIA
+@BOS
+7:30pm ET
+
+ATL
+@OKC
 8:00pm ET
 
-SA
+SAC
 @HOU
 8:00pm ET
 
-OKC
+MEM
+@SA
+8:30pm ET
+
+NO
 @POR
+10:00pm ET
+
+PHO
+@GS
 10:00pm ET

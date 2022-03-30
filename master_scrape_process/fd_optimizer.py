@@ -1614,6 +1614,16 @@ def normalize_roster(roster):
 
     return roster
 
+def seed_roster_to_seed_roster_string(seed_roster):
+    seed_roster_string = ""
+    for a in seed_roster:
+        if a == "":
+            seed_roster_string += ","
+        else:
+            seed_roster_string += a.name + ","
+
+    return seed_roster_string
+
 def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_rosters, entries):
     # generate roster keys to track uniuqe rosters and use this to suppress duplicates
     entry_id_to_count = {}
@@ -1623,7 +1633,6 @@ def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_ros
             entry_id_to_count[entry_id] = 0
         entry_id_to_count[entry_id] += 1
 
-    max_take_count = max(entry_id_to_count.values())
     is_initial_optimization = False
     if seed_rosters == None:
         seed_rosters = []
@@ -1632,79 +1641,59 @@ def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_ros
             seed_rosters.append(seed_roster)
             is_initial_optimization = True
 
-    entry_id_to_roster_list = {}
+
+    seed_roster_strings_to_entry_indices = {}
+    entry_idx = 0
+    for entry in entries:
+        seed_roster = seed_rosters[entry_idx]
+        seed_roster_string = seed_roster_to_seed_roster_string(seed_roster)
+        if not seed_roster_string in seed_roster_strings_to_entry_indices:
+            seed_roster_strings_to_entry_indices[seed_roster_string] = []
+
+        seed_roster_strings_to_entry_indices[seed_roster_string].append(entry_idx)
+        entry_idx += 1
+
     collected_rosters = []
-    if seed_rosters == None:
-        results = generate_n_best_rosters(by_position, [], iter_count_fast, seed_roster=None, to_take=max_take_count)
 
-        best_roster_value = results[0].value
-
-        seen_entry_ids = []
-        for entry in entries:
-            entry_id = entry[1]
-            if entry_id in seen_entry_ids:
-                continue
-
-            entry_rosters = []
-            seen_entry_ids.append(entry_id)
-            count = entry_id_to_count[entry_id]
-            print("{} {}".format(entry_id, count))
-            for i in range(count):
-                to_append = results[i]
-                if best_roster_value - to_append.value > 10:
-                    entry_rosters.append(results[0])
-                else:
-                    entry_rosters.append(to_append)
-
-            entry_id_to_roster_list[entry_id] = entry_rosters
-            
-        for entry in entries:
-            entry_id = entry[1]
-            collected_rosters.append(entry_id_to_roster_list[entry_id].pop())
-
-    else:
-        seed_roster_string_to_top_n = {}
-        seed_roster_string_to_take_index = {}
-        entry_idx = 0
-        for entry in entries:
+    seed_roster_string_to_top_n = {}
+    seed_roster_string_to_take_index = {}
+    entry_idx = 0
+    for entry in entries:
+        seed_roster = seed_rosters[entry_idx]
+        seed_roster_string = seed_roster_to_seed_roster_string(seed_roster)
+        
+        if seed_roster_string in seed_roster_string_to_top_n:
+            results = seed_roster_string_to_top_n[seed_roster_string]
+            take_index = seed_roster_string_to_take_index[seed_roster_string]
+            seed_roster_string_to_take_index[seed_roster_string] = (take_index + 1) % len(results)
+        else:
             print("----{}/{}".format(entry_idx, len(entries)))
-            seed_roster = seed_rosters[entry_idx]
-            seed_roster_string = ""
-            for a in seed_roster:
-                if a == "":
-                    seed_roster_string += ","
-                else:
-                    seed_roster_string += a.name + ","
-            
             print("SEED ROSTER STRING: {}".format(seed_roster_string))
-            if seed_roster_string in seed_roster_string_to_top_n:
-                results = seed_roster_string_to_top_n[seed_roster_string]
-                take_index = seed_roster_string_to_take_index[seed_roster_string]
-                seed_roster_string_to_take_index[seed_roster_string] = (take_index + 1) % len(results)
-            else:
-                take_index = 0
-                results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=250)
+            take_index = 0
+            if not seed_roster_string in seed_roster_strings_to_entry_indices:
+                __import__('pdb').set_trace()
+            max_take_count = len(seed_roster_strings_to_entry_indices[seed_roster_string])
+            results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=max_take_count)
+            acceptable_results = []
+            best_result_val = results[0].value
+            for result in results:
+                val_diff = best_result_val - result.value
+                if val_diff > 4.5 and not is_initial_optimization:
+                    break
 
-                acceptable_results = []
-                best_result_val = results[0].value
-                for result in results:
-                    val_diff = best_result_val - result.value
-                    if val_diff > 4.5 and not is_initial_optimization:
-                        break
+                acceptable_results.append(result)
 
-                    acceptable_results.append(result)
+            seed_roster_string_to_top_n[seed_roster_string] = acceptable_results
+            results = acceptable_results
+            seed_roster_string_to_take_index[seed_roster_string] = 1 % len(results) # 1 corresponds to take_idx = 0
 
-                seed_roster_string_to_top_n[seed_roster_string] = acceptable_results
-                results = acceptable_results
-                seed_roster_string_to_take_index[seed_roster_string] = 1 % len(results)
+        print("TAKE INDEX: {}/{}".format(take_index, len(results)))
+        result1 = results[take_index]
+        collected_rosters.append(result1)
 
-            print("TAKE INDEX: {}/{}".format(take_index, len(results)))
-            result1 = results[take_index]
-            collected_rosters.append(result1)
+        entry_idx += 1
+        pass
 
-            entry_idx += 1
-            pass
-    
 
     # best_roster = generate_single_roster(by_position, [], iter_count_slow)
     if is_initial_optimization:
@@ -1718,6 +1707,7 @@ def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_ros
             to_return.append(None)
             contest_type = entry[2]
             if not contest_type in contest_type_to_indices:
+
                 contest_type_to_indices[contest_type] = []
 
             contest_type_to_indices[contest_type].append(idx)
@@ -1728,7 +1718,9 @@ def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_ros
             idx_count = 0
             for idx in index_list:
                 to_return[idx] = collected_rosters[idx_count]
+                # print(idx_count)
                 idx_count += 1
+            
     else:
         to_return = collected_rosters
         # todo distribute MME and SE rosters differnetly
@@ -2191,7 +2183,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
 
     overrides = {}
     diffs = {}
-    diffs = {"Nikola Jokic": -3.6}
+    # diffs = {"Giannis Antetokounmpo": -2, "Luka Doncic": -1.5}
 
     by_position = remove_players_from_player_pool(by_position, players_to_remove, overrides, diffs)
     # parse this file
@@ -2200,7 +2192,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count = int(80000 / 5)
+    iter_count = int(80000 / 1)
 
     iter_count_slow = iter_count
     iter_count_fast = iter_count

@@ -1377,15 +1377,15 @@ if __name__ == "__main__":
     print("-----")
 
     # TODO: 2 - 3/18/22 -early
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-28-73634-entries-upload-template.csv"
-    # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
-    # assert False
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-29-73686-entries-upload-template (4).csv"
+    fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
+    assert False
 
 
     
     # todo read this number from the computer clock
-    current_time = 9.6
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-28-73634-entries-upload-template (3).csv"
+    current_time = 9.1
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-29-73686-entries-upload-template (6).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 
