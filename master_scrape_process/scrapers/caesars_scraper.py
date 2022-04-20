@@ -1,9 +1,7 @@
 from os import link
-import logging
+from datetime import timedelta, date
 import time
 import datetime
-from tkinter.tix import Tree
-from tracemalloc import start
 from bs4.element import NamespacedAttribute
 from tabulate import tabulate
 import json
@@ -29,17 +27,22 @@ def get_game_guids():
     url = "https://www.williamhill.com/us/az/bet/api/v3/sports/basketball/events/schedule"
     result = requests.get(url)
     as_json = result.json()
-    events = as_json['competitions'][0]['events']
+    events = as_json['competitions'][0]['events'] # TODO adjust this index as needed
+    # events = as_json['competitions'][1]['events'] # TODO adjust this index as needed
     counter = 1
     all_event_ids = []
     all_start_times = []
+    # __import__('pdb').set_trace()
     for event in events:
         event_id = event["id"]
         name = event["name"]
         start_time = event["startTime"]
+        start_time_parsed = dateutil.parser.isoparse(start_time)
+        time_shifted = start_time_parsed - timedelta(hours=4)
+
         all_event_ids.append(event_id)
         all_start_times.append(start_time)
-        print("{} - {}, {}, {}".format(counter, name, start_time, event_id))
+        print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
         counter += 1
 
     assert_start_times_are_sorted(all_start_times)
@@ -48,6 +51,34 @@ def get_game_guids():
     to_return = all_event_ids[:int(result)]
     assert len(to_return) == int(result)
     return to_return
+
+
+def get_game_guids_today():
+    url = "https://www.williamhill.com/us/az/bet/api/v3/sports/basketball/events/schedule"
+    result = requests.get(url)
+    as_json = result.json()
+    events = as_json['competitions'][0]['events'] # TODO adjust this index as needed
+    # events = as_json['competitions'][1]['events'] # TODO adjust this index as needed
+    counter = 1
+    all_start_times = []
+    to_return = []
+    for event in events:
+        event_id = event["id"]
+        name = event["name"]
+        start_time = event["startTime"]
+        start_time_parsed = dateutil.parser.isoparse(start_time)
+        time_shifted = start_time_parsed - timedelta(hours=4)
+
+        all_start_times.append(start_time)
+
+        if time_shifted.day == date.today().day:
+        # if time_shifted.day == 15:
+            counter += 1
+            print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
+            to_return.append(event_id)
+
+    return to_return
+
 
 def get_game_guids_(driver, all_team_names):
     url = "https://www.williamhill.com/us/az/bet/basketball/events/all"
@@ -164,8 +195,10 @@ def query_betCaesars(driver):
     # all_team_names = open('team_names.txt', "r").readlines()
 
     if game_guids == None:
-        # game_guids = get_game_guids(driver, all_team_names)
-        game_guids = get_game_guids()
+        game_guids = get_game_guids_today()
+        #todo:
+        # game_guids = ["f6f5ac8f-a039-4855-bbb2-363854c88482","e2a60ae1-4ed9-43ab-86c2-576874a5b474","3acbc716-60e2-4697-90c5-809f67e25c66","3bd61611-1cb2-45ab-9fdf-a4aaed6465b5","a59aac4e-6550-48b0-b2da-2028875b4998","8fa1f459-3285-45ad-9b31-b8932fc4f01c","23339178-c2e9-4be4-808d-2dee5be5009a","4f24dde8-2304-4388-a23d-1003e644681d","ee606260-0b91-436b-b905-9edbde8dc94d","9241ba8c-2140-4575-a4e8-c226f837fbb0","456d8161-f04e-46b2-a3d6-760269ed2a8a"]
+        
         
         
     result = query(driver, game_guids, all_team_names)

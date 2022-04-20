@@ -181,7 +181,8 @@ def generate_single_roster(by_position, players_to_exclude):
     best_roster_val = 0
 
     random.seed(time.time())
-    for i in range(500000):
+    
+    for i in range(80000):
         if i % 50000 == 0:
             print(i)
         to_remove = None

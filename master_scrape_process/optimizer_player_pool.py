@@ -1251,7 +1251,8 @@ def adjust_players_by_position(by_position, new_player_val, team_adjustment):
 def load_start_times_and_slate_path(path):
     start_times = open(path, "r")
     lines = start_times.readlines()
-    slate_path = lines[0].strip()
+    fd_slate_path = lines[0].strip()
+    dk_slate_path = lines[1].strip()
     first_team = None
     second_team = None
     time_conversion = {
@@ -1269,7 +1270,7 @@ def load_start_times_and_slate_path(path):
         '11:00pm ET': 11, '11:30pm ET': 11.5}
 
     time_to_teams = {}
-    for line in lines[1:]:
+    for line in lines[2:]:
         line = line.strip().strip('\n')
 
         if line == "":
@@ -1289,7 +1290,7 @@ def load_start_times_and_slate_path(path):
 
         first_team = line
 
-    return (time_to_teams, slate_path)
+    return (time_to_teams, fd_slate_path, dk_slate_path)
 
 
 def fd_optimize(file_path, slate_name, slate_type, locks=[], excludes=[]):
@@ -1321,16 +1322,14 @@ if __name__ == "__main__":
     download_folder = "/Users/amichailevy/Downloads/"
 
     folder = download_folder + "player_lists/"
-    # ------
-    dk_slate_file = folder + "DKSalaries_12_28_21.csv"
 
     # TODO: 1 - 3/11/22 -early
     # update start_times.txt
-    (start_time_to_teams, path) = load_start_times_and_slate_path("start_times2.txt")
+    (start_time_to_teams, fd_path, dk_path) = load_start_times_and_slate_path("start_times2.txt")
     
     print(start_time_to_teams)
 
-    fd_slate = (folder + path, "full", "main")
+    fd_slate = (folder + fd_path, "full", "main")
 
     # sd_slate_file = folder + "SD-111321-NBA-Main-Multiplier-playerlist.csv"
     # sd_salary_cap_slate_file = folder + "SD-111521-NBA-Main-Salary-playerlist.csv"
@@ -1339,6 +1338,8 @@ if __name__ == "__main__":
 
 
     fd_slate_file = fd_slate[0]
+    dk_slate_file = folder + dk_path
+
     fd_players = get_fd_slate_players(fd_slate_file, exclude_injured_players=False)
     dk_players = get_dk_slate_players(dk_slate_file)
     # dk_players = {}
@@ -1376,16 +1377,22 @@ if __name__ == "__main__":
 
     print("-----")
 
+    # result = dk_random_optimizer.generate_unique_rosters(dk_players_by_position, 1)
+
+    # generate_dk_lineups_file(result, dk_players, "test1")
+
+    # __import__('pdb').set_trace()
+
     # TODO: 2 - 3/18/22 -early
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-29-73686-entries-upload-template (4).csv"
-    fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
-    assert False
+    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-04-19-74800-entries-upload-template (1).csv"
+    # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
+    # assert False
 
 
     
     # todo read this number from the computer clock
-    current_time = 9.1
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-03-29-73686-entries-upload-template (6).csv"
+    current_time = 8.1
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-04-19-74800-entries-upload-template (2).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 

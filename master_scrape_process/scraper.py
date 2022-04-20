@@ -1,6 +1,7 @@
 from os import name, path, write
 
 from bs4.element import NamespacedAttribute
+from pkg_resources import find_distributions
 import fd_optimizer
 import pandas as pd
 import time
@@ -20,6 +21,7 @@ from scrapers.awesome_scraper import query_awsemo
 import scrapers.awsemo_NFL_scraper
 import scrapers.betMGM_scrape
 import scrapers.caesars_scraper
+import scrapers.crunch_scraper
 import scrapers.thrive_fantasy_scraper
 import optimizer_player_pool
 
@@ -368,11 +370,12 @@ def get_PP_projections(driver):
     stats_from_promotions = []
 
     for projection in data:
+        
         attr = projection['attributes']
         stat_type = attr['stat_type']
-        created_at = attr["created_at"]
+        # created_at = attr["created_at"]
         updated_at = attr["updated_at"]
-        line_score = attr["line_score"]
+        line_score = float(attr["line_score"])
         projection_type = attr["projection_type"]
         player_id = projection['relationships']['new_player']['data']['id']
         player_name = id_to_name[player_id]
@@ -422,6 +425,7 @@ def query_last_value_before_remove(site, player, stat):
 def log_line(output_file, *params):
     as_arr = [time_str()]
     as_arr += params
+    as_arr = [str(a) for a in as_arr]
     try:
         to_write = "|".join(as_arr)
         log(to_write, output_file)
@@ -492,6 +496,12 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
                 else:
                     old_val = stats_old[stat_key]
                     new_val = stats_new[stat_key]
+                    if isinstance(old_val, float):
+                        old_val = str(old_val)
+                    
+                    if isinstance(new_val, float):
+                        new_val = str(old_val)
+
                     if old_val.strip() != new_val.strip():
                         try:
                             diff = round(float(new_val) - float(old_val), 2)
@@ -535,6 +545,8 @@ def get_projections(site, driver):
         return scrapers.caesars_scraper.query_betCaesars(driver)
     elif site == "TF":
         return scrapers.thrive_fantasy_scraper.query_TF()
+    elif site == "Crunch":
+        return scrapers.crunch_scraper.query_dfscrunch()
 
 
 
@@ -978,7 +990,7 @@ def look_for_fantasy_point_arbitrage(old_table, sites, output_file, player_to_te
 
     arbitrage_rows = []
     ##search for arbitrage:
-    ARBITRAGE_CUTTOFF = 2
+    ARBITRAGE_CUTTOFF = 1
     for name, projection in pp_fdp_projections.items():
         if not isinstance(projection, float):
             continue
@@ -1397,10 +1409,11 @@ if __name__ == "__main__":
     # folder = "/Users/amichailevy/Downloads/spike_data/player_lists/"
     folder = "/Users/amichailevy/Downloads/player_lists/"
 
-    dk_slate_file = folder + "DKSalaries_1_20_21.csv"
     #TODO 1- 3/11/21
-    (_, fd_slate_file) = optimizer_player_pool.load_start_times_and_slate_path("start_times2.txt")
+    (_, fd_slate_file, dk_slate_file) = optimizer_player_pool.load_start_times_and_slate_path("start_times2.txt")
     fd_slate_file = folder + fd_slate_file
+
+    dk_slate_file = folder + dk_slate_file
 
     (dk_players, fd_players, yahoo_players) = get_player_prices(dk_slate_file, fd_slate_file)
 
@@ -1416,8 +1429,10 @@ if __name__ == "__main__":
     # all_sites = ["RW", "betMGM", "PP", "Caesars"]
     
     
-    # all_sites = ["Awesemo", "RW", "Caesars", "PP"]
-    all_sites = ["Caesars", "RW", "PP"]
+    all_sites = ["Crunch", "Caesars", "PP", "RW"]
+    # all_sites = ["Caesars", "RW", "PP"]
+    # all_sites = ["Caesars", "RW"]
+    # all_sites = ["PP"]
     # all_sites = ["Caesars"]
     # all_sites = ["PP2H"]
 
@@ -1450,7 +1465,7 @@ if __name__ == "__main__":
 
     driver = webdriver.Chrome("../master_scrape_process/chromedriver7")
 
-    period = 26
+    period = 25
     log("starting up! PERIOD: {}".format(period), output_file)
 
     player_to_team = {}
