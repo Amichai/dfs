@@ -1,4 +1,6 @@
-from calendar import c
+from distutils.log import debug
+from http.client import NON_AUTHORITATIVE_INFORMATION
+from dictdiffer import diff, patch, swap, revert
 import uuid
 from tinydb import TinyDB, Query, where
 import logging
@@ -16,26 +18,70 @@ logging.basicConfig(filename='logs/{}.log'.format(utils.date_str()), filemode='a
 
 
 class DataManager:
-  def __init__(self):
-    name = "data_files/{}.json".format(utils.date_str())
+  def __init__(self, day=None):
+    if day == None:
+      day = utils.date_str()
+    self.day = day
+    name = "data_files/{}.json".format(day)
     self.db = TinyDB(name)
-    # open a database with the current date
-    # self.db.insert({'type': 'apple', 'count': 7})
-    # self.db.insert({'type': 'peach', 'count': 3})
 
-  def write_projection(self, sport, scraperName, name, projections):
+  def write_projection(self, sport, scraper_name, name, projections):
+    new_id = str(uuid.uuid4())
     parts = utils.full_date_str().split(' ')
     to_write = {}
-    to_write['scraper'] = scraperName
+    to_write['scraper'] = scraper_name
     to_write['sport'] = sport
     to_write['_day'] = parts[0]
     to_write['_time'] = parts[1]
-    to_write['_id'] = str(uuid.uuid4())
+    to_write['_id'] = new_id
     to_write['name'] = name
     to_write['projections'] = projections
 
-    logging.info(str(to_write))
-    self.db.insert(to_write)
+    previous_value = self.query_projection(sport, scraper_name, name)
+    differences = list(diff(previous_value, projections))
+    if len(differences) > 0:
+      self.db.insert(to_write)
+      for difference in differences:
+        to_log = "{}|{}|{}|{}|{}".format(new_id, sport, scraper_name, name, difference)
+        logging.info(to_log)
+        print(to_log)
+      
+
+  def write_zeros(self, sport, scraper_name, results):
+    all_player_projections = self.query_all_projections(sport, scraper_name)
+    for name, row in all_player_projections.items():
+      if name not in results:
+        print("WRITING ZERO: {}".format(name))
+        projections = row['projections']
+        new_projections = {}
+        for stat, val in projections.items():
+          new_projections[stat] = 0
+        self.write_projection(sport, scraper_name, name, new_projections)
+
+  def query_all_projections(self, sport, scraper):
+    query = Query()
+    rows = self.db.search((query['sport'] == sport) 
+      & (query['scraper'] == scraper)
+      & (query['_day'] == self.day))
+
+    if len(rows) == 0:
+      return None
+    
+    name_to_rows = {}
+    for row in rows:
+      name = row['name']
+      if not name in name_to_rows:
+        name_to_rows[name] = row
+      elif name in name_to_rows:
+        old_row = name_to_rows[name]
+        d_new = "{} {}".format(row['_day'], row['_time'])
+        d_old = "{} {}".format(old_row['_day'], old_row['_time'])
+        parsed_new = dateutil.parser.isoparse(d_new)
+        parsed_old = dateutil.parser.isoparse(d_old)
+        if parsed_new > parsed_old:
+          name_to_rows[name] = row
+    
+    return name_to_rows
 
   def todays_rows(self, sport):
     return self.query('_day', utils.date_str(), 'sport', sport)
@@ -47,7 +93,7 @@ class DataManager:
     query = Query()
     rows = self.db.search((query['sport'] == sport) 
       & (query['scraper'] == scraper)
-      & (query['_day'] == utils.date_str())
+      & (query['_day'] == self.day)
       & (query['name'] == name))
 
     if len(rows) == 0:

@@ -1,6 +1,5 @@
 import time
 import datetime
-import pandas as pd
 from tabulate import tabulate
 import json
 import requests

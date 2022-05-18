@@ -3,8 +3,6 @@ from types import resolve_bases
 from bs4 import BeautifulStoneSoup
 import requests
 import time
-import pandas as pd
-
 
 class Player:
     def __init__(self, name, position, cost, team, value, game_start_slot=0, matchup=''):
@@ -32,7 +30,7 @@ class Roster:
     def __repr__(self):
         return ",".join([p.name for p in self.players]) + " {} - {}".format(self.cost, self.value)
 
-    def remainingFunds(self, max_cost=50000):
+    def remainingFunds(self, max_cost):
         return max_cost - self.cost
 
     def relpace(self, player, idx):
@@ -69,8 +67,6 @@ def select_better_player(players, max_cost, excluding, initial_value):
     if len(better_players) == 0:
         return None
 
-
-    # import pdb; pdb.set_trace()
     return random_element(better_players)
 
 def optimize_roster(roster, by_position):
@@ -81,7 +77,7 @@ def optimize_roster(roster, by_position):
         # pick a random player
         # swap that player for the best player we can afford that brings more value
         while True:
-            swap_idx = random.randint(0, 7)
+            swap_idx = random.randint(0, len(roster.players) - 1)
             
             if swap_idx in roster.locked_indices:
                 continue
@@ -109,6 +105,134 @@ def optimize_roster(roster, by_position):
     print(roster)
     assert False
 
+def optimize_roster_dk_showdown(all_players):
+    best_val = 0
+    best_roster = None
+
+    class TempRoster:
+        def __init__(self, players):
+            self.players = players
+
+    player_ct = len(all_players)
+    for i1 in range(player_ct):
+        p1 = all_players[i1]
+
+        for i2 in range(player_ct):
+            if i2 == i1:
+                continue
+
+            p2 = all_players[i2]
+
+            for i3 in range(player_ct):
+                if i3 <= i2 or i3 == i1:
+                    continue
+
+                p3 = all_players[i3]
+
+                for i4 in range(player_ct):
+                    if i4 <= i3 or i4 == i1:
+                        continue
+
+                    p4 = all_players[i4]
+
+                    for i5 in range(player_ct):
+                        if i5 <= i4 or i5 == i1:
+                            continue
+                        p5 = all_players[i5]
+
+                        for i6 in range(player_ct):
+                            if i6 <= i5 or i5 == i1:
+                                continue
+
+                            p6 = all_players[i6]
+
+                            roster = [p1, p2, p3, p4, p5, p6]
+                            total_cost = 0
+                            total_value = 0
+                            for i in range(6):
+                                if i == 0:
+                                    total_cost += roster[0].cost * 1.5
+                                    total_value += roster[0].value * 1.5
+                                else:
+                                    total_cost += roster[i].cost
+                                    total_value += roster[i].value
+
+
+
+                            if total_cost >= 50000:
+                                continue
+
+                            if total_value > best_val:
+                                best_val = total_value
+                                best_roster = roster
+                                print(roster)
+                                print("Cost: {}, val: {}".format(total_cost, total_value))
+
+
+    return TempRoster(best_roster)
+
+
+def optimize_roster_for_sport(by_position, sport, iter_count = 120000):
+    best_roster = None
+    best_roster_val = 0
+
+    random.seed(time.time())
+    
+    for i in range(iter_count):
+        if i % 50000 == 0:
+            print(i)
+        to_remove = None
+        if best_roster != None:
+            to_remove = random_element(best_roster.players)
+
+        by_position_copied = {}
+        for pos, players in by_position.items():
+            if to_remove in players:
+                players_new = list(players)
+
+                players_new.remove(to_remove)
+                by_position_copied[pos] = players_new
+            else:
+                by_position_copied[pos] = players
+
+        if to_remove == None:
+            by_position_copied = by_position
+
+        random_lineup = None
+        if sport == "MLB":
+            random_lineup = build_random_MLB_line_up(by_position_copied)
+        elif sport == "EL":
+            random_lineup = build_random_EL_line_up(by_position_copied)
+        elif sport == "EPL":
+            random_lineup = build_random_EPL_line_up(by_position_copied)
+        elif sport == "PGA":
+            random_lineup = build_random_PGA_line_up(by_position_copied)
+            pass
+            
+        if random_lineup.cost > 50000 or not random_lineup.is_valid:
+            continue
+
+
+        result = optimize_roster(random_lineup, by_position_copied)
+        if result.value > best_roster_val:
+            best_roster = result
+            if result.value >= best_roster_val:
+                best_roster_val = result.value
+
+            all_names = [a.name for a in best_roster.players]
+            all_names_sorted = sorted(all_names)
+            roster_key = ",".join(all_names_sorted)
+            # if roster_count > 50:
+            #     break
+
+            #TODO: PUT THIS BACK IN AND TROUBLESHOOT
+            # best_roster = optimize_roster_by_start_time(by_position_copied, best_roster)
+            # later games get laters slots
+            # earlier games get earlier slots
+            print("B: {}\n".format(best_roster))
+
+    return best_roster
+
 all_positions = ["PG", "SG", "SF", "PF", "C", "G", "F", "UTIL"]
 
 
@@ -116,6 +240,43 @@ def build_random_line_up(by_position):
     to_return = []
     for pos in all_positions:
         pass
+        to_return.append(random_element(by_position[pos]))
+
+    return Roster(to_return)
+
+
+mlb_positions = ["P", "P", "C", "1B", "2B", "3B", "SS", "OF", "OF", "OF"]
+
+def build_random_MLB_line_up(by_position):
+    to_return = []
+    for pos in mlb_positions:
+        to_return.append(random_element(by_position[pos]))
+
+    return Roster(to_return)
+
+
+el_positions = ["G", "G", "F", "F", "F", "UTIL"]
+
+def build_random_EL_line_up(by_position):
+    to_return = []
+    for pos in el_positions:
+        to_return.append(random_element(by_position[pos]))
+
+    return Roster(to_return)
+
+
+epl_positions = ["F", "F", "M", "M", "D", "D", "GK", "UTIL"]
+def build_random_EPL_line_up(by_position):
+    to_return = []
+    for pos in epl_positions:
+        to_return.append(random_element(by_position[pos]))
+
+    return Roster(to_return)
+
+PGA_positions = ["G", "G", "G", "G", "G", "G",]
+def build_random_PGA_line_up(by_position):
+    to_return = []
+    for pos in PGA_positions:
         to_return.append(random_element(by_position[pos]))
 
     return Roster(to_return)
@@ -182,7 +343,7 @@ def generate_single_roster(by_position, players_to_exclude):
 
     random.seed(time.time())
     
-    for i in range(80000):
+    for i in range(100000):
         if i % 50000 == 0:
             print(i)
         to_remove = None

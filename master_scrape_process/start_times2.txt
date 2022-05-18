@@ -1,13 +1,9 @@
-FanDuel-NBA-2022 ET-04 ET-20 ET-74873-players-list.csv
+FanDuel-NBA-2022 ET-05 ET-12 ET-76021-players-list.csv
 DKSalaries_4_20_22.csv
-BKN
-@BOS
+MIA
+@PHI
 7:00pm ET
 
-PHI
-@TOR
-8:00pm ET
-
-CHI
-@MIL
+PHO
+@DAL
 9:30pm ET

@@ -1,5 +1,4 @@
 from pdb import Pdb
-import pandas as pd
 import requests
 from selenium import webdriver
 import time

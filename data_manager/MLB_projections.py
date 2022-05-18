@@ -3,30 +3,6 @@ from tabulate import tabulate
 import utils
 
 
-def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
-  all_players = {}
-  salaries = open(fd_slate_file_path)
-  lines = salaries.readlines()
-
-  for line in lines[1:]:
-      parts = line.split(',')
-      full_name = utils.normalize_name(parts[3])
-
-      positions = parts[1]
-      salary = parts[7]
-      team = parts[9]
-      team = utils.normalize_team_name(team)
-      status = parts[11]
-      if status == "O" and exclude_injured_players:
-          continue
-
-      probablePitcher = parts[14]
-      if positions == 'P' and probablePitcher != "Yes":
-        continue
-      name = full_name
-      all_players[name] = [name, positions, float(salary), team, status]
-      
-  return all_players
 
 
 def parse_fantasy_score_from_projections(site, projections):
@@ -53,21 +29,26 @@ class MLBProjections:
     self.sport = 'MLB'
     self.scrapers = ['DFSCrunch', 'PP', 'Caesars']
 
-    self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
+    self.fd_players = utils.get_fd_slate_players(slate_path, exclude_injured_players=False)
+    self.all_teams = []
+    for player, info in self.fd_players.items():
+      team = info[3]
+      if team not in self.all_teams:
+        self.all_teams.append(team)
+        
 
-  def print_slate(self):
-    team_to_players = {}
+  def get_player_rows(self):
+    all_rows = []
 
     for player, info in self.fd_players.items():
       position = info[1]
       cost = float(info[2])
       team = info[3]
-      status = info[4]
-
-      player_row = [player, position, cost, status]
+      opp_team = info[4]
+      status = info[5]
+      player_row = [player, team, opp_team, position, cost, status]
 
       scraper_to_projections = {}
-
 
       for scraper in self.scrapers:
         projections = self.dm.query_projection(self.sport, scraper, player)
@@ -77,8 +58,56 @@ class MLBProjections:
           projection = parse_fantasy_score_from_projections(scraper, projections)
         player_row.append(projection)
 
-
       player_row.append(parse_caesaers_projection_activity_metric(scraper_to_projections["Caesars"]))
+
+      all_rows.append(player_row)
+
+    return all_rows
+
+  def players_by_position(self):
+    by_position = {"UTIL": [], 'C/1B': []}
+    all_rows = self.get_player_rows()
+    for row in all_rows:
+      name = row[0]
+      team = row[1]
+      opp = row[2]
+      pos = row[3]
+      cost = row[4]
+      status = row[5]
+      dfs_crunch = row[6]
+      pp_proj = row[7]
+      caesars_proj = row[8]
+      caesars_is_active = row[9]
+
+      value = dfs_crunch
+      if value == '':
+        continue
+
+      value = float(value)
+
+      if value == 0:
+        continue
+
+      positions = pos.split('/')
+      for position in positions:
+        if not position in by_position:
+          by_position[position] = []
+        if position != 'P':
+          by_position['UTIL'].append(utils.Player(name, position, cost, team, value, opp))
+        if position == 'C' or position == '1B':
+          by_position['C/1B'].append(utils.Player(name, position, cost, team, value, opp))
+        else:
+          by_position[position].append(utils.Player(name, position, cost, team, value, opp))
+
+    return by_position
+
+  def print_slate(self):
+    team_to_players = {}
+
+    all_rows = self.get_player_rows()
+    for player_row in all_rows:
+      team = player_row[1]
+
       if not team in team_to_players:
         team_to_players[team] = []
 
@@ -87,5 +116,5 @@ class MLBProjections:
     for team, rows in team_to_players.items():
       print("TEAM: {}".format(team))
 
-      rows_sorted = sorted(rows, key=lambda a: a[2], reverse=True)
-      print(tabulate(rows_sorted, headers=["player", "pos", "cost", "status"] + self.scrapers + ["act."]))
+      rows_sorted = sorted(rows, key=lambda a: a[3], reverse=True)
+      print(tabulate(rows_sorted, headers=["player", "team", "pos", "cost", "status"] + self.scrapers + ["act."]))

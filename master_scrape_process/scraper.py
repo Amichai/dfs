@@ -3,13 +3,11 @@ from os import name, path, write
 from bs4.element import NamespacedAttribute
 from pkg_resources import find_distributions
 import fd_optimizer
-import pandas as pd
 import time
 import datetime
 from requests.api import head
 from tabulate import tabulate
 import json
-import requests
 from selenium import webdriver
 from scrapers.stat_hero_scrape import sh_query_prices
 from scrapers.underdog_scrape import underdog_query_line
@@ -500,7 +498,7 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
                         old_val = str(old_val)
                     
                     if isinstance(new_val, float):
-                        new_val = str(old_val)
+                        new_val = str(new_val)
 
                     if old_val.strip() != new_val.strip():
                         try:
@@ -513,7 +511,10 @@ def diff_projections(site, new_p, old_p, output_file, player_to_team, dynamo_tab
                         finally:
                             write_projection(dynamo_table, site, player, team, stat_key, new_val, fd_players, name_to_status)
 
+active_players_caesars = None
+
 def get_projections(site, driver):
+    global active_players_caesars
     if site == "PP":
         return get_PP_projections(driver)
     if site == "PP2H":
@@ -542,7 +543,9 @@ def get_projections(site, driver):
     elif site == "betMGM":
         return scrapers.betMGM_scrape.query_betMGM(driver)
     elif site == "Caesars":
-        return scrapers.caesars_scraper.query_betCaesars(driver)
+        (result, active_players) = scrapers.caesars_scraper.query_betCaesars(driver)
+        active_players_caesars = active_players
+        return result
     elif site == "TF":
         return scrapers.thrive_fantasy_scraper.query_TF()
     elif site == "Crunch":
@@ -748,6 +751,8 @@ def get_player_projections_Caesars(sites):
         if not 'Steals' in stat_to_values:
             continue
         stls = stat_to_values['Steals']
+        if not 'Turnovers' in stat_to_values:
+            continue
         turnovers = stat_to_values["Turnovers"]
         
         # Intercept:  2.996728802425636
@@ -1366,7 +1371,8 @@ def arbitrage_finder(sites, old_table, player_to_team):
     
             
 def get_player_prices(dk_slate_file, fd_slate_file):
-    dk_players = optimizer_player_pool.get_dk_slate_players(dk_slate_file)
+    # dk_players = optimizer_player_pool.get_dk_slate_players(dk_slate_file)
+    dk_players = {}
     fd_players = optimizer_player_pool.get_fd_slate_players(fd_slate_file, False)
     # yahoo_players = optimizer_player_pool.get_yahoo_slate_players(yahoo_slate_file)
     yahoo_players = {}
@@ -1379,6 +1385,28 @@ def test_table():
     new_table = DataTable([["-", "A1","5","2"], ["-", "A2","6",""], ["-", "A3","","3"]], ["-", "A", "B", "C"])
     DataTable.diff(old_table, new_table, [], 1)
     pass
+
+
+def diff_caesars_and_dfs_crunch(sites):
+    caesars = sites["caesars-Projected"]
+    crunch = sites["Crunch"]
+
+    player_diff = []
+    for player, stats in crunch.items():
+        if not player in caesars:
+            continue
+        caesars_proj = float(caesars[player]["Fantasy Score"])
+        crunch_proj = float(crunch[player]["crunch_projected"])
+        diff = caesars_proj - crunch_proj
+
+        if player in active_players_caesars:
+            player = "**" + player
+
+        player_diff.append([player, diff, caesars_proj, crunch_proj])
+
+    player_diff_sorted = sorted(player_diff, key=lambda a: abs(a[1]), reverse=True)
+
+    print(tabulate(player_diff_sorted, headers=["name", "diff", "caesaers", "crunch"]))
 
 
 def get_name_to_status(sites):
@@ -1430,6 +1458,7 @@ if __name__ == "__main__":
     
     
     all_sites = ["Crunch", "Caesars", "PP", "RW"]
+    # all_sites = ["Caesars", "PP"]
     # all_sites = ["Caesars", "RW", "PP"]
     # all_sites = ["Caesars", "RW"]
     # all_sites = ["PP"]
@@ -1463,7 +1492,7 @@ if __name__ == "__main__":
         stat = parts[4]
         sites[site][player_name][stat] = str(val)
 
-    driver = webdriver.Chrome("../master_scrape_process/chromedriver7")
+    driver = webdriver.Chrome("../master_scrape_process/chromedriver9")
 
     period = 25
     log("starting up! PERIOD: {}".format(period), output_file)
@@ -1520,6 +1549,10 @@ if __name__ == "__main__":
 
             # stat_arbitrage_table = arbitrage_finder(sites, stat_arbitrage_table, player_to_team)
             if site == "Caesars":
+                # diff caesaers and crunch
+                diff_caesars_and_dfs_crunch(sites)
+            
+
                 timestamp = str(datetime.datetime.now())
                 date = timestamp.split(' ')[0]
                 stat = "LastUpdated"

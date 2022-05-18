@@ -88,7 +88,7 @@ class Player:
 
     def __repr__(self):
         # return "{} - {} - {} - {} - {} - {}".format(self.name, self.position, self.cost, self.team, self.value, self.value_per_dollar)
-        return self.name
+        return "{} - {}".format(self.name, self.value)
     
 class Roster:
     def __init__(self, players):

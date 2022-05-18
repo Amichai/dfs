@@ -27,6 +27,7 @@ def get_game_guids():
     url = "https://www.williamhill.com/us/az/bet/api/v3/sports/basketball/events/schedule"
     result = requests.get(url)
     as_json = result.json()
+    __import__('pdb').set_trace()
     events = as_json['competitions'][0]['events'] # TODO adjust this index as needed
     # events = as_json['competitions'][1]['events'] # TODO adjust this index as needed
     counter = 1
@@ -52,7 +53,6 @@ def get_game_guids():
     assert len(to_return) == int(result)
     return to_return
 
-
 def get_game_guids_today():
     url = "https://www.williamhill.com/us/az/bet/api/v3/sports/basketball/events/schedule"
     result = requests.get(url)
@@ -72,13 +72,11 @@ def get_game_guids_today():
         all_start_times.append(start_time)
 
         if time_shifted.day == date.today().day:
-        # if time_shifted.day == 15:
             counter += 1
             print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
             to_return.append(event_id)
 
     return to_return
-
 
 def get_game_guids_(driver, all_team_names):
     url = "https://www.williamhill.com/us/az/bet/basketball/events/all"
@@ -207,6 +205,7 @@ def query_betCaesars(driver):
 def query(driver, game_guids, all_team_names):
     all_team_names = [a.strip() for a in all_team_names]
     to_return = {}
+    active_players = []
     for guid in game_guids:
         url = 'https://www.williamhill.com/us/az/bet/api/v2/events/{}'.format(guid)
 
@@ -222,6 +221,9 @@ def query(driver, game_guids, all_team_names):
         for market in as_json['markets']:
             selections = market['selections']
             name = market['name']
+            # if market["active"] == False: # TODO: figure out this flag
+            #     continue
+
             if name == None:
                 continue
             if "|Alternative " in name or "|Margin of " in name:
@@ -246,6 +248,11 @@ def query(driver, game_guids, all_team_names):
 
             stat = name_parts[1].strip('|').replace('Total ', '')
             name = normalize_name(name)
+
+
+            if market["active"] == True:
+                active_players.append(name)
+
             under_faction = None
             over_fraction = None
             for selection in selections:
@@ -284,7 +291,7 @@ def query(driver, game_guids, all_team_names):
             # logger.info("{} {} {} {} {} {}".format(time_str(), name, stat, line, odds_percentage, line_adjusted))
 
 
-    return to_return
+    return (to_return, active_players)
 
 
 if __name__ == "__main__":

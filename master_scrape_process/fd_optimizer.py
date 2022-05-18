@@ -9,7 +9,7 @@ from tabulate import tabulate
 from pdb import set_trace
 from unittest import result
 
-import pandas as pd
+# import pandas as pd
 from hand_crafted_projections import read_projections
 
 
@@ -97,8 +97,6 @@ def select_better_player(players, max_cost, excluding, initial_value):
     if len(better_players) == 0:
         return None
 
-
-    # import pdb; pdb.set_trace()
     return random_element(better_players)
 
 
@@ -120,7 +118,7 @@ def optimize_roster(roster, by_position):
             position = to_swap.position
 
             excluding = [p.name for p in roster.players]
-            replacement = select_better_player(by_position[position], roster.remainingFunds() + to_swap.cost, excluding, to_swap.value)
+            replacement = select_better_player(by_position[position], roster.remainingFunds(60000) + to_swap.cost, excluding, to_swap.value)
 
             if replacement == None or to_swap.name == replacement.name:
                 no_improvement_count += 1
@@ -349,7 +347,7 @@ class Roster:
         to_return = ",".join([p.name for p in self.players]) + " {} - {}".format(self.cost, self.value)
         return to_return
 
-    def remainingFunds(self, max_cost=60000):
+    def remainingFunds(self, max_cost):
         return max_cost - self.get_cost()
 
     def relpace(self, player, idx):
@@ -557,7 +555,7 @@ def three_man_optimizer(all_players):
 
 def single_game_optimizer(all_players):
     best_val = 0
-    best_roster = None
+    best_rosters = []
     player_ct = len(all_players)
     for i1 in range(player_ct):
         p1 = all_players[i1]
@@ -594,11 +592,113 @@ def single_game_optimizer(all_players):
                         total_value = p1.value * 2 + p2.value * 1.5 +  p3.value * 1.2 + p4.value + p5.value
                         if total_value > best_val:
                             best_val = total_value
-                            best_roster = roster_set
-                            # print("{} - {}, {}".format(best_roster, total_value, total_cost))
+                            best_rosters = [roster_set]
+                            print("{} - {}, {}".format(roster_set, total_value, total_cost))
+                        elif total_value == best_val:
+                            best_rosters.append(roster_set)
+
+    print("Best roster ct: {}".format(len(best_rosters)))
+    for roster in best_rosters:
+        print(roster)
+    
+    return best_rosters[0]
+
+def single_game_optimizer_many(all_players, ct, locks=None):
+    player_ct = len(all_players)
+    all_rosters = []
+
+    roster_keys = set()
+    for i1 in range(player_ct):
+        p1 = all_players[i1]
+        if locks != None and p1.name != locks[i1]:
+            continue
+
+        for i2 in range(player_ct):
+            if i2 == i1:
+                continue
+            p2 = all_players[i2]
+
+            if locks != None and p2.name != locks[i2]:
+                continue
 
 
-    return best_roster
+            for i3 in range(player_ct):
+                if i3 == i1 or i3 == i2:
+                    continue
+                
+                p3 = all_players[i3]
+                if locks != None and p3.name != locks[i3]:
+                    continue
+
+                for i4 in range(player_ct):
+                    if i4 == i1 or i4 == i2 or i4 == i3:
+                        continue
+                    
+                    p4 = all_players[i4]
+                    if locks != None and p4.name != locks[i4]:
+                        continue
+
+                    for i5 in range(player_ct):
+                        if i5 == i1 or i5 == i2 or i5 == i3 or i5 == i4:
+                            continue
+                        
+                        p5 = all_players[i5]
+
+                        if locks != None and p5.name != locks[i5]:
+                            continue
+                        roster_set = [p1, p2, p3, p4, p5]
+                        
+                        total_cost = sum(pl.cost for pl in roster_set)
+                        if total_cost > 60000 or total_cost <= 59000:
+                            continue
+                        
+                        total_value = p1.value * 2 + p2.value * 1.5 +  p3.value * 1.2 + p4.value + p5.value
+
+                        if all(x.team == roster_set[0].team for x in roster_set):
+                            continue
+
+                        roster_key = "|".join(sorted([a.name for a in roster_set])) + "|" + str(round(total_value, 1))
+                        if roster_key in roster_keys:
+                            continue
+
+                        roster_keys.add(roster_key)
+                        all_rosters.append((roster_set, total_value, total_cost))
+                        
+    # given all the rosters take the top 30
+    # for each top player, boost that players value and take the top 10 rosters
+
+    all_rosters_sorted = sorted(all_rosters, key=lambda a: a[1], reverse=True)
+    to_return = []
+    mvp_ct_to_take = [40, 30, 25, 20, 17, 15, 10, 10, 5, 3, 3, 3, 3, 3, 2, 2, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+    mvp_ct_taken = []
+    seen_mvps = []
+
+    for roster in all_rosters_sorted:
+        mvp = roster[0][0]
+        if not mvp in seen_mvps:
+            print("NEW MVP: {}".format(mvp))
+            seen_mvps.append(mvp)
+            mvp_ct_taken.append(1)
+        else: 
+            idx = seen_mvps.index(mvp)
+            taken_so_far = mvp_ct_taken[idx]
+            available_to_take = mvp_ct_to_take[idx]
+            if taken_so_far == available_to_take:
+                continue
+            if taken_so_far > available_to_take:
+                __import__('pdb').set_trace()
+            
+            mvp_ct_taken[idx] += 1
+            to_return.append(roster)
+            print("Taken count: {} - {}".format(len(to_return), mvp_ct_taken))
+
+            if len(to_return) >= ct:
+                break
+
+
+    for roster in to_return:
+        print(roster)
+    return to_return
 
 
 def optimize_single_game(projection_file_name, fd_slate_file_name):
@@ -1255,6 +1355,39 @@ def validate_results(rosters, seed_rosters, player_to_actual=None):
 
     print(tabulate(all_rows, headers=["row", "name", "ct", "%", "team", "value", "cost", "val/$", "actual"]))
 
+def construct_upload_template_file_single_game(rosters, first_line, entries, player_to_id, player_id_to_name):
+    timestamp = str(datetime.datetime.now())
+    date = timestamp.replace('.', '_')
+    date = date.replace(":", "_")
+    output_file = open("/Users/amichailevy/Downloads/upload_template_{}.csv".format(date), "x")
+    output_file.write(first_line)
+    entry_idx = 0
+    for entry in entries:
+        cells = [entry[0], entry[1], entry[2].strip('"')]
+        if entry_idx >= len(rosters):
+            break
+        roster = rosters[entry_idx][0]
+        player_cells = []
+        for player in roster:
+            player_id = player_to_id[player.name]
+
+            player_name = player_id_to_name[player_id]
+
+            player_cells.append(player_name)
+
+        cells += player_cells
+
+        if len(cells) != 8:
+            __import__('pdb').set_trace()
+
+        to_write = ','.join(['"{}"'.format(c) for c in cells]) 
+
+        output_file.write(to_write + "\n")
+        entry_idx += 1
+        
+
+    output_file.close()
+
 def construct_upload_template_file(rosters, first_line, entries, player_to_id, seed_rosters, excluded, player_id_to_name):
 
     # how are these rosters distrbuted?
@@ -1365,7 +1498,7 @@ def load_current_lineups(path, player_id_to_name):
     return rosters
 
 
-def parse_upload_template(csv_template_file, exclude):
+def parse_upload_template(csv_template_file, exclude, offset = 0, entry_filter=None):
     template_file_lines = open(csv_template_file, "r").readlines()
     entries = []
     name_to_player_id = {}
@@ -1384,26 +1517,26 @@ def parse_upload_template(csv_template_file, exclude):
         contest_id = parts[1].strip('"').strip()
         contest_name = parts[2].strip('"').strip()
 
-
         if entry_id != '' or contest_id != '' or contest_name != '':
-            entries.append((entry_id, contest_id, contest_name))
+
+            if entry_filter == None or entry_filter in contest_name:
+                entries.append((entry_id, contest_id, contest_name))
 
         if len(parts) < 14:
             continue
-        
     
-        name_id = parts[13].strip('"').split(':')
+        name_id = parts[13 - offset].strip('"').split(':')
 
-        name_and_id = parts[13].strip('"')
+        name_and_id = parts[13 - offset].strip('"')
         if len(name_id) == 1:
             continue
         
-        injury_status = parts[25]
+        injury_status = parts[25 - offset]
 
         player_id = name_id[0]
         fd_name = name_id[1]
-        team = parts[23]
-        salary = parts[21]
+        team = parts[23 - offset]
+        salary = parts[21 - offset]
         if fd_name in name_conversion:
             fd_name = name_conversion[fd_name]
         name = normalize_name(fd_name)
@@ -1795,6 +1928,7 @@ def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_ros
             # __import__('pdb').set_trace()
 
             t1 = time.time()
+
             results = generate_n_best_rosters(by_position, [], iter_count_slow, seed_roster=seed_roster, to_take=max_take_count)
             t2 = time.time()
             print("d1: {}".format(t2 - t1))
@@ -1831,6 +1965,9 @@ def generate_best_roster(by_position, iter_count_slow, iter_count_fast, seed_ros
 
 
     print("MY BEST ROSTER: \n{}".format(collected_rosters[0]))
+
+    for player in collected_rosters[0].players:
+        print("{} - {}".format(player.name, player.value))
 
     contest_type_to_indices = {}
     idx = 0
@@ -2289,7 +2426,7 @@ def remove_players_from_player_pool(by_position, players_to_remove, overrides={}
             to_return[pos].append(player)
     return to_return
 
-def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, all_matchups=None, seed_rosters=None):
+def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, all_matchups=None, seed_rosters=None, entry_filter=None):
     if all_matchups == None:
         all_matchups = []
         for pos, players in by_position.items():
@@ -2323,12 +2460,13 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
         team_to_start_time[team1] = start_time[2]
         team_to_start_time[team2] = start_time[2]
 
-    player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [])
+    player_id_to_name, _, _, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name = parse_upload_template(csv_template_file, [], 0, entry_filter)
 
 
     overrides = {}
     diffs = {}
     # diffs = {"Luka Doncic": -1.8}
+    
 
     by_position = remove_players_from_player_pool(by_position, players_to_remove, overrides, diffs)
     # parse this file
@@ -2337,7 +2475,7 @@ def generate_MME_ensemble(by_position, csv_template_file, start_time_to_teams, a
     #only optimize the rosters that are starting now
     # master the art of re-optimizing
     
-    iter_count = int(80000 / 6.0)
+    iter_count = int(80000 / 0.6)
 
     iter_count_slow = iter_count
     iter_count_fast = iter_count

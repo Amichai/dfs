@@ -3,18 +3,18 @@ from difflib import IS_LINE_JUNK
 from io import DEFAULT_BUFFER_SIZE
 from os import stat
 import json
+from pickletools import optimize
 import time
 from pkg_resources import FileMetadata
 import requests
 import sys
 import datetime
 from tabulate import tabulate
-import pandas as pd
 from yahoo_optimizer import random_optimizer
 import fd_optimizer
 import sd_salary_cap_optimizer
 import dk_random_optimizer
-
+from external_projection_optimizer import nba_single_game_optimizer, nba_single_game_optimizer_many, construct_upload_file_fanduel
 
 from pathlib import Path
 
@@ -282,6 +282,23 @@ def get_player_projections_awesemo(projection_file_name):
     return player_to_fp
 
 
+def get_player_projections_crunch(projection_file_name):
+    to_read = open(projection_file_name)
+  
+    player_to_fp = {}
+
+    lines = to_read.readlines()
+    for line in lines:
+        parts = line.split('|')
+        if len(parts) < 4 or parts[1] != "Crunch":
+            continue
+        if parts[4] == "crunch_projected":
+            player_name = normalize_name(parts[2])
+            player_to_fp[player_name] = float(parts[5].strip())
+
+    return player_to_fp
+
+
 def get_player_projections_betMGM(projection_file_name):
     to_read = open(projection_file_name)
   
@@ -376,8 +393,10 @@ def get_player_projections_caesars(projection_file_name):
         if not 'Steals' in stat_to_values:
             continue
         stls = stat_to_values['Steals']
+        turnovers = stat_to_values["Turnovers"]
 
-        projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3
+        projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
+
         player_to_fp[player] = projected
 
     return player_to_fp
@@ -514,6 +533,8 @@ def get_all_games_fd(fd_slate_file_name):
     return all_games
 
 def load_season_data(all_teams=None):
+
+    # open("all_season_data.txt", "r")
 
     matched_team_names = []
 
@@ -706,46 +727,52 @@ def get_player_past_game_stats(player_name, team, season_data, fd_price, dk_pric
     to_return = []
     team = team_abbr_dict[team]
     team = normalize_team_name(team)
-    dates = season_data[team].keys()
-    dates_sorted = sorted(dates)
-    l1 = dates_sorted[-1]
-    l3 = dates_sorted[-3:]
-    l5 = dates_sorted[-5:]
+    # dates = season_data[team].keys()
+    # dates_sorted = sorted(dates)
+    # l1 = dates_sorted[-1]
+    # l3 = dates_sorted[-3:]
+    # l5 = dates_sorted[-5:]
 
+
+    # total_minutes = 0
+    # total_fdp = 0
+    # status_string = ""
+    # max_fdp = 0
+    # for date in l3:
+    #     game_rows = season_data[team][date]
+    #     matched_rows = [a for a in game_rows if q(a, "name") == player_name]
+    #     assert len(matched_rows) <= 1
+    #     if len(matched_rows) == 0:
+            
+    #         status_string += "O"
+    #         continue
+
+    #     matched_row = matched_rows[0]
+    #     played_minutes = q(matched_row, "minutes")
+    #     status = "O"
+    #     if q(matched_row, "starter") == "Y":
+    #         status = "S"
+    #     elif played_minutes > 0:
+    #         status = "B"
+
+    #     total_minutes += played_minutes
+    #     status_string += status
+    #     fdp = q(matched_row, "fdp")
+    #     if fdp > max_fdp:
+    #         max_fdp = fdp
+    #     total_fdp += fdp
+    
+    # fdp_per_minute = 0
+    # if total_minutes == 0:
+    #     assert total_fdp == 0
+    # else:
+    #     fdp_per_minute = round(total_fdp / float(total_minutes), 2)
 
     total_minutes = 0
     total_fdp = 0
-    status_string = ""
     max_fdp = 0
-    for date in l3:
-        game_rows = season_data[team][date]
-        matched_rows = [a for a in game_rows if q(a, "name") == player_name]
-        assert len(matched_rows) <= 1
-        if len(matched_rows) == 0:
-            
-            status_string += "O"
-            continue
-
-        matched_row = matched_rows[0]
-        played_minutes = q(matched_row, "minutes")
-        status = "O"
-        if q(matched_row, "starter") == "Y":
-            status = "S"
-        elif played_minutes > 0:
-            status = "B"
-
-        total_minutes += played_minutes
-        status_string += status
-        fdp = q(matched_row, "fdp")
-        if fdp > max_fdp:
-            max_fdp = fdp
-        total_fdp += fdp
-    
     fdp_per_minute = 0
-    if total_minutes == 0:
-        assert total_fdp == 0
-    else:
-        fdp_per_minute = round(total_fdp / float(total_minutes), 2)
+    status_string = ''
 
     to_return += ["{},{},{},{}".format(fd_positions, dk_positions, sd_positions, yahoo_position), round(total_minutes / 3.0, 2), round(total_fdp / 3.0, 2), max_fdp, fdp_per_minute, status_string, fd_price, dk_price, sd_factor, player_pool_projection]
 
@@ -767,13 +794,14 @@ def get_val_from_row(new_row):
 
     val = new_row[14]
     if not (isinstance(val, float) or isinstance(val, int)):
-        val = new_row[13]
+        val = new_row[15]
         if not (isinstance(val, float) or isinstance(val, int)):
-            val = new_row[12]
-            if not (isinstance(val, float) or isinstance(val, int)):
-                val = new_row[10]
-                if not (isinstance(val, float) or isinstance(val, int)):
-                    return 0.0
+            return 0.0
+            # val = new_row[12]
+            # if not (isinstance(val, float) or isinstance(val, int)):
+            #     val = new_row[10]
+            #     if not (isinstance(val, float) or isinstance(val, int)):
+            #         return 0.0
 
     return val
 
@@ -856,7 +884,6 @@ def consume_row_by_position(new_row, team, team_to_start_time_idx, team_matchup)
         price = new_row[7]
 
         val = get_val_from_row(new_row)
-
         if val == 0:
             continue
 
@@ -919,8 +946,10 @@ def print_rosters_and_projections(excluded_players, slate_name=""):
     dk_fdp_projections = get_player_projections_dk(projection_file_name)
     awesemo_fdp_projections = get_player_projections_awesemo(projection_file_name)
     betMGM_fdp_projections = get_player_projections_betMGM(projection_file_name)
+    crunch_fdp_projections = get_player_projections_crunch(projection_file_name)
 
     caesars_fdp_projections = get_player_projections_caesars(projection_file_name)
+
     # print_all_player_projections(caesars_fdp_projections)
     output_file = open("money_line_scrapes/projections_{}_{}_{}_{}.txt".format(current_date.month, current_date.day, current_date.year, slate_name), "w")
     # __import__('pdb').set_trace()
@@ -1005,7 +1034,8 @@ def print_rosters_and_projections(excluded_players, slate_name=""):
                 if player in dk_dfs_player_pool:
                     player_pool_projection = round(dk_dfs_player_pool[player][-1], 2)
 
-                game_stats = get_player_past_game_stats(player, player_data[1], season_data, fd_price, dk_price, sd_factor, fd_positions, dk_positions, sd_positions, yahoo_positions, player_pool_projection)
+                game_stats = get_player_past_game_stats(player, player_data[1], {}, fd_price, dk_price, sd_factor, fd_positions, dk_positions, sd_positions, yahoo_positions, player_pool_projection)
+                
 
                 normalized_name = normalize_name(player)
                 pp_projection = ""
@@ -1055,6 +1085,19 @@ def print_rosters_and_projections(excluded_players, slate_name=""):
                 game_stats.append(caesars_projection)
 
                 # #-------
+
+                #-------
+                crunch_projection = ""
+                if normalized_name in crunch_fdp_projections:
+                    crunch_projection = round(crunch_fdp_projections[normalized_name], 2)
+
+                if normalized_name in excluded_players:
+                    crunch_projection = 0.0
+
+                game_stats.append(crunch_projection)
+
+                # #-------
+
                 # awesemo_projection = ""
                 # if normalized_name in awesemo_fdp_projections:
                 #     awesemo_projection = round(awesemo_fdp_projections[normalized_name], 2)
@@ -1069,7 +1112,7 @@ def print_rosters_and_projections(excluded_players, slate_name=""):
                 all_rows.append(new_row)
                 consume_row_by_position(new_row, team, team_to_start_time_idx, slate)
                 
-            as_str = tabulate(all_rows, headers=["name", "fd,dk,sd pos", "ave min", "ave fp", "max fp", "fp/min", "L3", "fdp", "dkp", "SD", "DK DFS", "PP proj.", "DK Proj", "betMGM", "caesars"])
+            as_str = tabulate(all_rows, headers=["name", "fd,dk,sd pos", "ave min", "ave fp", "max fp", "fp/min", "L3", "fdp", "dkp", "SD", "DK DFS", "PP proj.", "DK Proj", "caesars", "dfs crunch"])
             output_file.write(as_str + "\n\n")
             print(as_str)
 
@@ -1341,8 +1384,8 @@ if __name__ == "__main__":
     dk_slate_file = folder + dk_path
 
     fd_players = get_fd_slate_players(fd_slate_file, exclude_injured_players=False)
-    dk_players = get_dk_slate_players(dk_slate_file)
-    # dk_players = {}
+    # dk_players = get_dk_slate_players(dk_slate_file)
+    dk_players = {}
     
     # sd_players = get_sd_slate_players(sd_slate_file)
     sd_players = {}
@@ -1351,8 +1394,8 @@ if __name__ == "__main__":
     # sd_salary_cap_players = get_sd_salary_cap_slate_players(sd_salary_cap_slate_file)
     sd_salary_cap_players = {}
 
-    dk_dfs_player_pool = get_dk_dfs_player_pool(player_pool_path)
-    # dk_dfs_player_pool = {}
+    # dk_dfs_player_pool = get_dk_dfs_player_pool(player_pool_path)
+    dk_dfs_player_pool = {}
     # all_games = get_all_games(dk_slate_file)
     all_games = get_all_games_fd(fd_slate_file)
 
@@ -1368,15 +1411,42 @@ if __name__ == "__main__":
 
     all_teams = get_all_teams()
     slate_to_team_to_players = get_slate_to_team_to_players(dk_players, yahoo_players)
-    season_data = load_season_data(all_teams)
-    assert len(season_data.keys()) % 2 == 0
+    # season_data = load_season_data(all_teams)
+    # assert len(season_data.keys()) % 2 == 0
 
     excluded_players = []
     
     print_rosters_and_projections(excluded_players, fd_slate[2])
 
-    print("-----")
 
+    #  ---- SINGLE GAME OPTIMIZER START------    
+    # single_game_slate_path = "FanDuel-NBA-2022 ET-05 ET-07 ET-75771-players-list.csv"
+
+    # result = nba_single_game_optimizer(fd_players_by_position, single_game_slate_path)
+    # print(result)
+    # __import__('pdb').set_trace()
+    # rosters = nba_single_game_optimizer_many(fd_players_by_position, single_game_slate_path, 130, ["Steven Adams"])
+
+    # optimal = rosters[0]
+
+    # for i in range(29):
+    #     rosters.insert(0, optimal)
+    
+    # for roster in rosters:
+    #     print(roster)
+
+    # rosters += nba_single_game_optimizer_many(fd_players_by_position, single_game_slate_path, 10, ["Ja Morant", "Steven Adams"])
+    # rosters += nba_single_game_optimizer_many(fd_players_by_position, single_game_slate_path, 10, ["Stephen Curry", "Steven Adams"])
+
+
+
+    # template_path = "FanDuel-NBA-2022-05-03-75571-entries-upload-template.csv"
+    # construct_upload_file_fanduel(template_path, rosters)
+    # assert False
+
+    # ---- SINGLE GAME OPTIMIZER END -----
+    
+    print("-----")
     # result = dk_random_optimizer.generate_unique_rosters(dk_players_by_position, 1)
 
     # generate_dk_lineups_file(result, dk_players, "test1")
@@ -1384,15 +1454,16 @@ if __name__ == "__main__":
     # __import__('pdb').set_trace()
 
     # TODO: 2 - 3/18/22 -early
-    # upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-04-19-74800-entries-upload-template (1).csv"
-    # fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
-    # assert False
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-05-12-76021-entries-upload-template (1).csv"
+    fd_optimizer.generate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams)
+
+    assert False
 
 
     
     # todo read this number from the computer clock
-    current_time = 8.1
-    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-04-19-74800-entries-upload-template (2).csv"
+    current_time = 7.1
+    upload_template_path = "/Users/amichailevy/Downloads/FanDuel-NBA-2022-05-08-75813-entries-upload-template (1).csv"
     fd_optimizer.regenerate_MME_ensemble(fd_players_by_position, upload_template_path, start_time_to_teams, current_time, [])
     assert False
 
