@@ -1,6 +1,4 @@
-from distutils.log import debug
-from http.client import NON_AUTHORITATIVE_INFORMATION
-from dictdiffer import diff, patch, swap, revert
+from dictdiffer import diff
 import uuid
 from tinydb import TinyDB, Query, where
 import logging
@@ -42,7 +40,7 @@ class DataManager:
     if len(differences) > 0:
       self.db.insert(to_write)
       for difference in differences:
-        to_log = "{}|{}|{}|{}|{}".format(new_id, sport, scraper_name, name, difference)
+        to_log = "{}|{}|{}|{}|{}|".format(new_id, sport, scraper_name, name, difference, parts[1])
         logging.info(to_log)
         print(to_log)
       
@@ -51,6 +49,9 @@ class DataManager:
     all_player_projections = self.query_all_projections(sport, scraper_name)
     for name, row in all_player_projections.items():
       if name not in results:
+        # __import__('pdb').set_trace()
+        # if row["projections"]['Fantasy Score'] == 0:
+        #   continue
         print("WRITING ZERO: {}".format(name))
         projections = row['projections']
         new_projections = {}
@@ -78,9 +79,11 @@ class DataManager:
         d_old = "{} {}".format(old_row['_day'], old_row['_time'])
         parsed_new = dateutil.parser.isoparse(d_new)
         parsed_old = dateutil.parser.isoparse(d_old)
+
         if parsed_new > parsed_old:
           name_to_rows[name] = row
-    
+
+    #Edmundo Sosa
     return name_to_rows
 
   def todays_rows(self, sport):

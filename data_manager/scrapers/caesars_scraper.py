@@ -11,13 +11,14 @@ class CaesarsScraper:
     self.sport = sport
     self.name = 'Caesars'
 
-    assert sport == "NBA" or sport == "WNBA" or sport == "MLB"
+    assert sport == "NBA" or sport == "WNBA" or sport == "MLB" or sport == "NFL"
     self.game_guids = None
     if sport == 'NBA' or sport == 'WNBA':
       self.sport_name = "basketball"
     elif sport == "MLB":
       self.sport_name = "baseball"
-      
+    elif sport == "NFL":
+      self.sport_name = "americanfootball"
 
     self.driver = utils.get_chrome_driver()
     self.all_team_names = ["Atlanta Hawks","Boston Celtics","Brooklyn Nets","Charlotte Hornets","Chicago Bulls","Cleveland Cavaliers","Dallas Mavericks","Denver Nuggets","Detroit Pistons","Golden State Warriors","Houston Rockets","Indiana Pacers","Los Angeles Clippers","Los Angeles Lakers","Memphis Grizzlies","Miami Heat","Milwaukee Bucks","Minnesota Timberwolves","New Orleans Pelicans","New York Knicks","Oklahoma City Thunder","Orlando Magic","Philadelphia 76ers","Phoenix Suns","Portland Trail Blazers","Sacramento Kings","San Antonio Spurs","Toronto Raptors","Utah Jazz","Washington Wizards"]
@@ -31,7 +32,7 @@ class CaesarsScraper:
     target_index = all_sports.index(self.sport)
 
     events = as_json['competitions'][target_index]['events']
-
+  
     counter = 1
     all_start_times = []
     to_return = []
@@ -67,7 +68,7 @@ class CaesarsScraper:
         as_text = self.driver.find_element_by_tag_name('body').text
 
         as_json = json.loads(as_text)
-        
+
         for market in as_json['markets']:
             selections = market['selections']
             name = market['name']
@@ -80,14 +81,16 @@ class CaesarsScraper:
                 continue
 
             if "Alternative" in str(market):
-                __import__('pdb').set_trace()
+                # __import__('pdb').set_trace()
                 continue
 
+
+            # __import__('pdb').set_trace()
             name_parts = market['name'].split('| |')
-            if market['name'].count('|') == 2:
-                continue
-            if len(name_parts) == 1:
-                continue
+            # if market['name'].count('|') == 2:
+            #     continue
+            # if len(name_parts) == 1:
+            #     continue
             
             if " |Live|" in name:
                 continue
@@ -96,19 +99,29 @@ class CaesarsScraper:
             if name in self.all_team_names:
               continue
 
-            stat = name_parts[1].strip('|').replace('Total ', '')
-            if stat == "3pt Field Goals":
-              continue
+            if len(name_parts) > 1:
+              stat = name_parts[1].strip('|').replace('Total ', '')
+              if stat == "3pt Field Goals":
+                continue
+            else:
+              stat = name_parts[0]
 
             name = utils.normalize_name(name)
 
             under_faction = None
             over_fraction = None
             for selection in selections:
-                if selection['type'] == 'under':
-                    under_faction = selection['price']['d']
-                elif selection['type'] == 'over':
-                    over_fraction = selection['price']['d']
+              if selection['price'] == None:
+                continue
+
+              if selection['type'] == 'under':
+                  under_faction = selection['price']['d']
+              elif selection['type'] == 'over':
+                  over_fraction = selection['price']['d']
+              elif selection['type'] == 'home':
+                  under_faction = selection['price']['d']
+              elif selection['type'] == 'away':
+                  over_fraction = selection['price']['d']
             
             if under_faction == None and over_fraction == None:
                 continue
@@ -123,6 +136,11 @@ class CaesarsScraper:
 
             if not name in to_return:
                 to_return[name] = {}
+
+            if not 'line' in market:
+              to_return[name][stat] = str(odds_percentage * 100)
+              to_return[name]["{}:isActive".format(stat)] = is_active
+              continue
 
             line = market['line']
    

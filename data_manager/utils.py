@@ -64,7 +64,7 @@ def normalize_name(name):
 # https://chromedriver.chromium.org/downloads
 # xattr -d com.apple.quarantine <chromedriver>
 def get_chrome_driver():
-  return webdriver.Chrome("../master_scrape_process/chromedriver9")
+  return webdriver.Chrome("../master_scrape_process/chromedriver10")
 
 def get_with_selenium(url):
   driver = get_chrome_driver()

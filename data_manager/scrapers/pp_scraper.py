@@ -5,7 +5,7 @@ class PPScraper:
     self.sport = sport
     self.name = 'PP'
 
-    assert sport == "NBA" or sport == "MLB" or sport == "WNBA"
+    assert sport == "NBA" or sport == "MLB" or sport == "WNBA" or sport == "NFL" or sport == "NFLP"
 
   def run(self):
     league_id = None
@@ -17,6 +17,8 @@ class PPScraper:
       league_id = 9
     elif self.sport == "MLB":
       league_id = 2
+    elif self.sport == "NFLP":
+      league_id = 44
 
 
     assert league_id != None

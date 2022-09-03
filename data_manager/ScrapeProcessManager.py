@@ -6,18 +6,21 @@ from scrapers.caesars_scraper import CaesarsScraper
 from scrapers.pp_scraper import PPScraper
 from scrapers.dfs_crunch_scraper import DFSCrunchScraper
 import argparse
-
+from ProcessData import process
 
 
 def run(sport):
   dataManager = data_manager.DataManager()
-  period = 2
+  period = 3
   scrapers_by_sport = {
     "NBA": [DFSCrunchScraper('NBA'), PPScraper('NBA'), CaesarsScraper('NBA')],
     "WNBA": [DFSCrunchScraper('WNBA'), PPScraper('WNBA')],
     "MLB": [DFSCrunchScraper('MLB'), PPScraper('MLB')],
-    "MLB": [DFSCrunchScraper('MLB')],
-    # "MLB": [DFSCrunchScraper('MLB'), PPScraper('MLB'), CaesarsScraper('MLB')],
+    # "MLB": [DFSCrunchScraper('MLB')],
+    "MLB": [PPScraper('MLB'), CaesarsScraper('MLB')],
+    # "NFL": [PPScraper('NFLP')],
+    # "NFL": [PPScraper('NFL'), CaesarsScraper('NFL')],
+    "NFL": [CaesarsScraper('NFL')],
   }
 
   scrapers = scrapers_by_sport[sport]
@@ -27,9 +30,14 @@ def run(sport):
   for i in range(scraper_ct):
     scraper = scrapers[idx % scraper_ct]
     result = scraper.run()
-    print(result)
+    # print(result)
+
+    # __import__('pdb').set_trace()
     for name, stats in result.items():
       dataManager.write_projection(scraper.sport, scraper.name, name, stats)
+
+      # for stat, val in stats.items():
+      #   print("{}, {}, {}".format(name, stat, val))
 
 
     dataManager.write_zeros(scraper.sport, scraper.name, result)
@@ -51,7 +59,10 @@ def run(sport):
 # Store projections in memory but don't write to disk until later?
 
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser()
-  parser.add_argument('-s', '--sport', required=True)
-  args = vars(parser.parse_args())
-  run(args['sport'])
+  dataManager = data_manager.DataManager()
+  process(dataManager)
+
+  # parser = argparse.ArgumentParser()
+  # parser.add_argument('-s', '--sport', required=True)
+  # args = vars(parser.parse_args())
+  # run(args['sport'])

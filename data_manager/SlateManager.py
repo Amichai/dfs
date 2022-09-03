@@ -119,8 +119,10 @@ if __name__ == "__main__":
   run("MLB")
 
   download_folder = "/Users/amichailevy/Downloads/"
-  slate_path = "FanDuel-MLB-2022 ET-05 ET-17 ET-76281-players-list.csv"
-  template_path = "FanDuel-MLB-2022-05-17-76281-entries-upload-template.csv"
+  slate_path = "FanDuel-MLB-2022 ET-06 ET-01 ET-76886-players-list.csv"
+  template_path = "FanDuel-MLB-2022-06-01-76886-entries-upload-template.csv"
+  teams_to_remove = []
+
 
 
   projections = MLBProjections(download_folder + slate_path)
@@ -131,7 +133,6 @@ if __name__ == "__main__":
   # dfs_crunch_path = "DFSCRUNCH-DOWNLOAD-DATA-fd76041 (2).csv"
   # by_position = utils.load_crunch_dfs_projection(dfs_crunch_path, slate_path, download_folder)
   all_teams = projections.all_teams
-
 
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '') #MLB
 
@@ -150,11 +151,13 @@ if __name__ == "__main__":
   # to_remove += ["Pavin Smith", "Jazz Chisholm", "Rougned Odor", "Yan Gomes", "Dylan Moore", "Brendan Rodgers", "Paul DeJong", "Austin Slater", "Randal Grichuk", "Frank Schwindel"]
   count = 0
 
-  top_pitchers = sorted(by_position['P'], key=lambda a: a.value, reverse=True)[:3]
+  top_pitchers = sorted(by_position['P'], key=lambda a: a.value, reverse=True)
+  top_pitchers = [p for p in top_pitchers if p.team not in teams_to_remove]
+  top_pitchers = top_pitchers[:1]
   pitcher_pool = []
   pitcher_pool += [top_pitchers[0]] * 10
-  pitcher_pool += [top_pitchers[1]] * 6
-  pitcher_pool += [top_pitchers[2]] * 4
+  # pitcher_pool += [top_pitchers[1]] * 6
+  # pitcher_pool += [top_pitchers[2]] * 4
 
   team_to_batters = {}
   for pos, players in by_position.items():
@@ -182,12 +185,18 @@ if __name__ == "__main__":
   # teams = teams[:math.ceil(len(teams) / 2)]
   teams = teams[:10]
 
+  for team_to_remove in teams_to_remove:
+    if team_to_remove in teams:
+      teams.remove(team_to_remove)
+
   team_selection_pool = []
   team_idx = len(teams)
   for team in teams:
     team_selection_pool += [team] * team_idx
 
     team_idx -= 1
+
+  
 
 
   # 50 entries
@@ -196,8 +205,11 @@ if __name__ == "__main__":
   # select random teams - but not if they're playing against this pitcher!
   # don't hit against my pitcher
 
-  while len(rosters) < len(entries):
+  block_count = 0
+
+  while len(rosters) < len(entries) * 1.6:
     pitcher = random.sample(pitcher_pool, 1)[0]
+    
     top_3_teams = random.sample(team_selection_pool, 3)
     count = 0
     while len(top_3_teams) != len(set(top_3_teams)) or pitcher.opp in top_3_teams:
@@ -207,10 +219,19 @@ if __name__ == "__main__":
         __import__('pdb').set_trace()
 
     accepted_teams = top_3_teams
-    team_key = "|".join(sorted(accepted_teams))
+    team_key = "|".join(sorted(accepted_teams)) + "|" + pitcher.name
+
+
     if team_key in seen_team_keys:
+      if block_count > 30:
+        __import__('pdb').set_trace()
+
+      block_count += 1
+      # print("{} - {}".format(pitcher, top_3_teams))
       continue
 
+
+    block_count = 0
     seen_team_keys.append(team_key)
 
     print("LOCKING PITCHER: {}".format(pitcher))
@@ -232,8 +253,8 @@ if __name__ == "__main__":
     seed_roster = [pitcher] + [""] * 8
     # __import__('pdb').set_trace()
     # iter_count = 9500
-    # iter_count = 11000
-    iter_count = 8300
+    iter_count = 17000
+    # iter_count = 8300
     result = optimizer.optimize(by_position_new, iter_count=iter_count, seed_roster=seed_roster)
     if result == None:
       print("Null roster skipping.")
@@ -274,11 +295,11 @@ if __name__ == "__main__":
   for entry in entries[:len(rosters_sorted)]:
     entry_name = entry[2]
     entry_ct = entry_name_to_ct[entry_name]
-    if entry_ct == 1:
-      to_print.append(rosters_sorted[0])
-    else:
-      to_print.append(rosters_sorted[take_idx])
-      take_idx += 1
+    # if entry_ct == 1:
+    #   to_print.append(rosters_sorted[0])
+    # else:
+    to_print.append(rosters_sorted[take_idx])
+    take_idx += 1
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name)
     
