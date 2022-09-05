@@ -64,7 +64,7 @@ def parse_caesaers_projection_activity_metric(caesars_projection):
 
 class NBA_WNBA_Projections:
   def __init__(self, slate_path, sport):
-    self.dm = DataManager()
+    self.dm = DataManager(sport)
     self.sport = sport
     self.scrapers = ['DFSCrunch', 'PP', 'Caesars']
 

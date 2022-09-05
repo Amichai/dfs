@@ -16,11 +16,11 @@ logging.basicConfig(filename='logs/{}.log'.format(utils.date_str()), filemode='a
 
 
 class DataManager:
-  def __init__(self, day=None):
+  def __init__(self, sport, day=None):
     if day == None:
       day = utils.date_str()
     self.day = day
-    name = "data_files/{}.json".format(day)
+    name = "data_files/{}_{}.json".format(day, sport)
     self.db = TinyDB(name)
 
   def write_projection(self, sport, scraper_name, name, projections):

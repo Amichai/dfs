@@ -7,6 +7,7 @@ import datetime
 import utils
 import statistics
 from ScrapeProcessManager import run
+from Optimizer import FD_WNBA_Optimizer
 # produce a table of projections
 # generate an ensemble of rosters
 # produce a file to upload
@@ -33,12 +34,16 @@ def parse_upload_template(csv_template_file, exclude, sport, offset = 0, entry_f
             if entry_filter == None or entry_filter in contest_name:
                 entries.append((entry_id, contest_id, contest_name))
 
+
+        # __import__('pdb').set_trace()
+        
         if len(parts) < 14:
             continue
     
         name_id = parts[13 - offset].strip('"').split(':')
 
         name_and_id = parts[13 - offset].strip('"')
+
         if len(name_id) == 1:
             continue
         injury_status = parts[25 - offset]
@@ -61,6 +66,8 @@ def parse_upload_template(csv_template_file, exclude, sport, offset = 0, entry_f
             players_to_remove.append(name)
             continue
 
+
+        
         if sport == "MLB" and parts[30 - offset].strip() != "P" and parts[29 - offset] == '0':
           print("{} not in batting order".format(name))
           # __import__('pdb').set_trace()
@@ -102,8 +109,8 @@ def construct_upload_template_file(rosters, first_line, entries, player_to_id, p
         # player_cells.reverse()
         cells += player_cells
 
-        if len(cells) != 12:
-            __import__('pdb').set_trace()
+        # if len(cells) != 12:
+        #     __import__('pdb').set_trace()
 
         to_write = ','.join(['"{}"'.format(c) for c in cells]) 
 
@@ -114,37 +121,7 @@ def construct_upload_template_file(rosters, first_line, entries, player_to_id, p
     output_file.close()
 
 
-
-if __name__ == "__main__":
-  run("MLB")
-
-  download_folder = "/Users/amichailevy/Downloads/"
-  slate_path = "FanDuel-MLB-2022 ET-06 ET-01 ET-76886-players-list.csv"
-  template_path = "FanDuel-MLB-2022-06-01-76886-entries-upload-template.csv"
-  teams_to_remove = []
-
-
-
-  projections = MLBProjections(download_folder + slate_path)
-  projections.print_slate()
-
-  by_position = projections.players_by_position()
-
-  # dfs_crunch_path = "DFSCRUNCH-DOWNLOAD-DATA-fd76041 (2).csv"
-  # by_position = utils.load_crunch_dfs_projection(dfs_crunch_path, slate_path, download_folder)
-  all_teams = projections.all_teams
-
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '') #MLB
-
-
-  entry_name_to_ct = {}
-  for entry in entries:
-    entry_name = entry[2]
-    if not entry_name in entry_name_to_ct:
-      entry_name_to_ct[entry_name] = 1
-    else:
-      entry_name_to_ct[entry_name] += 1
-
+def generate_MLB_roster_ensemble(entry_name_to_ct):
   rosters = []
 
   seen_team_keys = []
@@ -288,21 +265,76 @@ if __name__ == "__main__":
 
     count += 1
 
-  rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)[:len(entries)]
+if __name__ == "__main__":
+  # run("WNBA")
+
+  download_folder = "/Users/amichailevy/Downloads/"
+  slate_path = "FanDuel-WNBA-2022 ET-09 ET-04 ET-79945-players-list.csv"
+  template_path = "FanDuel-WNBA-2022-09-04-79945-entries-upload-template (3).csv"
+  teams_to_remove = []
+  start_times = "start_times.txt" # TODO
+
+  start_times = utils.load_start_times_and_slate_path(start_times)
+  __import__('pdb').set_trace()
+
+
+
+  # projections = MLBProjections(download_folder + slate_path)
+  projections = NBA_WNBA_Projections(download_folder + slate_path, "WNBA")
+  projections.print_slate()
+
+  by_position = projections.players_by_position()
+
+  # dfs_crunch_path = "DFSCRUNCH-DOWNLOAD-DATA-fd76041 (2).csv"
+  # by_position = utils.load_crunch_dfs_projection(dfs_crunch_path, slate_path, download_folder)
+  # all_teams = projections.all_teams
+
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 2) #MLB
+
+
+
+
+  entry_name_to_ct = {}
+  for entry in entries:
+    entry_name = entry[2]
+    if not entry_name in entry_name_to_ct:
+      entry_name_to_ct[entry_name] = 1
+    else:
+      entry_name_to_ct[entry_name] += 1
+
+
+  #MLB
+  # rosters = generate_MLB_roster_ensemble(entry_name_to_ct)
+
+  rosters = []
+
+  optimizer = FD_WNBA_Optimizer()
+  __import__('pdb').set_trace()
+
+  rosters = optimizer.optimize_top_n(by_position, 10)
+
+  print(rosters)
+  #-------
+
+  rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)[:1]
+
+  for roster in rosters_sorted:
+    print(roster)
+
   to_print = []
+
   # distribute best roster to the single entry, and the rest to the MME
   take_idx = 0
-  for entry in entries[:len(rosters_sorted)]:
+  for entry in entries:
     entry_name = entry[2]
     entry_ct = entry_name_to_ct[entry_name]
     # if entry_ct == 1:
     #   to_print.append(rosters_sorted[0])
     # else:
-    to_print.append(rosters_sorted[take_idx])
+    to_print.append(rosters_sorted[take_idx % len(rosters_sorted)])
     take_idx += 1
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name)
-    
   # pick pairs and triples
   # filter out all other 
 

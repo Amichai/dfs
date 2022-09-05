@@ -1,0 +1,14 @@
+# WORKFLOWS:
+
+ - Scrape lines - ScrapeProcessManager
+ - Detect line changes
+ - Detect arbitrage
+ - Generate lineups - SlateManager
+ - Reoptimize lineups
+
+
+
+ python ScrapeProcessManager.py -s NFL
+ python ProcessData.py -s NFL
+ 
+ [python SlateManager.py]

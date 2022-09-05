@@ -7,9 +7,10 @@ import json
 import time
 
 class CaesarsScraper:
-  def __init__(self, sport):
+  def __init__(self, sport, isGameday=True):
     self.sport = sport
     self.name = 'Caesars'
+    self.isGameday = isGameday
 
     assert sport == "NBA" or sport == "WNBA" or sport == "MLB" or sport == "NFL"
     self.game_guids = None
@@ -42,13 +43,17 @@ class CaesarsScraper:
         start_time = event["startTime"]
         start_time_parsed = dateutil.parser.isoparse(start_time)
         time_shifted = start_time_parsed - timedelta(hours=4)
+        today = date.today()
 
         all_start_times.append(start_time)
-
-        if time_shifted.day == date.today().day:
-            counter += 1
-            print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
-            to_return.append(event_id)
+        if not self.isGameday and abs(today.day - time_shifted.day) < 7 and today.month == time_shifted.month:
+          counter += 1
+          print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
+          to_return.append(event_id)
+        elif self.isGameday and time_shifted.day == today.day:
+          counter += 1
+          print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
+          to_return.append(event_id)
 
     return to_return
 

@@ -156,3 +156,102 @@ def load_crunch_dfs_projection(path, slate_path, download_folder):
 
     __import__('pdb').set_trace()
     return by_position
+
+
+def load_start_times_and_slate_path(path):
+    start_times = open(path, "r")
+    lines = start_times.readlines()
+    fd_slate_path = lines[0].strip()
+    dk_slate_path = lines[1].strip()
+    first_team = None
+    second_team = None
+    time_conversion = {
+        '12:00pm ET': 0, '12:30pm ET': 0.5,
+        '1:00pm ET': 1, '1:30pm ET': 1.5,
+        '2:00pm ET': 2, '2:30pm ET': 2.5,
+        '3:00pm ET': 3, '3:30pm ET': 3.5,
+        '4:00pm ET': 4, '4:30pm ET': 4.5,
+        '5:00pm ET': 5, '5:30pm ET': 5.5,
+        '6:00pm ET': 6, '6:30pm ET': 6.5, 
+        '7:00pm ET': 7, '7:30pm ET': 7.5, 
+        '8:00pm ET': 8, '8:30pm ET': 8.5, 
+        '9:00pm ET': 9, '9:30pm ET': 9.5, 
+        '10:00pm ET': 10, '10:30pm ET': 10.5, 
+        '11:00pm ET': 11, '11:30pm ET': 11.5}
+
+    time_to_teams = {}
+    for line in lines[2:]:
+        line = line.strip().strip('\n')
+
+        if line == "":
+            continue
+
+        if line[0].isdigit():
+            time_key = time_conversion[line]
+            if not time_key in time_to_teams:
+                time_to_teams[time_key] = []
+            time_to_teams[time_key] += [first_team, second_team]
+            continue
+
+        if line[0] == '@':
+            # second team
+            second_team = line.strip('@')
+            continue
+
+        first_team = line
+
+    return (time_to_teams, fd_slate_path, dk_slate_path)
+
+
+stat_name_normalization = {
+    # Thrive Fantasy
+    'HITs': 'Hits',
+    'RUNs': 'Runs Scored',
+    'BASEs': 'Bases',
+    'Ks': 'Pitching Strikeouts',
+    'Pass YDS': 'Passing Yards',
+    'Pass Yards': 'Passing Yards',
+    'Rush YDS': 'Rushing Yards',
+    'Rush Yards': 'Rushing Yards',
+    'Rec YDS': 'Receiving Yards',
+    'Pass YDS + Rush YDS': 'Pass+Rush Yards',
+    'Rush YDS + Rec YDS': 'Rush+Rec Yards',
+    'REC': 'Receptions',
+    'INT': 'Interceptions',
+    
+    'Rushing + Receiving Yards': 'Rush+Rec Yards',
+    'Pass TDs': 'Passing Touchdowns',
+    'Rush Attempts': 'Rushing Attempts',
+    'Pass Attempts': 'Passing Attempts',
+    'FG Made': 'Made Field Goals',
+    'Pass Completions': 'Passing Completions',
+    
+
+    # PP
+    'Strikeouts': 'Pitching Strikeouts',
+    'Hits Allowed': 'Hits Allowed',
+    'Walks Allowed': 'Walks Allowed',
+    'Runs': 'Runs Scored',
+    'Pitching Outs': 'Outs Recorded',
+}
+
+def normalize_stat_name(scraper_results):
+    mapping_values = list(stat_name_normalization.values())
+    mapping_keys = list(stat_name_normalization.keys())
+    unmodified_stats = []
+
+    results_new = {}
+    for player, stats in scraper_results.items():
+        results_new[player] = {}
+        for stat, val in stats.items():
+            if stat in stat_name_normalization:
+                stat = stat_name_normalization[stat]
+            
+            if stat not in mapping_values and stat not in mapping_keys and stat not in unmodified_stats and ':isActive' not in stat:
+                unmodified_stats.append(stat)
+
+
+            results_new[player][stat] = val
+
+    print("UNMODIFIED STATS: {}".format(unmodified_stats))
+    return results_new

@@ -208,6 +208,59 @@ class Optimizer:
 
 
       return best_roster
+  
+  def optimize_top_n(self, by_position, n, iter_count = 600000, lineup_validator = None, seed_roster = None):
+    all_rosters = []
+    roster_keys = []
+    random.seed(time.time())
+    
+    for i in range(iter_count):
+        if i % 50000 == 0:
+            print(i)
+
+        random_lineup = self.build_random_line_up(by_position)
+        if random_lineup == None:
+          continue
+
+        is_full_locked = False
+        if seed_roster != None:
+            is_full_locked = True
+            for i in range(9):
+                pl = seed_roster[i]
+                if pl != '' and pl != None:
+                    random_lineup.replace(pl, i)
+                    random_lineup.locked_indices.append(i)
+                else:
+                    is_full_locked = False
+
+            if is_full_locked:
+                print("ROSTER FULLY LOCKED")
+                return [random_lineup]
+            
+        if random_lineup == None or random_lineup.cost > self.max_cost:
+          continue
+
+        if len(random_lineup.players) != len(set([a.name for a in random_lineup.players])):
+          __import__('pdb').set_trace()
+
+        result = self.optimize_roster(random_lineup, by_position)
+    
+        if lineup_validator != None and lineup_validator(result) != True:
+          continue
+
+        all_names = [a.name for a in result.players]
+        all_names_sorted = sorted(all_names)
+        roster_key = ",".join(all_names_sorted)
+
+        if roster_key in roster_keys:
+          continue
+
+        roster_keys.append(roster_key)
+        all_rosters.append(result)
+        print(all_rosters)
+
+    all_rosters_sorted = sorted(all_rosters, key=lambda a: a.value, reverse=True)
+    return all_rosters_sorted[:n]
 
 
 class FD_NBA_Optimizer:
@@ -236,6 +289,44 @@ class FD_NBA_Optimizer:
   def opitimize(self, by_position):
     by_position = self.prune_player_pool(by_position)
     return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
+  
+  def opitimize_top_n(self, by_position, n):
+    by_position = self.prune_player_pool(by_position)
+    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
+    return result
+
+class FD_WNBA_Optimizer:
+  def __init__(self):
+    self.optimizer = Optimizer(40000, ["G", "G", "G", "F", "F", "F", "F"])
+
+  def prune_player_pool(self, by_position):
+    by_position_copied = {}
+    for position, players in by_position.items():
+      by_position_copied[position] = []
+
+      all_value_per_dollars = [pl.value_per_dollar for pl in players]
+
+      best_value = max(all_value_per_dollars)
+      cuttoff = best_value / 3
+      for player in players:
+        if player.value_per_dollar < cuttoff:
+          print("Filtered out: {}".format(player))
+          continue
+        by_position_copied[position].append(player)
+
+      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
+    
+    return by_position_copied
+
+  def optimize(self, by_position):
+    by_position = self.prune_player_pool(by_position)
+    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
+
+  def optimize_top_n(self, by_position, n):
+    by_position = self.prune_player_pool(by_position)
+    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
+    return result
+
 
 
 class MLB_Optimizer:
