@@ -4,11 +4,13 @@
  - Detect line changes
  - Detect arbitrage
  - Generate lineups - SlateManager
- - Reoptimize lineups
+ - Reoptimize lineups (sort of implemented for CFB)
 
 
 
- python ScrapeProcessManager.py -s NFL
- python ProcessData.py -s NFL
+ python3 ScrapeProcessManager.py -s NFL
+ python3 ProcessData.py -s NFL
  
  [python SlateManager.py]
+
+- Automotically scrape lines

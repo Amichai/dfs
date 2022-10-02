@@ -2,7 +2,6 @@ import json
 import datetime
 from selenium import webdriver
 import unidecode
-from name_mapper import name_mapper
 
 
 class Player:
@@ -51,19 +50,16 @@ class Roster:
 
 
 def normalize_name(name):
-    name = unidecode.unidecode(name)
-    name = name.replace("  ", " ")
-    name = name.replace("’", "'")
-    parts = name.split(" ")
-    if len(parts) > 2:
-        name = "{} {}".format(parts[0], parts[1]).strip()
+  name = unidecode.unidecode(name)
+  name = name.replace("  ", " ")
+  name = name.replace("’", "'")
+  parts = name.split(" ")
+  if len(parts) > 2:
+      return "{} {}".format(parts[0], parts[1]).strip()
 
-    name = name.replace(".", "")
-    if name in name_mapper:
-        print("mapping: {}".format(name))
-        name = name_mapper[name]
+  name = name.replace(".", "")
 
-    return name.strip()
+  return name.strip()
 
 # https://chromedriver.chromium.org/downloads
 # xattr -d com.apple.quarantine <chromedriver>
@@ -166,7 +162,6 @@ def load_start_times_and_slate_path(path):
     start_times = open(path, "r")
     lines = start_times.readlines()
     fd_slate_path = lines[0].strip()
-    dk_slate_path = lines[1].strip()
     first_team = None
     second_team = None
     time_conversion = {
@@ -184,7 +179,7 @@ def load_start_times_and_slate_path(path):
         '11:00pm ET': 11, '11:30pm ET': 11.5}
 
     time_to_teams = {}
-    for line in lines[2:]:
+    for line in lines[1:]:
         line = line.strip().strip('\n')
 
         if line == "":
@@ -195,16 +190,16 @@ def load_start_times_and_slate_path(path):
             if not time_key in time_to_teams:
                 time_to_teams[time_key] = []
             time_to_teams[time_key] += [first_team, second_team]
+            second_team = None
+            first_team = None
             continue
 
-        if line[0] == '@':
-            # second team
-            second_team = line.strip('@')
-            continue
+        if first_team == None:
+            first_team = line
+        else:
+            second_team = line
 
-        first_team = line
-
-    return (time_to_teams, fd_slate_path, dk_slate_path)
+    return (time_to_teams, fd_slate_path)
 
 #UNMODIFIED STATS: [ 'Pass+Rush+Rec TDs', 'Rec TDs', 'Rush TDs', 'Tackles+Ast']
 
@@ -220,22 +215,16 @@ stat_name_normalization = {
     'Rush YDS': 'Rushing Yards',
     'Rush Yards': 'Rushing Yards',
     'Rec YDS': 'Receiving Yards',
-    'Rec Yards': 'Receiving Yards',
     'Pass YDS + Rush YDS': 'Pass+Rush Yards',
     'Pass+Rush Yds': 'Pass+Rush Yards',
     'Rush YDS + Rec YDS': 'Rush+Rec Yards',
     'Rush+Rec Yds': 'Rush+Rec Yards',
-    
     'REC': 'Receptions',
     'INT': 'Interceptions',
 
     'Rushing + Receiving Yards': 'Rush+Rec Yards',
     'Pass TDs': 'Passing Touchdowns',
     "Pass TD's": 'Passing Touchdowns',
-    'Rush TDs': 'Rushing Touchdowns',
-    "Rush TD's": 'Rushing Touchdowns',
-    'Rushing TDs': 'Rushing Touchdowns',
-    "Rushing TD's": 'Rushing Touchdowns',
     'Rush Attempts': 'Rushing Attempts',
     'Pass Attempts': 'Passing Attempts',
     'FG Made': 'Made Field Goals',
@@ -250,11 +239,6 @@ stat_name_normalization = {
     'Walks Allowed': 'Walks Allowed',
     'Runs': 'Runs Scored',
     'Pitching Outs': 'Outs Recorded',
-    'Pitch Count': 'Pitches Thrown',
-    'Hitter Fantasy Score': 'Fantasy Points',
-    'Pitcher Fantasy Score': 'Fantasy Points',
-
-
 }
 
 def normalize_stat_name(scraper_results):
@@ -268,11 +252,6 @@ def normalize_stat_name(scraper_results):
         for stat, val in stats.items():
             if stat in stat_name_normalization:
                 stat = stat_name_normalization[stat]
-
-            if ':isActive' in stat:
-                stat_prefix = stat.replace(':isActive', '')
-                if stat_prefix in stat_name_normalization:
-                    stat = stat_name_normalization[stat_prefix] + ':isActive'
             
             if stat not in mapping_values and stat not in mapping_keys and stat not in unmodified_stats and ':isActive' not in stat:
                 unmodified_stats.append(stat)

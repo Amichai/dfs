@@ -42,13 +42,17 @@ def arbitrage(name_to_site_to_stat):
         name_to_stat_to_site[name][stat][site] = val_filtered
 
 
+  site_to_results = {}
   results = []
   for name, stat_to_site in name_to_stat_to_site.items():
     for stat, sites in stat_to_site.items():
       stat_vals = []
       for site, vals in sites.items():
         try:
-          stat_vals.append(float(vals[-1][0]))
+          to_append = float(vals[-1][0])
+          if to_append > 0:
+            stat_vals.append(to_append)
+          # print(vals)
         except:
           # This happens if :isActive = False on Caesars
           continue
@@ -57,8 +61,19 @@ def arbitrage(name_to_site_to_stat):
         continue
       min_val = min(stat_vals)
       max_val = max(stat_vals)
+      if max_val - min_val <= 1.5: 
+        continue
+      
       difference = round(calculatePercentDifference(min_val, max_val), 2)
-      results.append([difference, name, stat, sites])
+      if difference > 0.06:
+        sites_parsed = {}
+        for site, vals in sites.items():
+          if len(vals) == 0:
+            continue
+
+          sites_parsed[site] = vals[-1]
+
+        results.append([difference, name, stat, sites_parsed])
 
       # if len(keys) > 1:
       #   # print("{} - {}, {}".format(name, stat, sites))
@@ -120,6 +135,9 @@ def process(dataManager, sport):
     name = result['name']
     site = result['scraper']
     time = result['_time']
+
+    if 'updated' in result:
+      time = result['updated']
     
     # print("{}, {}, {}".format(result['_time'], name, result['projections']))
     if not name in all_names:

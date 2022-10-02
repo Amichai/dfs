@@ -7,6 +7,7 @@ from scrapers.caesars_scraper import CaesarsScraper
 from scrapers.pp_scraper import PPScraper
 from scrapers.dfs_crunch_scraper import DFSCrunchScraper
 from scrapers.thrive_fantasy_scraper import TFScraper
+from scrapers.underdog_scraper import UnderdogScraper
 import argparse
 from ProcessData import process
 import utils
@@ -16,10 +17,13 @@ def run(sport, count=None):
   dataManager = data_manager.DataManager(sport)
   period = 3
   scrapers_by_sport = {
-    "NBA": [DFSCrunchScraper('NBA'), PPScraper('NBA'), CaesarsScraper('NBA')],
+    "NBA": [PPScraper('NBA'), UnderdogScraper("NBA"), CaesarsScraper('NBA'), DFSCrunchScraper('NBA')],
     "WNBA": [DFSCrunchScraper('WNBA'), PPScraper('WNBA')],
-    "MLB": [PPScraper('MLB'), CaesarsScraper('MLB'), DFSCrunchScraper('MLB'), TFScraper('MLB')],
-    "NFL": [TFScraper('NFL'), PPScraper('NFL'), CaesarsScraper('NFL', False)],
+    "MLB": [TFScraper('MLB'), UnderdogScraper("MLB"), PPScraper('MLB'), CaesarsScraper('MLB'), ], # , DFSCrunchScraper('MLB')
+    "NFL": [CaesarsScraper('NFL', True), UnderdogScraper("NFL"), PPScraper('NFL'), TFScraper('NFL')],
+    "MMA": [CaesarsScraper("MMA", False), PPScraper("MMA")],
+    "CFB": [PPScraper('CFB'), UnderdogScraper("CFB"), CaesarsScraper('CFB', True)],
+    "NASCAR": [PPScraper("NASCAR")],
   }
 
   scrapers = scrapers_by_sport[sport]

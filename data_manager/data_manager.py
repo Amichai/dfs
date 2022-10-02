@@ -37,14 +37,35 @@ class DataManager:
 
     previous_value = self.query_projection(sport, scraper_name, name)
     differences = list(diff(previous_value, projections))
+
     if len(differences) > 0:
       self.db.insert(to_write)
       for difference in differences:
         to_log = "{}|{}|{}|{}|{}|".format(new_id, sport, scraper_name, name, difference, parts[1])
         logging.info(to_log)
-        print(to_log)
-      
 
+        if difference[0] != 'change':
+          print(to_log)
+          continue
+        
+        (v1, v2) = difference[2]
+        if difference[0] == 'change' and v1 != None and v2 != None and not isinstance(v1, bool):
+          v1 = float(v1)
+          v2 = float(v2)
+          change = utils.percentChange(v1, v2)
+          if abs(change) > 0.1:
+            print(to_log + "  % Diff: {}".format(change))
+        
+
+
+    else:
+      row = self.query_row(sport, scraper_name, name)
+      row_id = row['_id']
+
+      query = Query()
+      self.db.update({'updated': parts[1]}, 
+        query['_id'] == row_id)
+      
   def write_zeros(self, sport, scraper_name, results):
     all_player_projections = self.query_all_projections(sport, scraper_name)
     for name, row in all_player_projections.items():
@@ -83,7 +104,6 @@ class DataManager:
         if parsed_new > parsed_old:
           name_to_rows[name] = row
 
-    #Edmundo Sosa
     return name_to_rows
 
   def todays_rows(self, sport):
@@ -91,8 +111,8 @@ class DataManager:
 
   def delete(self, key, value):
     self.db.remove(where(key) == value)
-  
-  def query_projection(self, sport, scraper, name):
+
+  def query_row(self, sport, scraper, name):
     query = Query()
     rows = self.db.search((query['sport'] == sport) 
       & (query['scraper'] == scraper)
@@ -103,8 +123,15 @@ class DataManager:
       return None
 
     rows_sorted = sorted(rows, key=lambda row: dateutil.parser.isoparse("{} {}".format(row['_day'], row['_time'])), reverse=True)
+    return rows_sorted[0]
+
+  
+  def query_projection(self, sport, scraper, name):
+    row = self.query_row(sport, scraper, name)
+    if row == None:
+      return None
     
-    return rows_sorted[0]['projections']
+    return row['projections']
 
 
   def query(self, key1, value1, key2=None, value2=None):

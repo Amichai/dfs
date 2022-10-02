@@ -1,7 +1,21 @@
-CHI
-@CON
-1:00pm ET
+FanDuel-CFB-2022 ET-09 ET-30 ET-81160-players-list.csv
+slate2
+TULN
+@HOU
+7:00pm ET
 
-LV
-@SEA
-3:00pm ET
+UTSA
+@MTSU
+7:30pm ET
+
+SDSU
+@BOIS
+8:00pm ET
+
+WASH
+@UCLA
+10:30pm ET
+
+UNM
+@UNLV
+11:00pm ET

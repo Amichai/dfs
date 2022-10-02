@@ -1,6 +1,5 @@
 import random
 import time
-
 import utils
 
 def random_element(arr):
@@ -135,7 +134,8 @@ class Optimizer:
       best_roster = None
       best_roster_val = 0
       random.seed(time.time())
-      
+      roster_keys = []
+
       for i in range(iter_count):
           if i % 50000 == 0:
               print(i)
@@ -163,11 +163,11 @@ class Optimizer:
           is_full_locked = False
           if seed_roster != None:
               is_full_locked = True
-              for i in range(len(self.positions_to_fill)):
+              for i in range(9):
                   pl = seed_roster[i]
                   if pl != '' and pl != None:
-                      random_lineup.locked_indices.append(i)
                       random_lineup.replace(pl, i)
+                      random_lineup.locked_indices.append(i)
                   else:
                       is_full_locked = False
 
@@ -186,7 +186,16 @@ class Optimizer:
           if lineup_validator != None and lineup_validator(result) != True:
             continue
 
-          if result.value > best_roster_val:
+          all_names = [a.name for a in result.players]
+          all_names_sorted = sorted(all_names)
+          roster_key = ",".join(all_names_sorted)
+
+          if roster_key in roster_keys:
+            continue
+
+          roster_keys.append(roster_key)
+
+          if result.value >= best_roster_val:
               best_roster = result
               best_roster_val = result.value
 
@@ -257,135 +266,211 @@ class Optimizer:
 
         roster_keys.append(roster_key)
         all_rosters.append(result)
+        print(all_rosters)
 
     all_rosters_sorted = sorted(all_rosters, key=lambda a: a.value, reverse=True)
     return all_rosters_sorted[:n]
 
 
-class FD_NBA_Optimizer:
-  def __init__(self):
-    self.optimizer = Optimizer(60000, ["PG", "PG", "SG", "SG", "SF", "SF", "PF", "PF", "C"])
-
-  def prune_player_pool(self, by_position):
-    by_position_copied = {}
-    for position, players in by_position.items():
-      by_position_copied[position] = []
-
-      all_value_per_dollars = [pl.value_per_dollar for pl in players]
-
-      best_value = max(all_value_per_dollars)
-      cuttoff = best_value / 3
-      for player in players:
-        if player.value_per_dollar < cuttoff:
-          print("Filtered out: {}".format(player))
-          continue
-        by_position_copied[position].append(player)
-
-      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
-    
-    return by_position_copied
-
-  def opitimize(self, by_position):
-    by_position = self.prune_player_pool(by_position)
-    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
-  
-  def opitimize_top_n(self, by_position, n):
-    by_position = self.prune_player_pool(by_position)
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
-    return result
-
-class FD_WNBA_Optimizer:
-  def __init__(self):
-    self.optimizer = Optimizer(40000, ["G", "G", "G", "F", "F", "F", "F"])
-
-  def prune_player_pool(self, by_position):
-    by_position_copied = {}
-    for position, players in by_position.items():
-      by_position_copied[position] = []
-
-      all_value_per_dollars = [pl.value_per_dollar for pl in players]
-
-      best_value = max(all_value_per_dollars)
-      cuttoff = best_value / 3
-      for player in players:
-        if player.value_per_dollar < cuttoff:
-          print("Filtered out: {}".format(player))
-          continue
-        by_position_copied[position].append(player)
-
-      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
-    
-    return by_position_copied
-
-  def optimize(self, by_position):
-    by_position = self.prune_player_pool(by_position)
-    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
-
-  def optimize_top_n(self, by_position, n):
-    by_position = self.prune_player_pool(by_position)
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
-    return result
-
-
-
-class MLB_Optimizer:
-  def __init__(self):
-    self.optimizer = Optimizer(35000, ["P", "C/1B", "2B", "3B", "SS", "OF", "OF", "OF", "UTIL"])
-
-  def optimize(self, by_position, iter_count, seed_roster=None):
-
-    def lineup_validator(lineup):
-      team_ct = {}
-      team_ct_including_p = {}
-      for player in lineup.players:
-        pl_team = player.team
-        if not pl_team in team_ct:
-          team_ct_including_p[pl_team] = 1
-        else:
-          team_ct_including_p[pl_team] += 1
-        if player.position == "P":
-          continue
-        if not pl_team in team_ct:
-          team_ct[pl_team] = 1
-        else:
-          team_ct[pl_team] += 1
-
-      makes_per_team_limit = max(team_ct.values()) <= 4
-      min_teams_constraint = len(team_ct_including_p.values()) > 2
-      return makes_per_team_limit and min_teams_constraint
-
-
-    return self.optimizer.optimize(by_position, iter_count, lineup_validator=lineup_validator, seed_roster=seed_roster)
-
-class NFL_Optimizer:
-  def __init__(self):
-    self.optimizer = Optimizer(60000, ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "D"])
-
-  def optimize(self, by_position):
-    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
-
-  def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 5))
-    return result
-
-class CFB_Optimizer:
+class FD_CFB_Optimizer:
   def __init__(self):
     self.optimizer = Optimizer(60000, ["QB", "RB", "RB", "WR", "WR", "WR", "FLEX"])
 
-  def optimize(self, by_position, locked_players):
-    return self.optimizer.optimize(by_position, int(800000 / 3.6), None, locked_players)
+  def prune_player_pool(self, by_position):
+    by_position_copied = {}
+    for position, players in by_position.items():
+      by_position_copied[position] = []
+
+      all_value_per_dollars = [pl.value_per_dollar for pl in players]
+
+      best_value = max(all_value_per_dollars)
+      cuttoff = best_value / 3
+      for player in players:
+        if player.value_per_dollar < cuttoff:
+          print("Filtered out: {}".format(player))
+          continue
+        by_position_copied[position].append(player)
+
+      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
+    
+    return by_position_copied
+
+  def optimize(self, by_position):
+    by_position = self.prune_player_pool(by_position)
+    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
 
   def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 1))
+    by_position = self.prune_player_pool(by_position)
+    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
     return result
 
-class NASCAR_Optimizer:
-  def __init__(self):
-    self.optimizer = Optimizer(50000, ["D", "D", "D", "D", "D"])
 
-  def optimize(self, by_position, locked_players):
-    return self.optimizer.optimize(by_position, int(800000 / 3.6), None, locked_players)
 
-  def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 3))
-    return result
+import unidecode
+
+directory = "/Users/amichailevy/Downloads/"
+
+start_times = "start_times.txt"
+(start_times, fd_slate_path) = utils.load_start_times_and_slate_path(start_times)
+
+def normalize_name(name):
+  name = unidecode.unidecode(name)
+  name = name.replace("  ", " ")
+  name = name.replace("’", "'")
+  parts = name.split(" ")
+  if len(parts) > 2:
+      return "{} {}".format(parts[0], parts[1]).strip()
+
+  name = name.replace(".", "")
+
+  return name.strip()
+
+# def parse_entries():
+#   entries_filename = "DKEntries (1).csv"
+#   entries_lines = open(directory + entries_filename, "r").readlines()
+
+#   entries = []
+
+#   for line in entries_lines[1:]:
+#     parts = line.split(',')
+    
+#     entry_id = parts[0]
+#     if entry_id == '':
+#       continue
+#     entry_name = parts[1]
+#     contest_id = parts[2]
+#     entry_fee = parts[3]
+
+#     entries.append([entry_id, entry_name, contest_id, entry_fee])
+
+#   entries.reverse()
+
+#   return entries
+
+
+def parse_salaries():
+  salaries_filename = "FanDuel-CFB-2022 ET-09 ET-17 ET-80572-players-list.csv"
+  salaries_lines = open(directory + salaries_filename, "r").readlines()
+
+  name_to_salary_pos = {}
+  name_to_id = {}
+  for line in salaries_lines[1:]:
+    parts = line.split(',')
+    name = normalize_name(parts[3])
+    salary = float(parts[7])
+
+    pos = parts[1]
+    name_to_salary_pos[name] = (salary, pos)
+    name_to_id[name] = parts[0]
+
+  return name_to_salary_pos, name_to_id
+
+name_to_salary_pos, name_to_id = parse_salaries()
+
+
+
+# entries = parse_entries()
+
+def parse_name_to_value():
+  copied_lines = open('CFB_copied_lines.txt', "r").readlines()
+
+  names = []
+  scores = []
+
+
+  line_number = 0
+  for line in copied_lines:
+    line = line.strip()
+    if (line_number - 2) % 7 == 0:
+      names.append(line)
+    
+    if (line_number + 1) % 7 == 0:
+      scores.append(line)
+    
+    # print(9 % line_number - 3)
+    line_number += 1
+
+  name_to_score = {}
+  for i in range(len(names)):
+    name = normalize_name(names[i])
+    score = scores[i]
+
+    name_to_score[name] = score
+  
+  return name_to_score
+
+name_to_line = parse_name_to_value()
+
+by_position = {"QB": [], "RB": [], "WR": [], "FLEX": []}
+
+for name, salary_pos in name_to_salary_pos.items():
+  salary = salary_pos[0]
+  pos = salary_pos[1]
+  if pos == "TE":
+    pos = "WR"
+
+  if not name in name_to_line:
+    continue
+  value = name_to_line[name]
+  player = utils.Player(name, pos, salary, "", value)
+  by_position[pos].append(player)
+  by_position["FLEX"].append(player)
+
+
+optimizer = FD_CFB_Optimizer()
+best_rosters_sorted = optimizer.optimize(by_position)
+
+
+print(best_rosters_sorted[0])
+__import__('pdb').set_trace()
+
+assert False
+
+def write_all_rosters():
+  file = open(directory + "all_rosters.csv", "w")
+  file.write("F,F,F,F,F,F\n")
+
+  for roster in best_rosters_sorted[:150]:
+    print(roster)
+    player_ids = [name_to_id[name] for name in roster[0]]
+    row = ",".join(player_ids) + "\n"
+
+    file.write(row)
+
+  file.close()
+
+# write_all_rosters()
+# assert False
+
+file = open(directory + "upload_file2.csv", "w")
+
+
+file.write("Entry ID,Contest Name,Contest ID,Entry Fee,F,F,F,F,F,F\n")
+
+rosters_to_write = best_rosters_sorted[:150]
+
+__import__('pdb').set_trace()
+
+entry_ct = 0
+for entry in entries:
+  roster = rosters_to_write[entry_ct % 150]
+  print("{} - {}, {}".format(roster[0], roster[1], roster[2]))
+
+  player_ids = [name_to_id[name] for name in roster[0]]
+
+  entry_info = "{},{},{},{},".format(entry[0], entry[1], entry[2], entry[3])
+  row = entry_info + ",".join(player_ids) + "\n"
+
+  file.write(row)
+
+
+  entry_ct += 1
+  pass
+  
+
+file.close()
+#----
+
+
+
+# question - what percentage of the field took daniel rodriguez?
