@@ -1,21 +1,49 @@
 FanDuel-CFB-2022 ET-09 ET-30 ET-81160-players-list.csv
 slate2
-TULN
+BUF
+@BAL
+1:00pm ET
+
+TEN
+@IND
+1:00pm ET
+
+SEA
+@DET
+1:00pm ET
+
+WAS
+@DAL
+1:00pm ET
+
+CLE
+@ATL
+1:00pm ET
+
+LAC
 @HOU
-7:00pm ET
+1:00pm ET
 
-UTSA
-@MTSU
-7:30pm ET
+JAC
+@PHI
+1:00pm ET
 
-SDSU
-@BOIS
-8:00pm ET
+CHI
+@NYG
+1:00pm ET
 
-WASH
-@UCLA
-10:30pm ET
+NYJ
+@PIT
+1:00pm ET
 
-UNM
-@UNLV
-11:00pm ET
+ARI
+@CAR
+4:05pm ET
+
+DEN
+@LV
+4:25pm ET
+
+NE
+@GB
+4:25pm ET

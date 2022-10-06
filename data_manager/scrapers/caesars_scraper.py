@@ -62,7 +62,7 @@ class CaesarsScraper:
           counter += 1
           print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
           to_return.append(event_id)
-        elif self.isGameday and time_shifted.day == today.day:
+        elif self.isGameday and time_shifted.day == today.day and time_shifted.month == today.month:
           counter += 1
           print("{} - {}, {}, {}".format(counter, name, time_shifted.strftime('%m/%d %H:%M'), event_id))
           to_return.append(event_id)

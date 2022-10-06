@@ -361,11 +361,11 @@ class NFL_Optimizer:
   def __init__(self):
     self.optimizer = Optimizer(60000, ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "D"])
 
-  def optimize(self, by_position):
-    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
+  def optimize(self, by_position, locked_players):
+    return self.optimizer.optimize(by_position, int(800000 / 3.6), None, locked_players)
 
   def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 5))
+    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 1.6))
     return result
 
 class CFB_Optimizer:

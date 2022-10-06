@@ -175,6 +175,8 @@ def load_start_times_and_slate_path(path):
         '2:00pm ET': 2, '2:30pm ET': 2.5,
         '3:00pm ET': 3, '3:30pm ET': 3.5,
         '4:00pm ET': 4, '4:30pm ET': 4.5,
+        '4:05pm ET': 4.02,
+        '4:25pm ET': 4.48,
         '5:00pm ET': 5, '5:30pm ET': 5.5,
         '6:00pm ET': 6, '6:30pm ET': 6.5, 
         '7:00pm ET': 7, '7:30pm ET': 7.5, 

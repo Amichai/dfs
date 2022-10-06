@@ -7,10 +7,50 @@ import utils
 import statistics
 from ScrapeProcessManager import run
 from Optimizer import FD_WNBA_Optimizer
-# produce a table of projections
-# generate an ensemble of rosters
-# produce a file to upload
+import csv
 
+def parse_existing_rosters(filepath):
+  file = open(filepath)
+  file_reader = csv.reader(file, delimiter=',', quotechar='"')
+  entries = []
+  first_line = True
+
+  for parts in file_reader:
+    if first_line:
+      first_line = False
+      continue
+    player_ids = [a for a in parts]
+    entries.append(player_ids)
+
+  return entries
+
+def filter_out_locked_teams(by_position, locked_teams):
+  to_return = {}
+  for pos, players in by_position.items():
+    if not pos in to_return:
+      to_return[pos] = []
+
+    for player in players:
+      if player.team in locked_teams:
+        continue
+
+      if player.value < 0.01:
+        continue
+      
+      to_return[pos].append(player)
+  
+  return to_return
+
+def get_name_to_player_objects(by_position):
+  name_to_player_objects = {}
+  for pos, players in by_position.items():
+    for player in players:
+      if not player.name in name_to_player_objects:
+        name_to_player_objects[player.name] = []
+      
+      name_to_player_objects[player.name].append(player)
+
+  return name_to_player_objects
 
 def parse_upload_template(csv_template_file, exclude, sport, offset = 0, entry_filter=None):
     template_file_lines = open(csv_template_file, "r").readlines()
@@ -154,10 +194,122 @@ def print_optimizer_projections(by_position, name_to_id):
       output.write(",".join([str(r) for r in row]) + '\n')
     
 
+  
+
+def optimize_slate(slate_path, template_path):
+  projections = NFL_Projections(download_folder + slate_path, "NFL")
+  projections.print_slate()
+
+  by_position = projections.players_by_position()
+
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 0)
+
+  entry_name_to_ct = {}
+  for entry in entries:
+    entry_name = entry[2]
+    if not entry_name in entry_name_to_ct:
+      entry_name_to_ct[entry_name] = 1
+    else:
+      entry_name_to_ct[entry_name] += 1
+
+
+  rosters = []
+
+  optimizer = NFL_Optimizer()
+
+  rosters = optimizer.optimize_top_n(by_position, 20)
+
+  rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
+  for roster in rosters_sorted:
+    print(roster)
+
+  print_player_exposures(rosters_sorted)
+
+  to_print = []
+  # distribute best roster to the single entry, and the rest to the MME
+  entry_name_to_take_idx = {}
+
+  for entry in entries:
+    entry_name = entry[2]
+
+    entry_ct = entry_name_to_ct[entry_name]
+    if not entry_name in entry_name_to_take_idx:
+      if entry_ct > 1:
+        entry_name_to_take_idx[entry_name] = 1
+      else:
+        entry_name_to_take_idx[entry_name] = 0
+
+    take_idx = entry_name_to_take_idx[entry_name]
+
+    # entry_ct = entry_name_to_ct[entry_name]
+    # if entry_ct == 1:
+    #   to_print.append(rosters_sorted[0])
+    # else:
+    to_print.append(rosters_sorted[take_idx % len(rosters_sorted)])
+    entry_name_to_take_idx[entry_name] += 1
+
+  construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name)
+
+
+def reoptimize_slate(slate_path, current_rosters_path, current_time):
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + current_rosters_path, [], '', 0)
+
+  start_times = "start_times.txt"
+  start_times = utils.load_start_times_and_slate_path(start_times)[0]
+  locked_teams = []
+  for time, teams in start_times.items():
+    if time < current_time:
+      locked_teams += teams
+  
+  projections = NFL_Projections(download_folder + slate_path, "NFL")
+  projections.print_slate()
+
+  by_position = projections.players_by_position(exclude_zero_value=False)
+  name_to_players = get_name_to_player_objects(by_position)
+  optimizer = NFL_Optimizer()
+
+  by_position = filter_out_locked_teams(by_position, locked_teams)
+  existing_rosters = parse_existing_rosters(download_folder + current_rosters_path)
+  seen_roster_strings = []
+
+  for existing_roster in existing_rosters:
+    players = existing_roster[3:12]
+    players2 = [p.split(':')[0] for p in players]
+    roster_string = ",".join(players2)
+
+    if roster_string in seen_roster_strings:
+      continue
+
+    seen_roster_strings.append(roster_string)
+    # __import__('pdb').set_trace()
+    players3 = [player_id_to_name[p] for p in players2]
+    players4 = [name_to_players[p][0] for p in players3]
+    players5 = []
+    for p in players4:
+      if p.team in locked_teams:
+        players5.append(p)
+      else:
+        players5.append(None)
+
+    result = optimizer.optimize(by_position, players5)
+
+    print(result)
+  
+
+
+
+
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
   slate_path = "FanDuel-NFL-2022 ET-10 ET-02 ET-81077-players-list.csv"
-  template_path = "FanDuel-NFL-2022-10-02-81077-entries-upload-template (1).csv"
+  template_path = "FanDuel-NFL-2022-10-02-81077-entries-upload-template (2).csv"
+
+  # optimize_slate(slate_path, template_path)
+
+  reoptimize_slate(slate_path, "FanDuel-NFL-2022-10-02-81077-entries-upload-template (3).csv", 3.5)
+
+
+  assert False
   teams_to_remove = []
 
   # start_times = "start_times.txt"
@@ -165,9 +317,7 @@ if __name__ == "__main__":
 
 
   # projections = MLBProjections(download_folder + slate_path)
-  projections = NFL_Projections(download_folder + slate_path, "NFL", {
-    "Leonard Fournette": 0.95
-  })
+  projections = NFL_Projections(download_folder + slate_path, "NFL")
   projections.print_slate()
 
   by_position = projections.players_by_position()
@@ -193,7 +343,7 @@ if __name__ == "__main__":
 
   optimizer = NFL_Optimizer()
 
-  rosters = optimizer.optimize_top_n(by_position, 120)
+  rosters = optimizer.optimize_top_n(by_position, 20)
 
   rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
   for roster in rosters_sorted:

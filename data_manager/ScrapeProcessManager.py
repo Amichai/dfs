@@ -17,7 +17,7 @@ def run(sport, count=None):
   dataManager = data_manager.DataManager(sport)
   period = 3
   scrapers_by_sport = {
-    "NBA": [PPScraper('NBA'), UnderdogScraper("NBA"), CaesarsScraper('NBA'), DFSCrunchScraper('NBA')],
+    "NBA": [PPScraper('NBA'), UnderdogScraper("NBA"), CaesarsScraper('NBA')], #DFSCrunchScraper('NBA')
     "WNBA": [DFSCrunchScraper('WNBA'), PPScraper('WNBA')],
     "MLB": [TFScraper('MLB'), UnderdogScraper("MLB"), PPScraper('MLB'), CaesarsScraper('MLB'), ], # , DFSCrunchScraper('MLB')
     "NFL": [CaesarsScraper('NFL', True), UnderdogScraper("NFL"), PPScraper('NFL'), TFScraper('NFL')],

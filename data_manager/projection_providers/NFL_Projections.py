@@ -117,7 +117,7 @@ class NFL_Projections:
 
     return all_rows
 
-  def players_by_position(self):
+  def players_by_position(self, exclude_zero_value = True):
     by_position = {'FLEX': []}
     all_rows = self.get_player_rows()
     for row in all_rows:
@@ -140,7 +140,7 @@ class NFL_Projections:
 
       value = float(value)
 
-      if value == 0:
+      if exclude_zero_value and value == 0:
         continue
       
       positions = pos.split('/')
