@@ -24,10 +24,17 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
   return all_players
 
 def parse_fantasy_score_from_projections(site, projections):
-  if site == "PP":
+  if site == "RotoWire" or site == "NumberFire":
+    if "Fantasy Score" not in projections:
+      return ''
+
+    return projections["Fantasy Score"]
+
+  elif site == "PP":
     if "Fantasy Score" not in projections:
       return ''
     return projections["Fantasy Score"]
+
   elif site == "DFSCrunch":
     return projections["Fantasy Score"]
   elif site == "Caesars":
@@ -53,20 +60,37 @@ def parse_fantasy_score_from_projections(site, projections):
 def parse_caesaers_projection_activity_metric(caesars_projection):
   if caesars_projection == None:
     return 0
-  a1 = caesars_projection["Points:isActive"]
-  a2 = caesars_projection["Assists:isActive"]
-  a3 = caesars_projection["Rebounds:isActive"]
-  a4 = caesars_projection["Blocks:isActive"]
-  a5 = caesars_projection["Steals:isActive"]
+
+  a1 = False
+  a2 = False
+  a3 = False
+  a4 = False
+  a5 = False
+
+  if "Points:isActive" in caesars_projection:
+    a1 = caesars_projection["Points:isActive"]
+  
+  if "Assists:isActive" in caesars_projection:
+    a2 = caesars_projection["Assists:isActive"]
+  
+  if "Rebounds:isActive" in caesars_projection:
+    a3 = caesars_projection["Rebounds:isActive"]
+  
+  if "Blocks:isActive" in caesars_projection:
+    a4 = caesars_projection["Blocks:isActive"]
+
+  if "Steals:isActive" in caesars_projection:
+    a5 = caesars_projection["Steals:isActive"]
 
   total = [a1, a2, a3, a4, a5]
   return len([a for a in total if a])
+  
 
 class NBA_WNBA_Projections:
   def __init__(self, slate_path, sport):
     self.dm = DataManager(sport)
     self.sport = sport
-    self.scrapers = ['DFSCrunch', 'PP', 'Caesars']
+    self.scrapers = ['DFSCrunch', 'PP', 'Caesars', 'RotoWire', 'NumberFire']
 
     self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
 
@@ -98,7 +122,7 @@ class NBA_WNBA_Projections:
 
     return all_rows
 
-  def players_by_position(self):
+  def players_by_position(self, exclude_zero_value=False):
     by_position = {}
     all_rows = self.get_player_rows()
     for row in all_rows:
@@ -110,7 +134,9 @@ class NBA_WNBA_Projections:
       dfs_crunch = row[5]
       pp_proj = row[6]
       caesars_proj = row[7]
-      caesars_is_active = row[8]
+      rotowire_proj = row[8]
+      numberfire_proj = row[9]
+      caesars_is_active = row[10]
 
       value = 0
       if int(caesars_is_active) >= 3:
@@ -118,7 +144,7 @@ class NBA_WNBA_Projections:
       elif pp_proj != '':
         value = pp_proj
       else:
-        value = dfs_crunch
+        value = numberfire_proj
 
       if value == '':
         continue
@@ -126,7 +152,7 @@ class NBA_WNBA_Projections:
       value = float(value)
 
 
-      if value == 0:
+      if exclude_zero_value and value == 0:
         continue
       
       positions = pos.split('/')

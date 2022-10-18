@@ -239,6 +239,10 @@ stat_name_normalization = {
     'Walks Allowed': 'Walks Allowed',
     'Runs': 'Runs Scored',
     'Pitching Outs': 'Outs Recorded',
+
+    'Shots': 'Shots On Goal',
+    'Saves': 'Goalie Saves',
+
 }
 
 def normalize_stat_name(scraper_results):

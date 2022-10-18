@@ -1,6 +1,6 @@
 import utils
 
-known_sports = ["NBA", "MLB", "WNBA", "NFL", "NFLP", "MMA", "CFB", "NASCAR"]
+known_sports = ["NBA", "MLB", "WNBA", "NFL", "NFLP", "MMA", "CFB", "NASCAR", "NHL"]
 
 class PPScraper:
   def __init__(self, sport):
@@ -27,6 +27,8 @@ class PPScraper:
       league_id = 15
     elif self.sport == "NASCAR":
       league_id = 4
+    elif self.sport == "NHL":
+      league_id = 8
 
 
     assert league_id != None

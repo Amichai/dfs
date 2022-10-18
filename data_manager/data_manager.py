@@ -54,7 +54,7 @@ class DataManager:
           v2 = float(v2)
           change = utils.percentChange(v1, v2)
           if abs(change) > 0.1:
-            print(to_log + "  % Diff: {}".format(change))
+            print(to_log + "  % Diff: {}".format(round(change, 2)))
         
 
 

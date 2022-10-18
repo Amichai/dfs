@@ -1,49 +1,11 @@
 FanDuel-CFB-2022 ET-09 ET-30 ET-81160-players-list.csv
 slate2
-BUF
-@BAL
-1:00pm ET
+PHI
+@BOS
+Tue
+7:30pm ET
 
-TEN
-@IND
-1:00pm ET
-
-SEA
-@DET
-1:00pm ET
-
-WAS
-@DAL
-1:00pm ET
-
-CLE
-@ATL
-1:00pm ET
-
-LAC
-@HOU
-1:00pm ET
-
-JAC
-@PHI
-1:00pm ET
-
-CHI
-@NYG
-1:00pm ET
-
-NYJ
-@PIT
-1:00pm ET
-
-ARI
-@CAR
-4:05pm ET
-
-DEN
-@LV
-4:25pm ET
-
-NE
-@GB
-4:25pm ET
+LAL
+@GS
+Tue
+10:00pm ET

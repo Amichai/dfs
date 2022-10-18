@@ -30,8 +30,6 @@ def parse_salaries():
   salaries_lines = open(directory + salaries_filename, "r").readlines()
 
   name_mappings = {
-    'Heili Alatengheili': 'Heili Alateng',
-    'Li Jingliang': 'Jingliang Li',
   }
 
   name_to_salary = {}

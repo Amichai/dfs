@@ -15,22 +15,23 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
     salary = parts[7]
     team = parts[9]
     team = utils.normalize_team_name(team)
+    opp = parts[10]
+    opp = utils.normalize_team_name(opp)
     status = parts[11]
     if status == "O" and exclude_injured_players:
         continue
     name = full_name
     if positions == "D":
       name = team
-    all_players[name] = [name, positions, float(salary), team, status]
+    all_players[name] = [name, positions, float(salary), team, status, opp]
 
   return all_players
 
 def parse_fantasy_score_from_projections(site, projections):
-  if site == "PP":
+  if site == "PP" or site == 'RotoWire':
     if "Fantasy Score" not in projections:
       return ''
     return projections["Fantasy Score"]
-
 
 team_to_defense_name = {
   "PIT": "Steelers DST",
@@ -72,6 +73,7 @@ class NFL_Projections:
     self.dm = DataManager(sport)
     self.sport = sport
     self.scrapers = ['PP']
+    self.scrapers = ['PP', 'RotoWire']
     self.player_adjustments = player_adjustments
 
     self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
@@ -85,8 +87,9 @@ class NFL_Projections:
       cost = float(info[2])
       team = info[3]
       status = info[4]
+      opp = info[5]
 
-      player_row = [player, team, position, cost, status]
+      player_row = [player, team, position, cost, status, opp]
 
       scraper_to_projections = {}
 
@@ -126,7 +129,8 @@ class NFL_Projections:
       pos = row[2]
       cost = row[3]
       status = row[4]
-      pp_proj = row[5]
+      opp = row[5]
+      pp_proj = row[6]
       value = pp_proj
 
       if name in self.player_adjustments:
@@ -147,10 +151,10 @@ class NFL_Projections:
       for position in positions:
         if not position in by_position:
           by_position[position] = []
-        by_position[position].append(utils.Player(name, position, cost, team, value))
+        by_position[position].append(utils.Player(name, position, cost, team, value, opp))
 
         if pos != "D" and pos != "QB":
-          by_position["FLEX"].append(utils.Player(name, position, cost, team, value))
+          by_position["FLEX"].append(utils.Player(name, position, cost, team, value, opp))
 
 
 
@@ -172,4 +176,4 @@ class NFL_Projections:
       print("TEAM: {}".format(team))
 
       rows_sorted = sorted(rows, key=lambda a: a[3], reverse=True)
-      print(tabulate(rows_sorted, headers=["player", "team", "pos", "cost", "status"] + self.scrapers + ["act."]))
+      print(tabulate(rows_sorted, headers=["player", "team", "pos", "cost", "status", "opp"] + self.scrapers + ["act."]))

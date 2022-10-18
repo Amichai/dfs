@@ -6,6 +6,8 @@ import utils
 import json
 import time
 
+known_sports = ["NBA","WNBA","MLB","NFL","MMA","CFB","PGA", "NHL"]
+
 class CaesarsScraper:
   def __init__(self, sport, isGameday=True):
     self.sport = sport
@@ -16,7 +18,7 @@ class CaesarsScraper:
     self.name = 'Caesars'
     self.isGameday = isGameday
 
-    assert sport == "NBA" or sport == "WNBA" or sport == "MLB" or sport == "NFL" or sport == "MMA" or sport == "CFB"
+    assert sport in known_sports
     self.game_guids = None
     if sport == 'NBA' or sport == 'WNBA':
       self.sport_name = "basketball"
@@ -26,6 +28,12 @@ class CaesarsScraper:
       self.sport_name = "americanfootball"
     elif sport == "MMA":
       self.sport_name = "ufcmma"
+    elif sport == "PGA":
+      self.sport_name = "golf"
+      self.sport_lookup = "Shriners Children's Open"
+    elif sport == "NHL":
+      self.sport_name = "icehockey"
+      
 
     self.driver = utils.get_chrome_driver()
     self.all_team_names = ["Atlanta Hawks","Boston Celtics","Brooklyn Nets","Charlotte Hornets","Chicago Bulls","Cleveland Cavaliers","Dallas Mavericks","Denver Nuggets","Detroit Pistons","Golden State Warriors","Houston Rockets","Indiana Pacers","Los Angeles Clippers","Los Angeles Lakers","Memphis Grizzlies","Miami Heat","Milwaukee Bucks","Minnesota Timberwolves","New Orleans Pelicans","New York Knicks","Oklahoma City Thunder","Orlando Magic","Philadelphia 76ers","Phoenix Suns","Portland Trail Blazers","Sacramento Kings","San Antonio Spurs","Toronto Raptors","Utah Jazz","Washington Wizards"]
@@ -35,6 +43,7 @@ class CaesarsScraper:
     result = requests.get(url)
     as_json = result.json()
 
+    # __import__('pdb').set_trace()
     all_sports = [a['name'] for a in as_json['competitions']]
 
     target_index = 0

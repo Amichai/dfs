@@ -6,7 +6,14 @@ import utils
 
 
 def parse_fantasy_score_from_projections(site, projections):
+  if site == "Underdog":
+    if "Fantasy Points" in projections:
+      return projections["Fantasy Points"]
+
   if site == "PP":
+    if "Fantasy Points" in projections:
+      return projections["Fantasy Points"]
+
     if 'Hitter Fantasy Score' in projections:
       return projections['Hitter Fantasy Score']
 
@@ -24,10 +31,10 @@ def parse_caesaers_projection_activity_metric(caesars_projection):
 
 
 class MLBProjections:
-  def __init__(self, slate_path):
-    self.dm = DataManager()
-    self.sport = 'MLB'
-    self.scrapers = ['DFSCrunch', 'PP', 'Caesars']
+  def __init__(self, slate_path, sport):
+    self.dm = DataManager(sport)
+    self.sport = sport
+    self.scrapers = ['Underdog', 'PP', 'Caesars']
 
     self.fd_players = utils.get_fd_slate_players(slate_path, exclude_injured_players=False)
     self.all_teams = []
@@ -74,15 +81,21 @@ class MLBProjections:
       pos = row[3]
       cost = row[4]
       status = row[5]
-      dfs_crunch = row[6]
+      underdog_proj = row[6]
       pp_proj = row[7]
       caesars_proj = row[8]
       caesars_is_active = row[9]
 
-      value = dfs_crunch
-      if value == '':
+      value = pp_proj
+      if (value == '' or value == None) and underdog_proj != '':
+        value = underdog_proj
+
+      if pos == "C":
+        print("{}, {}, {}, {}".format(name, underdog_proj, pp_proj, value))
+      if value == '' or value == None:
         continue
 
+      
       value = float(value)
 
       if value == 0:
@@ -97,6 +110,7 @@ class MLBProjections:
         if position == 'C' or position == '1B':
           by_position['C/1B'].append(utils.Player(name, position, cost, team, value, opp))
         else:
+          
           by_position[position].append(utils.Player(name, position, cost, team, value, opp))
 
     return by_position

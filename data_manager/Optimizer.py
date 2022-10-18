@@ -277,7 +277,7 @@ class FD_NBA_Optimizer:
       cuttoff = best_value / 3
       for player in players:
         if player.value_per_dollar < cuttoff:
-          print("Filtered out: {}".format(player))
+          # print("Filtered out: {}".format(player))
           continue
         by_position_copied[position].append(player)
 
@@ -285,11 +285,11 @@ class FD_NBA_Optimizer:
     
     return by_position_copied
 
-  def opitimize(self, by_position):
+  def optimize(self, by_position, locked_players):
     by_position = self.prune_player_pool(by_position)
-    return self.optimizer.optimize(by_position, iter_count = int(800000 / 0.6))
+    return self.optimizer.optimize(by_position, int(100000), None, locked_players)
   
-  def opitimize_top_n(self, by_position, n):
+  def optimize_top_n(self, by_position, n):
     by_position = self.prune_player_pool(by_position)
     result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
     return result
@@ -361,11 +361,26 @@ class NFL_Optimizer:
   def __init__(self):
     self.optimizer = Optimizer(60000, ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "D"])
 
+
+    def lineup_validator(roster):
+      # the selected defense can't be playing against any of the other player teams
+      defense_opp = roster.players[-1].opp
+      is_valid = True
+      for pl in roster.players:
+        if pl.team == defense_opp:
+          is_valid = False
+          break
+      
+      return is_valid
+
+    self.lineup_validator = lineup_validator
+    
+
   def optimize(self, by_position, locked_players):
-    return self.optimizer.optimize(by_position, int(800000 / 3.6), None, locked_players)
+    return self.optimizer.optimize(by_position, int(800000 / 3.6), self.lineup_validator, locked_players)
 
   def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 1.6))
+    result = self.optimizer.optimize_top_n(by_position, n, int(200000 / 1.0), self.lineup_validator)
     return result
 
 class CFB_Optimizer:
@@ -376,7 +391,7 @@ class CFB_Optimizer:
     return self.optimizer.optimize(by_position, int(800000 / 3.6), None, locked_players)
 
   def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 1))
+    result = self.optimizer.optimize_top_n(by_position, n, int(200000 / 1))
     return result
 
 class NASCAR_Optimizer:
@@ -388,4 +403,15 @@ class NASCAR_Optimizer:
 
   def optimize_top_n(self, by_position, n):
     result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 3))
+    return result
+
+class NHL_Optimizer:
+  def __init__(self):
+    self.optimizer = Optimizer(55000, ['C', 'C', 'W', 'W', 'D', 'D', 'UTIL', 'UTIL', 'G'])
+
+  def optimize(self, by_position, locked_players):
+    return self.optimizer.optimize(by_position, int(800000 / 1.6), None, locked_players)
+
+  def optimize_top_n(self, by_position, n):
+    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000 / 0.6))
     return result

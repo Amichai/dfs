@@ -14,3 +14,17 @@
  [python SlateManager.py]
 
 - Automotically scrape lines
+-----
+CFB with rotowire? 
+
+
+create a brand new recurring scraper script that works
+scrape NHL
+
+------
+Draft Kings 
+New strategy for distrbuting MMEs
+Run through all my projections to see which names are not matched on the FD slate file (check for naming mismatches)
+Sort each player pair that share a position slot (probably by cost)
+----
+enter 150 MME!

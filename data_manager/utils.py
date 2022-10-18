@@ -3,6 +3,8 @@ import datetime
 from selenium import webdriver
 import unidecode
 from name_mapper import name_mapper
+import requests
+from bs4 import BeautifulSoup
 
 
 class Player:
@@ -65,10 +67,18 @@ def normalize_name(name):
 
     return name.strip()
 
+def get_request(url):
+    r = requests.get(url)
+    return r.json()
+
+def get_request_beautiful_soup(url):
+    r = requests.get(url)
+    return BeautifulSoup(r.text, 'lxml')
+
 # https://chromedriver.chromium.org/downloads
 # xattr -d com.apple.quarantine <chromedriver>
 def get_chrome_driver():
-  return webdriver.Chrome("../master_scrape_process/chromedriver10")
+  return webdriver.Chrome("../master_scrape_process/chromedriver11")
 
 def get_with_selenium(url):
   driver = get_chrome_driver()
@@ -256,6 +266,33 @@ stat_name_normalization = {
     'Hitter Fantasy Score': 'Fantasy Points',
     'Pitcher Fantasy Score': 'Fantasy Points',
 
+    'Shots': 'Shots On Goal',
+    'Saves': 'Goalie Saves',
+
+    'Pass+Rush+Rec TDs': 'Total TDs',
+
+    'PTS': 'Points',
+    'ASTS': 'Assists',
+    'PTS + ASTS': 'Points + Assists',
+    'PTS + REBS': 'Points + Rebounds',
+    'REBS': 'Rebounds',
+    'PTS + REBS + ASTS': 'Points + Rebounds + Assists',
+    'Points + Assists + Rebounds': 'Points + Rebounds + Assists',
+    'Pts + Rebs + Asts': 'Points + Rebounds + Assists',
+    'REBS + ASTS': 'Rebounds + Assists',
+    'BLKS': 'Blocks',
+    'BLKS + STLS': 'Blocks + Steals',
+    'STLS': 'Steals',
+
+    'Pts+Rebs': 'Points + Rebounds',
+    'Pts+Asts': 'Points + Assists',
+    'Rebs+Asts': 'Rebounds + Assists',
+    'Blks+Stls':'Blocks + Steals',
+    'Pts+Rebs+Asts': 'Points + Rebounds + Assists',
+    'Blocked Shots': 'Blocks',
+
+
+    #UNMODIFIED STATS: ['Turnovers', '3-PT Made', 'Pts+Rebs', 'Rebs+Asts', 'Pts+Asts', 'Blks+Stls', 'Pts+Rebs+Asts', 'Fantasy Score', 'Blocked Shots']
 
 }
 
@@ -292,3 +329,15 @@ def percentChange(v1, v2):
         return 0
 
     return diff / (v1 + 0.01)
+
+def print_player_exposures(rosters_sorted):
+  player_to_ct = {}
+  for roster in rosters_sorted:
+    for player in roster.players:
+      if not player.name in player_to_ct:
+        player_to_ct[player.name] = 1
+      else:
+        player_to_ct[player.name] += 1
+
+  player_to_ct_sorted = sorted(player_to_ct.items(), key=lambda a: a[1], reverse=True)
+  print(player_to_ct_sorted)

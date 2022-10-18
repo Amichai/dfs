@@ -146,8 +146,8 @@ def print_optimizer_projections(by_position, name_to_id):
 
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
-  slate_path = "FanDuel-NASCAR-2022 ET-09 ET-25 ET-80857-players-list.csv"
-  template_path = "FanDuel-NASCAR-2022-09-25-80857-entries-upload-template.csv"
+  slate_path = "FanDuel-NASCAR-2022 ET-10 ET-16 ET-81751-players-list.csv"
+  template_path = "FanDuel-NASCAR-2022-10-16-81751-entries-upload-template.csv"
   teams_to_remove = []
 
   projections = NASCAR_Projections(download_folder + slate_path, "NASCAR")
@@ -181,17 +181,23 @@ if __name__ == "__main__":
   print_player_exposures(rosters_sorted)
 
   to_print = []
-
   # distribute best roster to the single entry, and the rest to the MME
-  take_idx = 0
+  entry_name_to_take_idx = {}
+
   for entry in entries:
     entry_name = entry[2]
+
     entry_ct = entry_name_to_ct[entry_name]
-    # if entry_ct == 1:
-    #   to_print.append(rosters_sorted[0])
-    # else:
+    if not entry_name in entry_name_to_take_idx:
+      if entry_ct > 1:
+        entry_name_to_take_idx[entry_name] = 1
+      else:
+        entry_name_to_take_idx[entry_name] = 0
+
+    take_idx = entry_name_to_take_idx[entry_name]
+
     to_print.append(rosters_sorted[take_idx % len(rosters_sorted)])
-    take_idx += 1
+    entry_name_to_take_idx[entry_name] += 1
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name)
   # pick pairs and triples

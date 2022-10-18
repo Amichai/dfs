@@ -28,7 +28,7 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
   return all_players
 
 def parse_fantasy_score_from_projections(site, projections):
-  if site == "PP":
+  if site == "PP" or "RotoWire":
     if "Fantasy Score" not in projections:
       return ''
     return projections["Fantasy Score"]
@@ -37,7 +37,7 @@ class NASCAR_Projections:
   def __init__(self, slate_path, sport):
     self.dm = DataManager(sport)
     self.sport = sport
-    self.scrapers = ['PP']
+    self.scrapers = ['PP', 'RotoWire']
 
     self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
 
