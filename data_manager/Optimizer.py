@@ -285,13 +285,13 @@ class FD_NBA_Optimizer:
     
     return by_position_copied
 
-  def optimize(self, by_position, locked_players):
+  def optimize(self, by_position, locked_players, iter=int(100000)):
     by_position = self.prune_player_pool(by_position)
-    return self.optimizer.optimize(by_position, int(100000), None, locked_players)
+    return self.optimizer.optimize(by_position, iter, None, locked_players)
   
-  def optimize_top_n(self, by_position, n):
+  def optimize_top_n(self, by_position, n, iter = int(60000)):
     by_position = self.prune_player_pool(by_position)
-    result = self.optimizer.optimize_top_n(by_position, n, iter_count = int(200000))
+    result = self.optimizer.optimize_top_n(by_position, n, iter)
     return result
 
 class FD_WNBA_Optimizer:

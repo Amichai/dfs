@@ -68,8 +68,6 @@ def parse_upload_template(csv_template_file, exclude, sport, offset = 0, entry_f
         if name in exclude:
             players_to_remove.append(name)
             continue
-
-
         
         if sport == "MLB" and parts[30 - offset].strip() != "P" and parts[29 - offset] == '0':
           print("{} not in batting order".format(name))
@@ -158,7 +156,8 @@ def construct_upload_template_file(rosters, first_line, entries, player_to_id, p
         #     __import__('pdb').set_trace()
 
         to_write = ','.join(['"{}"'.format(c) for c in cells])
-        to_write += ",{}".format(index_strings[entry_idx])
+        if index_strings != None:
+          to_write += ",{}".format(index_strings[entry_idx])
 
         output_file.write(to_write + "\n")
         entry_idx += 1
@@ -200,6 +199,20 @@ def get_players_by_value(by_position, team_set):
   return all_players_sorted
   
 
+def is_roster_valid(roster):
+  team_ct = {}
+  for pl in roster.players:
+    team = pl.team
+    if not team in team_ct:
+      team_ct[team] = 1
+    else:
+      team_ct[team] += 1
+
+    if team_ct[team] == 5:
+      return False
+    
+  return True
+
 def optimize_slate(slate_path, template_path):
   projections = NBA_WNBA_Projections(download_folder + slate_path, "NBA")
   projections.print_slate()
@@ -223,7 +236,7 @@ def optimize_slate(slate_path, template_path):
 
   optimizer = FD_NBA_Optimizer()
 
-  rosters = optimizer.optimize_top_n(by_position, 5000)
+  rosters = optimizer.optimize_top_n(by_position, 5000, iter=60000)
 
   rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
   SE_ROSTER_TAKE = 10
@@ -235,7 +248,9 @@ def optimize_slate(slate_path, template_path):
   utils.print_player_exposures(rosters_sorted[:SE_ROSTER_TAKE])
 
   # TODO: MME EARLY SLATE LOCK-IN
-  early_slate_teams = ["PHI", "BOS"]
+  early_slate_teams = [
+    # "MIL", "PHI"
+  ]
   mme_rosters = []
   early_slate_ids = []
   for roster in rosters_sorted:
@@ -255,7 +270,13 @@ def optimize_slate(slate_path, template_path):
       early_slate_ids.append(roster_id)
       mme_rosters.append(roster)
     
+
+  #TODO:
+  mme_rosters = rosters_sorted
   print("MME ROSTERS RESOLVED: {}".format(len(mme_rosters)))
+  valid_mme_rosters = [r for r in mme_rosters if is_roster_valid(r)]
+  mme_rosters = valid_mme_rosters
+
   if len(mme_rosters) < 151:
     __import__('pdb').set_trace()
 
@@ -267,6 +288,7 @@ def optimize_slate(slate_path, template_path):
   index_strings = []
   # distribute best roster to the single entry, and the rest to the MME
   entry_name_to_take_idx = {}
+  invalid_roster_ct = 1
 
   for entry in entries:
     entry_name = entry[2]
@@ -282,11 +304,17 @@ def optimize_slate(slate_path, template_path):
 
     if entry_ct < SE_ROSTER_TAKE:
       idx = take_idx % len(rosters_sorted)
-      to_print.append(rosters_sorted[idx])
+      roster_to_append = rosters_sorted[idx]
+      assert is_roster_valid(roster_to_append)
+
+      to_print.append(roster_to_append)
       index_strings.append(str(idx) + "_SE")
     else:
       idx = take_idx % len(top_mme_rosters)
-      to_print.append(top_mme_rosters[idx])
+      roster_to_append = top_mme_rosters[idx]
+      assert is_roster_valid(roster_to_append)
+      
+      to_print.append(roster_to_append)
       index_strings.append(str(idx) + "_MME")
     
     entry_name_to_take_idx[entry_name] += 1
@@ -315,56 +343,107 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time):
   by_position = filter_out_locked_teams(by_position, locked_teams)
   existing_rosters = parse_existing_rosters(download_folder + current_rosters_path)
   seen_roster_strings = []
+  seen_roster_string_to_optimized_roster = {}
 
+  roster_idx = 0
+  all_results = []
   for existing_roster in existing_rosters:
+    print("ROSTER: {}".format(roster_idx))
+    roster_idx += 1
     players = existing_roster[3:12]
+    if players[0] == '':
+      continue
+
     roster_string = ",".join(players)
 
     if roster_string in seen_roster_strings:
+      result = seen_roster_string_to_optimized_roster[roster_string]
+      all_results.append(result)
       continue
 
     seen_roster_strings.append(roster_string)
-    players3 = [player_id_to_name[p] for p in players]
+    players3 = []
+    for p in players:
+      if not p in player_id_to_name:
+        __import__('pdb').set_trace()
+
+      players3.append(player_id_to_name[p])
+
     players4 = [name_to_players[p][0] for p in players3]
     players5 = []
     initial_roster = []
+    lock_ct = 0
     for p in players4:
       if p.team in locked_teams:
         players5.append(p)
+        lock_ct += 1
       else:
         players5.append(None)
       initial_roster.append(p.name)
 
 
-    result = optimizer.optimize(by_position, players5)
+    if lock_ct != 9:
+      result = optimizer.optimize(by_position, players5, int(6000))
 
-    print("INITIAL ROSTER:\n{}".format(initial_roster))
-    print(result)
+    else:
+      result = utils.Roster(players4)
+    
+    seen_roster_string_to_optimized_roster[roster_string] = result
+    try:
+      names1 = [p.name for p in result.players]
+      roster1_key = ",".join(sorted(names1))
+
+      roster2_key = ",".join(sorted(initial_roster))
+      if roster1_key != roster2_key:
+        print("LOCKED PLAYERS: {}".format(players5))
+
+
+        print("INITIAL ROSTER:\n{}".format(initial_roster))
+        print(result)
+
+
+
+      all_results.append(result)
+    except:
+      __import__('pdb').set_trace()
+
+  utils.print_player_exposures(all_results)
+
+  construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
 
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
-  slate_path = "FanDuel-NBA-2022 ET-10 ET-18 ET-81576-players-list.csv"
-  template_path = "FanDuel-NBA-2022-10-18-81576-entries-upload-template (1).csv"
+
+  slate = 7
+
+  # 7PM MAIN
+  if slate == 7:
+    slate_path = "FanDuel-NBA-2022 ET-10 ET-22 ET-82200-players-list (2).csv"
+    template_path = "FanDuel-NBA-2022-10-22-82200-entries-upload-template (2).csv"
+
+    # optimize_slate(slate_path, template_path)
+
+    reoptimize_slate(slate_path, "FanDuel-NBA-2022-10-22-82200-entries-upload-template (4).csv", 8.6)
+
+  elif slate == 8:
+    
+    slate_path = "FanDuel-NBA-2022 ET-10 ET-22 ET-82202-players-list.csv"
+    template_path = "FanDuel-NBA-2022-10-22-82202-entries-upload-template.csv"
 
 
-  optimize_slate(slate_path, template_path)
+    optimize_slate(slate_path, template_path)
+  
+  elif slate == 9:
+    
+    slate_path = "FanDuel-NBA-2022 ET-10 ET-22 ET-82203-players-list.csv"
+    template_path = "FanDuel-NBA-2022-10-22-82203-entries-upload-template.csv"
 
-  # reoptimize_slate(slate_path, "FanDuel-NBA-2022-10-12-81712-entries-upload-template (6).csv", 9.6)
+
+    optimize_slate(slate_path, template_path)
+
+    # reoptimize_slate(slate_path, "FanDuel-NBA-2022-10-22-82200-entries-upload-template (3).csv", 7.6)
+
   assert False
 
-  teams_to_remove = []
-  start_times = "start_times.txt" # TODO
-
-  start_times = utils.load_start_times_and_slate_path(start_times)
-  # __import__('pdb').set_trace()
-
-
-
-  # projections = MLBProjections(download_folder + slate_path)
-  
-  # pick pairs and triples
-  # filter out all other 
-
-#
-  
+# validate player name matching!

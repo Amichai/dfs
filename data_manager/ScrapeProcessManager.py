@@ -21,11 +21,11 @@ def run(sport, count=None):
   scrapers_by_sport = {
     "NBA": [
         PPScraper('NBA'),
-        TFScraper('NBA'),
         NumberFireScraper('NBA'),
-        RotoWireScraper('NBA', '8799'),
-        UnderdogScraper("NBA"),
-        CaesarsScraper('NBA')
+        CaesarsScraper('NBA'),
+        # TFScraper('NBA'),
+        # UnderdogScraper("NBA"),
+        # RotoWireScraper('NBA', '8799'),
       ], #DFSCrunchScraper('NBA')
     "WNBA": [DFSCrunchScraper('WNBA'), PPScraper('WNBA')],
     "MLB": [TFScraper('MLB'), UnderdogScraper("MLB"), PPScraper('MLB'), CaesarsScraper('MLB'), ], # , DFSCrunchScraper('MLB')
