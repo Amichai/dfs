@@ -12,4 +12,9 @@ name_mapper = {
   #NBA
   "Nic Claxton": "Nicolas Claxton", 
   "Cam Thomas": "Cameron Thomas", 
+  "Mohamed Bamba": "Mo Bamba",
+  "Juan Hernangomez": "Juancho Hernangomez",
+  "Patrick Mills": "Patty Mills",
+  "Nah'Shon Hyland": "Bones Hyland",
+  "KJ Martin": "Kenyon Martin"
 }

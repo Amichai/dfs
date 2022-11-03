@@ -333,6 +333,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
   rosters = optimizer.optimize_top_n(by_position, 5000, iter=iter)
 
+
   rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
   orig_rosters_sorted = rosters_sorted
   if roster_filter != None:
@@ -492,13 +493,9 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
       names1 = [p.name for p in result.players]
       roster1_key = ",".join(sorted(names1))
 
-      is_se_roster = "Single Entry" in existing_roster[2] or "Entries Max" in existing_roster[2]
-      if is_se_roster:
-        print("IS SE ROSTER!")
-
-      if roster1_key in seen_roster_strings and not allow_duplicate_rosters and not is_se_roster:
+      if roster1_key in seen_roster_strings and not allow_duplicate_rosters:
           # don't change the result
-        print("initial roster unchanged! {}")
+        print("initial roster unchanged!")
         all_results.append(utils.Roster(players4))
       else:
         seen_roster_strings.append(roster1_key)
@@ -520,9 +517,6 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
   utils.print_player_exposures(all_results, locked_teams)
   variation = utils.print_roster_variation(all_results)
   print(variation)
-  
-  # variation = utils.print_roster_variation(existing_rosters)
-  # print(variation)
   
 
   construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
@@ -547,43 +541,137 @@ def single_game_optimizer():
   construct_upload_template_file(all_results_rosters * 1000, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
 
+def filter_top_mme_rosters(rosters_sorted, value_tolerance, to_take):
+  assert rosters_sorted[0].value >= rosters_sorted[1].value 
+  assert rosters_sorted[10].value >= rosters_sorted[11].value 
+  assert rosters_sorted[20].value >= rosters_sorted[21].value 
+
+  value_couttoff = rosters_sorted[0].value - value_tolerance
+  filtered_rosters = [r for r in rosters_sorted if r.value > value_couttoff]
+  player_exposures = utils.get_player_exposures(filtered_rosters)
+  player_to_new_value = {}
+
+  for player, ct in player_exposures.items():
+    player_to_new_value[player] = 1 / ct
+
+  print("input rosters: {} filtered: {}".format(len(rosters_sorted), len(filtered_rosters)))
+  if len(filtered_rosters) < to_take:
+    print("Not enough rosters to take: {}".format(to_take))
+    __import__('pdb').set_trace()
+
+  roster_and_new_value = []
+  idx = 0
+  for roster in filtered_rosters:
+
+    new_roster_value = sum([player_to_new_value[pl.name] for pl in roster.players])
+    roster_and_new_value.append((roster, new_roster_value, idx))
+    idx += 1
+      
+  roster_and_new_value_sorted = sorted(roster_and_new_value, key=lambda a: a[1], reverse=True)
+  # for roster_val in roster_and_new_value_sorted:
+  #   print("{} - {}, {}".format(round(roster_val[1], 2), roster_val[2], roster_val[0].value))
+
+  
+  all_the_new_rosters = [r[0] for r in roster_and_new_value_sorted]
+  to_return = all_the_new_rosters[:to_take]
+
+  # utils.print_player_exposures(rosters_sorted[:to_take])
+  # print("------------")
+  # utils.print_player_exposures(to_return)
+
+
+  return to_return
+
+def generate_top_n_rosters_sorted(by_position, roster_count, iter):
+  optimizer = FD_NBA_Optimizer()
+  rosters = optimizer.optimize_top_n(by_position, roster_count, iter=iter)
+
+  rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
+
+  return rosters_sorted
+
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
-  # template_path = "FanDuel-NBA-2022-11-01-82625-entries-upload-template.csv"
-
-  # slate_path = "FanDuel-NBA-2022 ET-11 ET-01 ET-82625-players-list.csv"
-  # all_rosters = optimize_slate(slate_path, template_path, 0, iter=120000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
-
-
-  # assert False
-  # single_game_optimizer()
-
 
   slate_path = "FanDuel-NBA-2022 ET-11 ET-02 ET-82696-players-list (2).csv"
-  # MINE
   template_path = "FanDuel-NBA-2022-11-02-82696-entries-upload-template (2).csv"
+  template_paths = [
+    # path name
+    (template_path, "mine")
+  ]
 
-  # all_rosters = optimize_slate(slate_path, template_path, 0, iter=120000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
+  projections = NBA_WNBA_Projections(download_folder + slate_path, "NBA")
+  projections.print_slate()
+
+  by_position = projections.players_by_position()
+
+  # utils.save_player_projections(by_position)
+
+  all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=90000)
+  # all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=120000)
+
+  SE_ROSTER_TAKE = 10
+  se_rosters = all_rosters_sorted[:SE_ROSTER_TAKE]
   
+  mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=6, to_take=150)
 
-  #DIDI
-  # optimize_slate_with_rosters(template_path, all_rosters[150:301])
-  
-  # all_rosters = optimize_slate(slate_path, template_path, 155, iter=90000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
-  # all_rosters = optimize_slate(slate_path, template_path, 0, 1000)
+  assert len(mme_rosters) == 150
+  utils.print_player_exposures(mme_rosters)
 
 
-
-  # dk_slate_path = "DKSalaries (1).csv"
-  
-  # all_rosters = optimize_slate_dk(dk_slate_path, 200000)
-
-  # optimize_slate(slate_path, template_path2, 0, 100000)
-
-  # TODO CONSIDER SORTING ENTRIES BY ENTRY FEE BEFORE REOPTIMIZING
-  reoptimize_slate(slate_path, "FanDuel-NBA-2022-11-02-82696-entries-upload-template (3).csv", 9.6, "start_times.txt", False)
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 0)
 
 
-  assert False
+  entry_name_to_ct = {}
+  for entry in entries:
+    entry_name = entry[2]
+    if not entry_name in entry_name_to_ct:
+      entry_name_to_ct[entry_name] = 1
+    else:
+      entry_name_to_ct[entry_name] += 1
+
+  entry_name_to_take_idx = {}
+  index_strings = []
+  to_print = []
+
+  for entry in entries:
+    entry_name = entry[2]
+    entry_ct = entry_name_to_ct[entry_name]
+
+    if not entry_name in entry_name_to_take_idx:
+      if entry_ct > 1:
+        entry_name_to_take_idx[entry_name] = 1
+      else:
+        entry_name_to_take_idx[entry_name] = 0
+
+    take_idx = entry_name_to_take_idx[entry_name]
+
+    if entry_ct < SE_ROSTER_TAKE:
+      idx = take_idx % len(se_rosters)
+      roster_to_append = se_rosters[idx]
+      if not is_roster_valid(roster_to_append):
+        roster_to_append = se_rosters[idx + 1]
+        assert is_roster_valid(roster_to_append)
+
+      to_print.append(roster_to_append)
+      index_strings.append(str(idx) + "_SE_{}".format(roster_to_append.value))
+    else:
+      idx = take_idx % len(mme_rosters)
+      roster_to_append = mme_rosters[idx]
+      assert is_roster_valid(roster_to_append)
+      
+      to_print.append(roster_to_append)
+      index_strings.append(str(idx) + "_MME_{}".format(roster_to_append.value))
+    
+    entry_name_to_take_idx[entry_name] += 1
+
+  construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
+
+  # generate top n SE rosters (10)
+  # generate mme rosters - value range, then optiimize for diversity within that range
+
+
+
+
 
 # validate player name matching!

@@ -5,6 +5,7 @@ import unidecode
 from name_mapper import name_mapper
 import requests
 from bs4 import BeautifulSoup
+from tabulate import tabulate
 
 
 class Player:
@@ -62,7 +63,6 @@ def normalize_name(name):
 
     name = name.replace(".", "")
     if name in name_mapper:
-        print("mapping: {}".format(name))
         name = name_mapper[name]
 
     return name.strip()
@@ -170,6 +170,83 @@ def load_crunch_dfs_projection(path, slate_path, download_folder):
 
     __import__('pdb').set_trace()
     return by_position
+
+def single_game_optimizer_many(by_position, ct, locks=None):
+    all_players = []
+    seen_names = []
+
+    for _, players in by_position.items():
+        for player in players:
+            if player.name in seen_names:
+                continue
+            all_players.append(player)
+            seen_names.append(player.name)
+    
+    player_ct = len(all_players)
+    all_rosters = []
+
+    roster_keys = set()
+    for i1 in range(player_ct):
+        p1 = all_players[i1]
+        if locks != None and p1.name != locks[i1]:
+            continue
+
+        for i2 in range(player_ct):
+            if i2 == i1:
+                continue
+            p2 = all_players[i2]
+
+            if locks != None and p2.name != locks[i2]:
+                continue
+
+
+            for i3 in range(player_ct):
+                if i3 == i1 or i3 == i2:
+                    continue
+                
+                p3 = all_players[i3]
+                if locks != None and p3.name != locks[i3]:
+                    continue
+
+                for i4 in range(player_ct):
+                    if i4 == i1 or i4 == i2 or i4 == i3:
+                        continue
+                    
+                    p4 = all_players[i4]
+                    if locks != None and p4.name != locks[i4]:
+                        continue
+
+                    for i5 in range(player_ct):
+                        if i5 == i1 or i5 == i2 or i5 == i3 or i5 == i4:
+                            continue
+                        
+                        p5 = all_players[i5]
+
+                        if locks != None and p5.name != locks[i5]:
+                            continue
+                        roster_set = [p1, p2, p3, p4, p5]
+                        
+                        total_cost = sum(pl.cost for pl in roster_set)
+                        if total_cost > 60000 or total_cost <= 59000:
+                            continue
+                        
+                        total_value = p1.value * 2 + p2.value * 1.5 +  p3.value * 1.2 + p4.value + p5.value
+
+                        if all(x.team == roster_set[0].team for x in roster_set):
+                            continue
+
+                        roster_key = "|".join(sorted([a.name for a in roster_set])) + "|" + str(round(total_value, 1))
+                        if roster_key in roster_keys:
+                            continue
+
+                        roster_keys.add(roster_key)
+                        all_rosters.append((roster_set, total_value, total_cost))
+    all_rosters_sorted = sorted(all_rosters, key=lambda a: a[1], reverse=True)
+    to_return = all_rosters_sorted[:ct]
+    for roster in to_return:
+        print(roster)
+        
+    return to_return
 
 
 def load_start_times_and_slate_path(path):
@@ -330,14 +407,117 @@ def percentChange(v1, v2):
 
     return diff / (v1 + 0.01)
 
-def print_player_exposures(rosters_sorted):
-  player_to_ct = {}
-  for roster in rosters_sorted:
-    for player in roster.players:
-      if not player.name in player_to_ct:
-        player_to_ct[player.name] = 1
-      else:
-        player_to_ct[player.name] += 1
+def get_player_exposures(rosters_sorted):
+    player_to_ct = {}
+    for roster in rosters_sorted:
+        for player in roster.players:
+            if not player.name in player_to_ct:
+                player_to_ct[player.name] = 1
+            else:
+                player_to_ct[player.name] += 1
+    
+    return player_to_ct
 
-  player_to_ct_sorted = sorted(player_to_ct.items(), key=lambda a: a[1], reverse=True)
-  print(player_to_ct_sorted)
+def print_player_exposures(rosters_sorted, locked_teams=None):
+    name_to_player = {}
+    max_ct = 0
+    player_to_ct = {}
+    for roster in rosters_sorted:
+        for player in roster.players:
+            if not player.name in player_to_ct:
+                player_to_ct[player.name] = 1
+                name_to_player[player.name] = player
+            else:
+                player_to_ct[player.name] += 1
+                new_ct = player_to_ct[player.name]
+                if new_ct > max_ct:
+                    max_ct = new_ct
+
+
+    player_to_ct_sorted = sorted(player_to_ct.items(), key=lambda a: a[1], reverse=True)
+    print(player_to_ct_sorted)
+
+    rows = []
+    for player_name, ct in player_to_ct.items():
+        pl = name_to_player[player_name]
+        if pl.value == 0:
+            continue
+        if locked_teams != None and pl.team in locked_teams:
+            continue
+        rows.append([player_name, ct, pl.team, round(pl.value, 2)])
+
+    rows_sorted = sorted(rows, key=lambda a: a[1], reverse=True)
+    print(tabulate(rows_sorted, headers=["name", "ct", "team", "value"]))
+
+    print("CORE!!")
+    for player_name, ct in player_to_ct.items():
+        exposure = round(ct / max_ct, 1)
+        if exposure >= 0.8:
+            player = name_to_player[player_name]
+            print("{}, {} - {} ({})".format(player.name, player.team, round(player.value, 2), round(player.value_per_dollar, 2)))
+
+    return player_to_ct
+
+def print_roster_variation(rosters):
+    key_to_ct = {}
+    for roster in rosters:
+        names1 = [p.name for p in roster.players]
+        roster_key = ",".join(sorted(names1))
+        if not roster_key in key_to_ct:
+            key_to_ct[roster_key] = 1
+        else:
+            key_to_ct[roster_key] += 1
+    
+    just_cts = key_to_ct.values()
+    return sorted(just_cts, reverse=True)
+
+
+def parse_projection_from_caesars_lines(lines):
+    if not "Points" in lines:
+        return
+    pts = float(lines['Points'])
+    if not 'Rebounds' in lines:
+        return
+    rbds = float(lines['Rebounds'])
+    if not 'Assists' in lines:
+        return
+    asts = float(lines['Assists'])
+    if not 'Blocks' in lines:
+        return
+    blks = float(lines['Blocks'])
+    if not 'Steals' in lines:
+        return
+    stls = float(lines['Steals'])
+    turnovers = float(lines["Turnovers"])
+    projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
+
+    a1 = False
+    a2 = False
+    a3 = False
+    a4 = False
+    a5 = False
+
+    if "Points:isActive" in lines:
+        a1 = lines["Points:isActive"]
+    
+    if "Assists:isActive" in lines:
+        a2 = lines["Assists:isActive"]
+    
+    if "Rebounds:isActive" in lines:
+        a3 = lines["Rebounds:isActive"]
+    
+    if "Blocks:isActive" in lines:
+        a4 = lines["Blocks:isActive"]
+
+    if "Steals:isActive" in lines:
+        a5 = lines["Steals:isActive"]
+
+    total = [a1, a2, a3, a4, a5]
+    activity = len([a for a in total if a])
+
+    return [round(projected, 2), activity]
+
+def save_player_projections(by_position):
+    for pos, players in by_position:
+        pass
+    pass

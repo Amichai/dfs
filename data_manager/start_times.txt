@@ -1,33 +1,41 @@
-FanDuel-CFB-2022 ET-09 ET-30 ET-81160-players-list.csv
+NBA MAIN 10/31/22
 slate2
+ATL
+@NY
+7:30pm ET
+
+SAC
+@MIA
+7:30pm ET
+
 BOS
-@ORL
-7:00pm ET
+@CLE
+7:30pm ET
 
-DET
-@IND
-7:00pm ET
-
-HOU
-@MIL
-8:00pm ET
-
-CLE
+CHA
 @CHI
-8:00pm ET
+7:30pm ET
 
 TOR
-@MIA
-8:00pm ET
-
-MEM
-@DAL
-8:30pm ET
-
-OKC
-@DEN
-9:00pm ET
+@SA
+7:30pm ET
 
 LAC
-@SAC
+@HOU
+7:30pm ET
+
+DET
+@MIL
+7:30pm ET
+
+UTA
+@DAL
+7:30pm ET
+
+MEM
+@POR
 10:00pm ET
+
+NO
+@LAL
+10:30pm ET

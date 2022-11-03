@@ -4,6 +4,7 @@ import data_manager
 import time
 import dateutil
 from tinydb import TinyDB, Query, where
+import utils
 
 def calculatePercentDifference(v1, v2):
   v1 = float(v1)
@@ -14,12 +15,29 @@ def calculatePercentDifference(v1, v2):
 
   return diff / (v1 + 0.01)
 
+def get_caesar_fantasy_projection(stats):
+  stat_dict = {}
+  for stat, vals in stats.items():
+    # TODO:
+    stat_dict[stat] = vals[-1][0]
+  caesars_projection = utils.parse_projection_from_caesars_lines(stat_dict)
+  if caesars_projection == None:
+    return None
+
+  if caesars_projection[1] == 5:
+    return caesars_projection[0]
+  
+  return None
+
 def arbitrage(name_to_site_to_stat):
   name_to_stat_to_site = {}
+  caesars_fantasy_points = {}
 
   for name, site_to_stat in name_to_site_to_stat.items():
     name_to_stat_to_site[name] = {}
     for site, stats in site_to_stat.items():
+      if site == "NumberFire" or site == "FantasyData":
+          continue
 
       for stat, val in stats.items():
         if ":isActive" in stat:
@@ -27,6 +45,15 @@ def arbitrage(name_to_site_to_stat):
         
         if not stat in name_to_stat_to_site[name]:
           name_to_stat_to_site[name][stat] = {}
+
+        if site == "Caesars":
+          caesars_fantasy_score = get_caesar_fantasy_projection(stats)
+          if caesars_fantasy_score != None:
+            ## TODO
+            timestamp = stats['Points'][-1][1]
+            caesars_fantasy_points[name] = (caesars_fantasy_score, timestamp)
+            
+        
 
         val_filtered = val
         if site == "Caesars":
@@ -41,12 +68,15 @@ def arbitrage(name_to_site_to_stat):
 
         name_to_stat_to_site[name][stat][site] = val_filtered
 
-
   site_to_results = {}
   results = []
   for name, stat_to_site in name_to_stat_to_site.items():
     for stat, sites in stat_to_site.items():
+
       stat_vals = []
+      if stat == "Fantasy Score" and name in caesars_fantasy_points:
+        sites['Caesars'] = [caesars_fantasy_points[name]]
+
       for site, vals in sites.items():
         try:
           to_append = float(vals[-1][0])
@@ -113,13 +143,14 @@ def findDiffs(name_to_site_to_stat):
             continue
 
           change = diff / (v1 + 0.01)
+          # __import__('pdb').set_trace()
 
           # CHECK THE IS ACTIVE FLAG BEFORE CONTINUING? 
           # FILTER ON THE TIMES
           
           if abs(change) > 0.1:
-            print("{} - {}".format(name, site))
-            print("{} - {} = {}".format(stat, val, change))
+            print("{} - {}, {}:".format(name, site, stat))
+            print("{} = {}".format(val, round(change, 2)))
     
 
 # Internal to each scraper/stat look for difference

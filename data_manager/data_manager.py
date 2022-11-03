@@ -38,6 +38,18 @@ class DataManager:
     previous_value = self.query_projection(sport, scraper_name, name)
     differences = list(diff(previous_value, projections))
 
+    # if sport == "NBA" and scraper_name == "Caesars":
+    #   old_projection = utils.parse_projection_from_caesars_lines(previous_value)
+    #   new_projection = utils.parse_projection_from_caesars_lines(projections)
+    #   proj1 = old_projection[0]
+    #   proj2 = new_projection[0]
+    #   activity1 = old_projection[1]
+    #   activity2 = new_projection[1]
+    #   if proj1 != proj2 or activity1 != activity2:
+    #     print("{}, {}, {}".format(sport, scraper_name, name))
+    #     print("OLD: {}".format(old_projection))
+    #     print("NEW: {}".format(new_projection))
+
     if len(differences) > 0:
       self.db.insert(to_write)
       for difference in differences:
@@ -73,7 +85,7 @@ class DataManager:
         # __import__('pdb').set_trace()
         # if row["projections"]['Fantasy Score'] == 0:
         #   continue
-        print("WRITING ZERO: {}".format(name))
+        # print("WRITING ZERO: {}".format(name))
         projections = row['projections']
         new_projections = {}
         for stat, val in projections.items():

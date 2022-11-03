@@ -10,6 +10,7 @@ from scrapers.thrive_fantasy_scraper import TFScraper
 from scrapers.underdog_scraper import UnderdogScraper
 from scrapers.rotowire_scraper import RotoWireScraper
 from scrapers.numberfire_scraper import NumberFireScraper
+from scrapers.fantasy_data_scraper import FantasyDataScraper
 import argparse
 from ProcessData import process
 import utils
@@ -18,26 +19,41 @@ import utils
 def run(sport, count=None):
   dataManager = data_manager.DataManager(sport)
   period = 3
+  nfs = NumberFireScraper(sport)
+  pps = PPScraper(sport)
+  cs = CaesarsScraper(sport, True)
+  uds = UnderdogScraper(sport)
+  tfs = TFScraper(sport)
+  fantasyDataScraper = FantasyDataScraper(sport)
+
   scrapers_by_sport = {
     "NBA": [
-        PPScraper('NBA'),
-        NumberFireScraper('NBA'),
-        CaesarsScraper('NBA'),
-        # TFScraper('NBA'),
-        # UnderdogScraper("NBA"),
+        # tfs,
+        # uds,
+        fantasyDataScraper,
+        pps,
+        nfs,
+        cs,
         # RotoWireScraper('NBA', '8799'),
       ], #DFSCrunchScraper('NBA')
-    "WNBA": [DFSCrunchScraper('WNBA'), PPScraper('WNBA')],
-    "MLB": [TFScraper('MLB'), UnderdogScraper("MLB"), PPScraper('MLB'), CaesarsScraper('MLB'), ], # , DFSCrunchScraper('MLB')
-    "NFL": [PPScraper('NFL'), RotoWireScraper('NFL', '3636'), CaesarsScraper('NFL', True), UnderdogScraper("NFL")], # , TFScraper('NFL')
-    "MMA": [CaesarsScraper("MMA", False), PPScraper("MMA")],
-    "CFB": [PPScraper('CFB'), UnderdogScraper("CFB"), CaesarsScraper('CFB', True)],
-    "NASCAR": [RotoWireScraper('NASCAR', '192'), PPScraper("NASCAR")],
-    "PGA": [CaesarsScraper('PGA')],
-    "NHL": [PPScraper("NHL"), CaesarsScraper("NHL", False)]
+    "WNBA": [DFSCrunchScraper('WNBA'), pps],
+    "MLB": [tfs, uds, pps, cs, ], # , DFSCrunchScraper('MLB')
+    "NFL": [
+      nfs,
+      pps,
+      cs,
+      # UnderdogScraper("NFL")], 
+      # , TFScraper('NFL')
+    ],
+    "MMA": [CaesarsScraper("MMA", False), pps],
+    "CFB": [pps, uds, cs],
+    "NASCAR": [RotoWireScraper('NASCAR', '192'), pps],
+    "PGA": [cs],
+    "NHL": [pps, CaesarsScraper("NHL", False)]
   }
 
   scrapers = scrapers_by_sport[sport]
+
   if count != None:
     scrapers = scrapers[:int(count)]
 

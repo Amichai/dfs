@@ -217,7 +217,7 @@ def optimize_slate(slate_path, template_path):
 
   optimizer = NFL_Optimizer()
 
-  rosters = optimizer.optimize_top_n(by_position, 20)
+  rosters = optimizer.optimize_top_n(by_position, 30)
 
   rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
   for roster in rosters_sorted:
@@ -254,7 +254,7 @@ def optimize_slate(slate_path, template_path):
 def reoptimize_slate(slate_path, current_rosters_path, current_time):
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + current_rosters_path, [], '', 0)
 
-  start_times = "start_times.txt"
+  start_times = "start_times_NFL1.txt"
   start_times = utils.load_start_times_and_slate_path(start_times)[0]
   locked_teams = []
   for time, teams in start_times.items():
@@ -271,18 +271,30 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time):
   by_position = filter_out_locked_teams(by_position, locked_teams)
   existing_rosters = parse_existing_rosters(download_folder + current_rosters_path)
   seen_roster_strings = []
+  seen_roster_string_to_optimized_roster = {}
 
+  all_results = []
   for existing_roster in existing_rosters:
     players = existing_roster[3:12]
+    if players[0] == '':
+      continue
+
     players2 = [p.split(':')[0] for p in players]
     roster_string = ",".join(players2)
 
     if roster_string in seen_roster_strings:
+      result = seen_roster_string_to_optimized_roster[roster_string]
+      all_results.append(result)
       continue
 
     seen_roster_strings.append(roster_string)
     # __import__('pdb').set_trace()
-    players3 = [player_id_to_name[p] for p in players2]
+    players3 = []
+    for p in players:
+      if not p in player_id_to_name:
+        __import__('pdb').set_trace()
+
+      players3.append(player_id_to_name[p])
     players4 = [name_to_players[p][0] for p in players3]
     players5 = []
     for p in players4:
@@ -292,21 +304,26 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time):
         players5.append(None)
 
     result = optimizer.optimize(by_position, players5)
+    seen_roster_string_to_optimized_roster[roster_string] = result
 
     print(result)
   
+    all_results.append(result)
 
+  utils.print_player_exposures(all_results)
+
+  construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name)
 
 
 
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
-  slate_path = "FanDuel-NFL-2022 ET-10 ET-16 ET-81659-players-list.csv"
-  template_path = "FanDuel-NFL-2022-10-16-81659-entries-upload-template (1).csv"
+  slate_path = "FanDuel-NFL-2022 ET-10 ET-23 ET-81947-players-list.csv"
+  template_path = "FanDuel-NFL-2022-10-23-81947-entries-upload-template.csv"
 
-  # optimize_slate(slate_path, template_path)
+  optimize_slate(slate_path, template_path)
 
-  reoptimize_slate(slate_path, "FanDuel-NFL-2022-10-16-81659-entries-upload-template (2).csv", 3.5)
+  # reoptimize_slate(slate_path, "FanDuel-NFL-2022-10-23-81947-entries-upload-template (2).csv", 3.1)
 
 
   assert False

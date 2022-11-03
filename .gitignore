@@ -2,4 +2,5 @@ master_scrape_process/money_line_scrapes/
 master_scrape_process/salary_data/
 data_manager/logs/
 data_manager/data_files/
+data_manager/past_entries/
 .DS_Store

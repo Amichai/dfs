@@ -6,7 +6,10 @@ class NumberFireScraper:
     self.name = 'NumberFire'
     if self.sport == "NBA":
       self.query_url = 'https://www.numberfire.com/nba/daily-fantasy/daily-basketball-projections'
+    elif self.sport == "NFL":
+      self.query_url = 'https://www.numberfire.com/nfl/daily-fantasy/daily-football-projections'
     else:
+      __import__('pdb').set_trace()
       print("unknown sport")
       assert False
       

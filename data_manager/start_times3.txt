@@ -1,33 +1,9 @@
-FanDuel-CFB-2022 ET-09 ET-30 ET-81160-players-list.csv
+NBA EARLY 10/23/22
 slate2
-BOS
-@ORL
-7:00pm ET
+POR
+@LAL
+3:30pm ET
 
-DET
-@IND
-7:00pm ET
-
-HOU
-@MIL
-8:00pm ET
-
-CLE
-@CHI
-8:00pm ET
-
-TOR
-@MIA
-8:00pm ET
-
-MEM
-@DAL
-8:30pm ET
-
-OKC
-@DEN
-9:00pm ET
-
-LAC
-@SAC
-10:00pm ET
+CHA
+@ATL
+5:00pm ET

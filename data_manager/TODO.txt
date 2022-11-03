@@ -8,8 +8,8 @@
 
 
 
- python3 ScrapeProcessManager.py -s NFL
- python3 ProcessData.py -s NFL
+ python3 ScrapeProcessManager.py -s NBA
+ python3 ProcessData.py -s NBA
  
  [python SlateManager.py]
 
@@ -28,3 +28,7 @@ Run through all my projections to see which names are not matched on the FD slat
 Sort each player pair that share a position slot (probably by cost)
 ----
 enter 150 MME!
+
+----
+11/1/22
+https://www.fanduel.com/games/82612/contests/82612-259923515/enter

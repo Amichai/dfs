@@ -28,7 +28,7 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
   return all_players
 
 def parse_fantasy_score_from_projections(site, projections):
-  if site == "PP" or site == 'RotoWire':
+  if site == "PP" or site == 'NumberFire':
     if "Fantasy Score" not in projections:
       return ''
     return projections["Fantasy Score"]
@@ -73,7 +73,7 @@ class NFL_Projections:
     self.dm = DataManager(sport)
     self.sport = sport
     self.scrapers = ['PP']
-    self.scrapers = ['PP', 'RotoWire']
+    self.scrapers = ['PP', 'NumberFire']
     self.player_adjustments = player_adjustments
 
     self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
@@ -131,7 +131,14 @@ class NFL_Projections:
       status = row[4]
       opp = row[5]
       pp_proj = row[6]
-      value = pp_proj
+      numberfire_proj = 0
+      if len(row) > 7:
+        numberfire_proj = row[7]
+      
+      if pp_proj != '':
+        value = pp_proj
+      else:
+        value = numberfire_proj
 
       if name in self.player_adjustments:
         new_value = value * self.player_adjustments[name]
