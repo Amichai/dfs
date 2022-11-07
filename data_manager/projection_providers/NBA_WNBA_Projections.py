@@ -225,6 +225,26 @@ class NBA_WNBA_Projections:
 
     self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
 
+  def validate_player_set(self):
+    # return
+    # for each player that we have a projection in the database for, make sure we have a corresponding player
+    all_players = self.all_players()
+    all_player_names = [p.name for p in all_players]
+    for scraper in self.scrapers:
+      all_projections = self.dm.query_all_projections(self.sport, scraper)
+      if all_projections == None:
+        continue
+      names = all_projections.keys()
+      for name in names:
+        if not name in all_player_names:
+          # pass
+          projection_values = list(all_projections[name]['projections'].values())
+          all_zero = all([x == 0 for x in projection_values])
+          if not all_zero:
+            # __import__('pdb').set_trace()
+            print("PLAYER WITH PROJECTION NOT FOUND in slate: {} - {}".format(name, all_projections[name]))
+
+
   def get_player_rows(self):
     all_rows = []
 
@@ -253,6 +273,31 @@ class NBA_WNBA_Projections:
 
     return all_rows
 
+  def all_players(self):
+    by_position = self.players_by_position()
+    all_players = []
+    all_names = []
+    for pos, players in by_position.items():
+      for player in players:
+        name = player.name
+        if name in all_names:
+          continue
+
+        all_names.append(name)
+        all_players.append(player)
+
+
+    return all_players
+
+
+  def name_to_player(self):
+    all_players = self.all_players()
+    name_to_player = {}
+    for player in all_players:
+      name_to_player[player.name] = player
+
+    return name_to_player
+
   def players_by_position(self, exclude_zero_value=False):
     by_position = {}
     all_rows = self.get_player_rows()
@@ -276,7 +321,7 @@ class NBA_WNBA_Projections:
       elif pp_proj != '':
         value = pp_proj
       else:
-        value = fantasy_data_proj
+        value = dfs_crunch
 
       if value == '':
         continue

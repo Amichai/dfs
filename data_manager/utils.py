@@ -303,7 +303,13 @@ stat_name_normalization = {
     'HITs': 'Hits',
     'RUNs': 'Runs Scored',
     'BASEs': 'Bases',
+    'Total Bases': 'Bases',
     'Ks': 'Pitching Strikeouts',
+
+    "HITs + RBIs + RUNs": "Hits + Runs + RBIs",
+    "Hits+Runs+RBIS": "Hits + Runs + RBIs",
+
+
     'Pass YDS': 'Passing Yards',
     'Pass Yards': 'Passing Yards',
     'Rush YDS': 'Rushing Yards',
@@ -368,6 +374,8 @@ stat_name_normalization = {
     'Pts+Rebs+Asts': 'Points + Rebounds + Assists',
     'Blocked Shots': 'Blocks',
 
+    "3-PT Made": "3-Pointers Made",
+
 
     #UNMODIFIED STATS: ['Turnovers', '3-PT Made', 'Pts+Rebs', 'Rebs+Asts', 'Pts+Asts', 'Blks+Stls', 'Pts+Rebs+Asts', 'Fantasy Score', 'Blocked Shots']
 
@@ -419,11 +427,14 @@ def get_player_exposures(rosters_sorted):
     return player_to_ct
 
 def print_player_exposures(rosters_sorted, locked_teams=None):
+    print("print player exposures")
     name_to_player = {}
     max_ct = 0
     player_to_ct = {}
     for roster in rosters_sorted:
         for player in roster.players:
+            if "Vanderbilt" in player.name:
+                __import__('pdb').set_trace()
             if not player.name in player_to_ct:
                 player_to_ct[player.name] = 1
                 name_to_player[player.name] = player
@@ -432,6 +443,8 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
                 new_ct = player_to_ct[player.name]
                 if new_ct > max_ct:
                     max_ct = new_ct
+
+
 
 
     player_to_ct_sorted = sorted(player_to_ct.items(), key=lambda a: a[1], reverse=True)
@@ -447,7 +460,13 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
         rows.append([player_name, ct, pl.team, round(pl.value, 2)])
 
     rows_sorted = sorted(rows, key=lambda a: a[1], reverse=True)
-    print(tabulate(rows_sorted, headers=["name", "ct", "team", "value"]))
+    idx = 1
+    rows_sorted_with_idx = []
+    for row in rows_sorted:
+        new_row = [idx] + row
+        rows_sorted_with_idx.append(new_row)
+        idx += 1
+    print(tabulate(rows_sorted_with_idx, headers=["idx", "name", "ct", "team", "value"]))
 
     print("CORE!!")
     for player_name, ct in player_to_ct.items():

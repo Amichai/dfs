@@ -558,6 +558,8 @@ def filter_top_mme_rosters(rosters_sorted, value_tolerance, to_take):
   if len(filtered_rosters) < to_take:
     print("Not enough rosters to take: {}".format(to_take))
     __import__('pdb').set_trace()
+    filtered_rosters = rosters_sorted[:to_take]
+    player_exposures = utils.get_player_exposures(filtered_rosters)
 
   roster_and_new_value = []
   idx = 0
@@ -593,8 +595,8 @@ def generate_top_n_rosters_sorted(by_position, roster_count, iter):
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
 
-  slate_path = "FanDuel-NBA-2022 ET-11 ET-02 ET-82696-players-list (2).csv"
-  template_path = "FanDuel-NBA-2022-11-02-82696-entries-upload-template (2).csv"
+  slate_path = "FanDuel-NBA-2022 ET-11 ET-06 ET-82909-players-list.csv"
+  template_path = "FanDuel-NBA-2022-11-06-82909-entries-upload-template (1).csv"
   template_paths = [
     # path name
     (template_path, "mine")
@@ -602,20 +604,25 @@ if __name__ == "__main__":
 
   projections = NBA_WNBA_Projections(download_folder + slate_path, "NBA")
   projections.print_slate()
+  projections.validate_player_set()
 
   by_position = projections.players_by_position()
 
   # utils.save_player_projections(by_position)
 
   all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=90000)
-  # all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=120000)
+  # all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=150000)
 
-  SE_ROSTER_TAKE = 10
+  SE_ROSTER_TAKE = 20
   se_rosters = all_rosters_sorted[:SE_ROSTER_TAKE]
+  print("SE ROSTERS")
+  utils.print_player_exposures(se_rosters)
   
-  mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=6, to_take=150)
-
+  mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=5.6, to_take=150)
+  # mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=9, to_take=150)
+  print("MME ROSTER COUNT: {}".format(len(mme_rosters)))
   assert len(mme_rosters) == 150
+  print("MME ROSTERS")
   utils.print_player_exposures(mme_rosters)
 
 
@@ -658,7 +665,7 @@ if __name__ == "__main__":
     else:
       idx = take_idx % len(mme_rosters)
       roster_to_append = mme_rosters[idx]
-      assert is_roster_valid(roster_to_append)
+      # assert is_roster_valid(roster_to_append)
       
       to_print.append(roster_to_append)
       index_strings.append(str(idx) + "_MME_{}".format(roster_to_append.value))
@@ -675,3 +682,5 @@ if __name__ == "__main__":
 
 
 # validate player name matching!
+# i need to know about removals if the game hasn't started yet!!
+# there's a bug with player exposures (only one vanderbilt?)

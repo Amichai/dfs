@@ -76,6 +76,9 @@ data = {
 class FantasyDataScraper:
   def __init__(self, sport):
     self.sport = sport
+    if sport != 'NBA':
+      print("UNKNOWN SPORT FANTASY DATA SCRAPER")
+      return
     assert sport == "NBA"
     self.name = 'FantasyData'
 
@@ -93,5 +96,5 @@ class FantasyDataScraper:
         name = utils.normalize_name(name)
         proj = player['FantasyPointsFanDuel']
         to_return[name] = {"Fantasy Score": proj}
-      
+
       return to_return

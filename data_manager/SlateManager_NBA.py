@@ -310,6 +310,8 @@ def optimize_slate_with_rosters(template_path, top_mme_rosters):
 def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filter=None, hedge_entry_name=None, hedge_entry_ct=0):
   projections = NBA_WNBA_Projections(download_folder + slate_path, "NBA")
   projections.print_slate()
+  projections.validate_player_set()
+
 
   by_position = projections.players_by_position()
 
@@ -558,16 +560,6 @@ if __name__ == "__main__":
   # assert False
   # single_game_optimizer()
 
-
-  slate_path = "FanDuel-NBA-2022 ET-11 ET-02 ET-82696-players-list (2).csv"
-  # MINE
-  template_path = "FanDuel-NBA-2022-11-02-82696-entries-upload-template (2).csv"
-
-  # all_rosters = optimize_slate(slate_path, template_path, 0, iter=120000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
-  
-
-  #DIDI
-  # optimize_slate_with_rosters(template_path, all_rosters[150:301])
   
   # all_rosters = optimize_slate(slate_path, template_path, 155, iter=90000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
   # all_rosters = optimize_slate(slate_path, template_path, 0, 1000)
@@ -580,8 +572,16 @@ if __name__ == "__main__":
 
   # optimize_slate(slate_path, template_path2, 0, 100000)
 
-  # TODO CONSIDER SORTING ENTRIES BY ENTRY FEE BEFORE REOPTIMIZING
-  reoptimize_slate(slate_path, "FanDuel-NBA-2022-11-02-82696-entries-upload-template (3).csv", 9.6, "start_times.txt", False)
+  # slate_path = "FanDuel-NBA-2022 ET-11 ET-04 ET-82790-players-list.csv"
+  # template_path = "FanDuel-NBA-2022-11-04-82790-entries-upload-template.csv"
+
+  # # TODO CONSIDER SORTING ENTRIES BY ENTRY FEE BEFORE REOPTIMIZING
+
+
+  slate_path = "FanDuel-NBA-2022 ET-11 ET-06 ET-82909-players-list.csv"
+  template_path = "FanDuel-NBA-2022-11-06-82909-entries-upload-template (1).csv"
+  # all_rosters = optimize_slate(slate_path, template_path, 0, iter=150000)
+  reoptimize_slate(slate_path, "FanDuel-NBA-2022-11-06-82909-entries-upload-template (2).csv", 9.6, "start_times.txt", False)
 
 
   assert False

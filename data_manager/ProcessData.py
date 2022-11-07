@@ -5,6 +5,7 @@ import time
 import dateutil
 from tinydb import TinyDB, Query, where
 import utils
+from tabulate import tabulate
 
 def calculatePercentDifference(v1, v2):
   v1 = float(v1)
@@ -121,8 +122,18 @@ def arbitrage(name_to_site_to_stat):
       #         results.append([difference, pp_val[0], c_val[0], name, stat, pp_val[1]])
 
   results_sorted = sorted(results, key=lambda a: abs(a[0]), reverse=True)
+  table_rows = []
   for result in results_sorted:
-    print(result)
+    projections = result[3]
+    rows = []
+    for site, val_time in projections.items():
+      row = [site, float(val_time[0]), val_time[1]]
+      rows.append(row)
+    rows_sorted = sorted(rows, key=lambda a: a[1])
+    print("{}, {}, {}".format(result[0], result[1], result[2]))
+    table_rows.append([result[0], result[1], result[2], rows_sorted])
+
+  print(tabulate(table_rows, headers=["diff", "name", "stat", "sites"]))
       
 
 def findDiffs(name_to_site_to_stat):

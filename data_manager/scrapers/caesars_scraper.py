@@ -18,7 +18,7 @@ class CaesarsScraper:
     self.name = 'Caesars'
     self.isGameday = isGameday
 
-    assert sport in known_sports
+    # assert sport in known_sports
     self.game_guids = None
     if sport == 'NBA' or sport == 'WNBA':
       self.sport_name = "basketball"

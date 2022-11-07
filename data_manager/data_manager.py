@@ -49,7 +49,6 @@ class DataManager:
     #     print("{}, {}, {}".format(sport, scraper_name, name))
     #     print("OLD: {}".format(old_projection))
     #     print("NEW: {}".format(new_projection))
-
     if len(differences) > 0:
       self.db.insert(to_write)
       for difference in differences:
@@ -65,11 +64,9 @@ class DataManager:
           v1 = float(v1)
           v2 = float(v2)
           change = utils.percentChange(v1, v2)
-          if abs(change) > 0.1:
+          if abs(change) > 0.1 and v2 != 0:
             print(to_log + "  % Diff: {}".format(round(change, 2)))
         
-
-
     else:
       row = self.query_row(sport, scraper_name, name)
       row_id = row['_id']

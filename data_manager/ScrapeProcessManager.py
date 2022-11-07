@@ -26,17 +26,24 @@ def run(sport, count=None):
   tfs = TFScraper(sport)
   fantasyDataScraper = FantasyDataScraper(sport)
 
+  dfs_crunch_slate = {
+    'CBB': 'dk77039',
+  }
+
+  dfsCrunch = DFSCrunchScraper(sport, dfs_crunch_slate[sport])
+
   scrapers_by_sport = {
     "NBA": [
-        # tfs,
-        # uds,
-        fantasyDataScraper,
-        pps,
-        nfs,
-        cs,
-        # RotoWireScraper('NBA', '8799'),
-      ], #DFSCrunchScraper('NBA')
-    "WNBA": [DFSCrunchScraper('WNBA'), pps],
+      dfsCrunch,
+      # tfs,
+      uds,
+      pps,
+      # nfs,
+      cs,
+      # fantasyDataScraper,
+      # RotoWireScraper('NBA', '8799'),
+    ],
+    "WNBA": [dfsCrunch, pps],
     "MLB": [tfs, uds, pps, cs, ], # , DFSCrunchScraper('MLB')
     "NFL": [
       nfs,
@@ -47,6 +54,7 @@ def run(sport, count=None):
     ],
     "MMA": [CaesarsScraper("MMA", False), pps],
     "CFB": [pps, uds, cs],
+    "CBB": [dfsCrunch, pps],
     "NASCAR": [RotoWireScraper('NASCAR', '192'), pps],
     "PGA": [cs],
     "NHL": [pps, CaesarsScraper("NHL", False)]
@@ -64,7 +72,6 @@ def run(sport, count=None):
     result = scraper.run()
 
     result = utils.normalize_stat_name(result)
-
     for name, stats in result.items():
       dataManager.write_projection(scraper.sport, scraper.name, name, stats)
 
