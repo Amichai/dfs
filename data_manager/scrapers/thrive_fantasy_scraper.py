@@ -14,7 +14,7 @@ class TFScraper:
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
             'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
-            'token': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbWwiLCJhdWRpZW5jZSI6IklPUyIsInBhc3MiOiIkMmEkMTAkTUdyR2FQbzhvZW91aEwuSnRjeWtBdWMzVVk1d1RNeFNtVm1XbmJyUDdpR1YzejhRb3V5MTIiLCJjcmVhdGVkIjoxNjY3NDIzNDQzMDg3LCJleHAiOjE2NjgwMjgyNDN9.3LLa1ZaWbSkynSHb0sEWK5z2BGHvjYybQXnC4uO0Q8L2gKDbrII9sqaoJTROI23NqXw7-V7nr7H5L3FUOCJkSA',
+            'token': 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbWwiLCJhdWRpZW5jZSI6IklPUyIsInBhc3MiOiIkMmEkMTAkTUdyR2FQbzhvZW91aEwuSnRjeWtBdWMzVVk1d1RNeFNtVm1XbmJyUDdpR1YzejhRb3V5MTIiLCJjcmVhdGVkIjoxNjY4MTEyNDg1MTc4LCJleHAiOjE2Njg3MTcyODV9.l_RRJUlO8aGRd9S5jlzVUdbSId7aVHPvG96dHqadxs3kIwnUgPqG4qsL2QD0qR_7B6cRiZ5_DQOl8RTwHkqDsA',
             'sec-ch-ua-platform': '"macOS"',
             'content-type': 'application/json',
             'accept': '*/*',

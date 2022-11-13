@@ -1,0 +1,34 @@
+FanDuel-NBA-2022 ET-11 ET-12 ET-83181-players-list.csv
+NA
+NA
+BKN
+@LAC
+4:00pm ET
+
+UTA
+@WAS
+6:00pm ET
+
+BOS
+@DET
+7:00pm ET
+
+TOR
+@IND
+7:00pm ET
+
+ATL
+@PHI
+7:30pm ET
+
+CHA
+@MIA
+8:00pm ET
+
+POR
+@DAL
+8:30pm ET
+
+HOU
+@NO
+8:30pm ET

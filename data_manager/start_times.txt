@@ -1,13 +1,26 @@
-NBA MAIN 10/31/22
-slate2
-WAS
-@MEM
-6:00pm ET
+FanDuel-NBA-2022 ET-11 ET-12 ET-83182-players-list.csv
+FanDuel-NBA-2022-11-12-83182-entries-upload-template.csv
+DKSalaries (2).csv
+BOS
+@DET
+7:00pm ET
 
-CHI
-@TOR
-6:00pm ET
+TOR
+@IND
+7:00pm ET
 
-UTA
-@LAC
-10:00pm ET
+ATL
+@PHI
+7:30pm ET
+
+CHA
+@MIA
+8:00pm ET
+
+POR
+@DAL
+8:30pm ET
+
+HOU
+@NO
+8:30pm ET

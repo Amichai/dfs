@@ -2,45 +2,6 @@ from data_manager import DataManager
 from tabulate import tabulate
 import utils
 
-def get_dk_slate_players(dk_slate_path):
-  all_players = {}
-  #'SG/SF,Rodney Hood (20071564),Rodney Hood,20071564,SG/SF/F/G/UTIL,3000,MIL@PHI 11/09/2021 07:30PM ET,MIL,8.88\n'
-  all_lines = open(dk_slate_path,  encoding="ISO-8859-1").readlines()
-  for line in all_lines[1:]:
-      parts = line.split(",")
-      positions = parts[0]
-      name = utils.normalize_name(parts[2])
-      salary = parts[5]
-      game_info = parts[6]
-      team = parts[7]
-      team = utils.normalize_team_name(team)
-
-      player_id = parts[3]
-      all_players[name] = [name, positions, float(salary), team, player_id]
-
-  return all_players
-
-def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
-  all_players = {}
-  salaries = open(fd_slate_file_path)
-  lines = salaries.readlines()
-
-  for line in lines[1:]:
-      parts = line.split(',')
-      full_name = utils.normalize_name(parts[3])
-
-      positions = parts[1]
-      salary = parts[7]
-      team = parts[9]
-      team = utils.normalize_team_name(team)
-      status = parts[11]
-      if status == "O" and exclude_injured_players:
-          continue
-      name = full_name
-      all_players[name] = [name, positions, float(salary), team, status]
-      
-  return all_players
-
 def parse_fantasy_score_from_projections(site, projections):
   if site == "NumberFire":
     if "Fantasy Score" not in projections:
@@ -120,9 +81,10 @@ class NBA_Projections_dk:
   def __init__(self, slate_path, sport):
     self.dm = DataManager(sport)
     self.sport = sport
-    self.scrapers = ['PP', 'Caesars', 'NumberFire', "FantasyData"]
+    self.scrapers = ['PP', 'Caesars', 'NumberFire', "FantasyData", "DFSCrunch"]
     
-    self.dk_players = get_dk_slate_players(slate_path)
+    self.dk_players = utils.get_dk_slate_players(slate_path)
+    self.name_to_player_id = {}
 
   def get_player_rows(self):
     all_rows = []
@@ -131,6 +93,7 @@ class NBA_Projections_dk:
       position = info[1]
       cost = float(info[2])
       team = info[3]
+      self.name_to_player_id[player] = info[4]
 
       player_row = [player, team, position, cost]
 
@@ -150,6 +113,7 @@ class NBA_Projections_dk:
       all_rows.append(player_row)
 
     return all_rows
+  
 
   def players_by_position(self, exclude_zero_value=False):
     by_position = {'UTIL': []}
@@ -163,7 +127,8 @@ class NBA_Projections_dk:
       caesars_proj = row[5]
       numberfire_proj = row[6]
       fantasy_data_proj = row[7]
-      caesars_is_active = row[8]
+      dfs_crunch_proj = row[8]
+      caesars_is_active = row[-1]
 
       value = 0
       if int(caesars_is_active) >= 3:
@@ -172,7 +137,7 @@ class NBA_Projections_dk:
         value = pp_proj
       else:
         # TODO VALIDATE THIS CHANGE!
-        value = fantasy_data_proj
+        value = dfs_crunch_proj
 
       if value == '':
         continue
@@ -223,7 +188,7 @@ class NBA_WNBA_Projections:
     self.sport = sport
     self.scrapers = ['DFSCrunch', 'PP', 'Caesars', 'RotoWire', 'NumberFire', "FantasyData"]
 
-    self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
+    self.fd_players = utils.get_fd_slate_players(slate_path, exclude_injured_players=False)
 
   def validate_player_set(self):
     # return
@@ -298,11 +263,25 @@ class NBA_WNBA_Projections:
 
     return name_to_player
 
+
+  def get_name_to_team(self):
+    name_to_team = {}
+    all_rows = self.get_player_rows()
+    for row in all_rows:
+      name = row[0]
+      team = row[1]
+      name_to_team[name] = team
+
+    return name_to_team
+
+
   def players_by_position(self, exclude_zero_value=False):
     by_position = {}
     all_rows = self.get_player_rows()
     for row in all_rows:
       name = row[0]
+      # todo
+
       team = row[1]
       pos = row[2]
       cost = row[3]
@@ -330,7 +309,7 @@ class NBA_WNBA_Projections:
 
       if exclude_zero_value and value == 0:
         continue
-      
+
       positions = pos.split('/')
       for position in positions:
         if not position in by_position:

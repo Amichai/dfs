@@ -6,7 +6,7 @@ from name_mapper import name_mapper
 import requests
 from bs4 import BeautifulSoup
 from tabulate import tabulate
-
+import csv
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -248,12 +248,14 @@ def single_game_optimizer_many(by_position, ct, locks=None):
         
     return to_return
 
+DOWNLOAD_FOLDER = "/Users/amichailevy/Downloads/"
 
 def load_start_times_and_slate_path(path):
     start_times = open(path, "r")
     lines = start_times.readlines()
-    fd_slate_path = lines[0].strip()
-    dk_slate_path = lines[1].strip()
+    player_list = lines[0].strip()
+    fd_slate_path = lines[1].strip()
+    dk_slate_path = lines[2].strip()
     first_team = None
     second_team = None
     time_conversion = {
@@ -267,10 +269,16 @@ def load_start_times_and_slate_path(path):
         '5:00pm ET': 5, '5:30pm ET': 5.5,
         '6:00pm ET': 6, '6:30pm ET': 6.5, 
         '7:00pm ET': 7, '7:30pm ET': 7.5, 
+        '7:15pm ET': 7.15, '7:45pm ET': 7.85,
         '8:00pm ET': 8, '8:30pm ET': 8.5, 
+        '8:15pm ET': 8.15, '8:45pm ET': 8.85,
         '9:00pm ET': 9, '9:30pm ET': 9.5, 
+        '9:15pm ET': 9.15, '9:45pm ET': 9.85,
         '10:00pm ET': 10, '10:30pm ET': 10.5, 
-        '11:00pm ET': 11, '11:30pm ET': 11.5}
+        '10:15pm ET': 10.15, '10:45pm ET': 10.85,
+        '11:00pm ET': 11, '11:30pm ET': 11.5,
+        '11:15pm ET': 11.15
+    }
 
     time_to_teams = {}
     for line in lines[2:]:
@@ -293,7 +301,7 @@ def load_start_times_and_slate_path(path):
 
         first_team = line
 
-    return (time_to_teams, fd_slate_path, dk_slate_path)
+    return (time_to_teams, player_list, fd_slate_path, dk_slate_path)
 
 #UNMODIFIED STATS: [ 'Pass+Rush+Rec TDs', 'Rec TDs', 'Rush TDs', 'Tackles+Ast']
 
@@ -375,6 +383,7 @@ stat_name_normalization = {
     'Blocked Shots': 'Blocks',
 
     "3-PT Made": "3-Pointers Made",
+    'FT Made': 'Free Throws Made',
 
 
     #UNMODIFIED STATS: ['Turnovers', '3-PT Made', 'Pts+Rebs', 'Rebs+Asts', 'Pts+Asts', 'Blks+Stls', 'Pts+Rebs+Asts', 'Fantasy Score', 'Blocked Shots']
@@ -433,8 +442,6 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
     player_to_ct = {}
     for roster in rosters_sorted:
         for player in roster.players:
-            if "Vanderbilt" in player.name:
-                __import__('pdb').set_trace()
             if not player.name in player_to_ct:
                 player_to_ct[player.name] = 1
                 name_to_player[player.name] = player
@@ -536,7 +543,114 @@ def parse_projection_from_caesars_lines(lines):
 
     return [round(projected, 2), activity]
 
-def save_player_projections(by_position):
-    for pos, players in by_position:
-        pass
-    pass
+def get_dk_slate_players(dk_slate_path):
+    all_players = {}
+    #'SG/SF,Rodney Hood (20071564),Rodney Hood,20071564,SG/SF/F/G/UTIL,3000,MIL@PHI 11/09/2021 07:30PM ET,MIL,8.88\n'
+    all_lines = open(dk_slate_path,  encoding="ISO-8859-1").readlines()
+    for line in all_lines[1:]:
+        parts = line.split(",")
+        positions = parts[0]
+        name = normalize_name(parts[2])
+        salary = parts[5]
+        game_info = parts[6]
+        team = parts[7]
+        team = normalize_team_name(team)
+
+        player_id = parts[3]
+        all_players[name] = [name, positions, float(salary), team, player_id]
+
+    return all_players
+
+def get_dk_slate_game_info(dk_slate_path):
+    game_infos = []
+    seen_games = []
+    all_lines = open(dk_slate_path,  encoding="ISO-8859-1").readlines()
+    for line in all_lines[1:]:
+        parts = line.split(",")
+        game_info = parts[6]
+        start_time = game_info.split(' ')[2]
+        if not game_info in seen_games:
+            game_infos.append((game_info, start_time))
+            seen_games.append(game_info)
+
+    game_infos_sorted = sorted(game_infos, key=lambda a: a[1])
+    to_return = [a[0] for a in game_infos_sorted]
+
+    return to_return
+
+def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
+    all_players = {}
+    salaries = open(fd_slate_file_path)
+    lines = salaries.readlines()
+
+    for line in lines[1:]:
+        parts = line.split(',')
+        full_name = normalize_name(parts[3])
+
+        positions = parts[1]
+        salary = parts[7]
+        team = parts[9]
+        team = normalize_team_name(team)
+        status = parts[11]
+        if status == "O" and exclude_injured_players:
+            continue
+        name = full_name
+        all_players[name] = [name, positions, float(salary), team, status]
+        
+    return all_players
+
+
+
+def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_suffix = ''):
+
+    file = open(entries_path)
+    file_reader = csv.reader(file, delimiter=',', quotechar='"')
+    prefix_cells = []
+    first_line = True
+    for cells in file_reader:
+        if first_line:
+            first_line = False
+            continue
+
+        row_prefix = [cells[0], cells[1], cells[2], cells[3]]
+        prefix_cells.append(row_prefix)
+        
+
+
+    timestamp = str(datetime.datetime.now())
+    date = timestamp.replace('.', '_')
+    date = date.replace(":", "_")
+
+    output_file = open("/Users/amichailevy/Downloads/DK_upload_template_{}_{}.csv".format(date, file_suffix), "x")
+
+    first_line = "Entry ID,Contest Name,Contest ID,Entry Fee,PG,SG,SF,PF,C,G,F,UTIL\n"
+    output_file.write(first_line)
+    
+    idx = 0
+    for roster in rosters:
+        cells = prefix_cells[idx]
+        if isinstance(roster, list):
+            idx += 1
+            continue
+        for player in roster.players:
+            player_id = name_to_player_id[player.name]
+            cells.append(player_id)
+        idx += 1
+
+        output_file.write(",".join(cells) + "\n")
+
+    output_file.close()
+
+def get_player_name_to_start_time(start_times, projections):
+    name_to_team = projections.get_name_to_team()
+    team_to_time = {}
+
+    for st_time, teams in start_times.items():
+        for team in teams:
+            team_to_time[team] = st_time
+
+    player_to_start_time = {}
+    for name, team in name_to_team.items():
+        player_to_start_time[name] = team_to_time[team]
+
+    return player_to_start_time

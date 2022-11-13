@@ -37,7 +37,7 @@ def arbitrage(name_to_site_to_stat):
   for name, site_to_stat in name_to_site_to_stat.items():
     name_to_stat_to_site[name] = {}
     for site, stats in site_to_stat.items():
-      if site == "NumberFire" or site == "FantasyData":
+      if site == "NumberFire" or site == "FantasyData" or site == "DFSCrunch":
           continue
 
       for stat, val in stats.items():

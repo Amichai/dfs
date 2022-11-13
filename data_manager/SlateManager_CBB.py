@@ -1,5 +1,5 @@
 import math
-from projection_providers.NBA_WNBA_Projections import NBA_WNBA_Projections, NBA_Projections_dk
+from projection_providers.CBB_Projections import CBB_Projections
 import random
 import datetime
 import utils
@@ -214,85 +214,21 @@ def is_roster_valid(roster):
     
   return True
 
+def optimize_slate_dk(slate_path, iter):
+  projections = NBA_Projections_dk(download_folder + slate_path, "CBB")
+  projections.print_slate()
 
-def consider_swap(idx1, idx2, player1, player2, team_to_start_time):
-  if team_to_start_time[player1.team] > team_to_start_time[player2.team]:
-    pass
+  by_position = projections.players_by_position()
+  optimizer = DK_NBA_Optimizer()
+
+  # TODO
+  # cj = [p for p in by_position['G'] if p.name == "Cory Joseph"][0]
+
+
+  roster = optimizer.optimize(by_position, None, iter)
+  print(roster)
+  __import__('pdb').set_trace()
   pass
-
-def optimize_dk_roster_for_late_swap(roster, start_times):
-  team_to_start_time = {}
-  for time, teams in start_times.items():
-    for team in teams:
-      team_to_start_time[team] = time
-
-  players = roster.players
-  # print("players before: {}".format(players))
-  pg = players[0]
-  sg = players[1]
-  sf = players[2]
-  pf = players[3]
-  c = players[4]
-  g = players[5]
-  f = players[6]
-  util = players[7]
-
-  # __import__('pdb').set_trace()
-  if team_to_start_time[pg.team] > team_to_start_time[g.team]:
-    players[0] = g
-    players[5] = pg
-    pg = players[0]
-    g = players[5]
-  if team_to_start_time[sg.team] > team_to_start_time[g.team]:
-    players[1] = g
-    players[5] = sg
-    sg = players[1]
-    g = players[5]
-  if team_to_start_time[sf.team] > team_to_start_time[f.team]:
-    players[2] = f
-    players[6] = sf
-    sf = players[2]
-    f = players[6]
-  if team_to_start_time[pf.team] > team_to_start_time[f.team]:
-    players[3] = f
-    players[6] = pf
-    pf = players[3]
-    f = players[6]
-
-
-  util_pos = util.position
-  if util_pos == "PG":
-    # try to swap with pg and g
-    pass
-  elif util_pos == "SG":
-    # try to swap with sg and g
-    pass
-  elif util_pos == "SF":
-    # try to swap with pf and f
-    pass
-  elif util_pos == "PF":
-    # try to swap with pf and f
-    pass
-  elif util_pos == "C":
-    # try to swap with c
-    pass
-  # latest_start_time = 0
-  # latest_start_time_player = None
-  # player_idx = 0
-  # for i in range(4):
-  #   player = players[i]
-  #   start_time = team_to_start_time[player.team]
-  #   if latest_start_time_player == None or start_time > latest_start_time:
-  #     latest_start_time = start_time
-  #     latest_start_time_player = player
-  #     player_idx = i
-
-
-  # __import__('pdb').set_trace()
-  # players[7] = latest_start_time_player
-  # players[player_idx] = util
-
-  # print("players after: {}".format(players))
 
 
 def generate_hedge_lineups(player_to_ct, by_position, optimizer, lineup_ct=20, iter=90000):
@@ -326,7 +262,7 @@ def generate_hedge_lineups(player_to_ct, by_position, optimizer, lineup_ct=20, i
   
 
 def optimize_slate_with_rosters(template_path, top_mme_rosters):
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(utils.DOWNLOAD_FOLDER + template_path, [], '', 0)
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 0)
 
 
   entry_name_to_ct = {}
@@ -342,6 +278,7 @@ def optimize_slate_with_rosters(template_path, top_mme_rosters):
   index_strings = []
   # distribute best roster to the single entry, and the rest to the MME
   entry_name_to_take_idx = {}
+  invalid_roster_ct = 1
 
   for entry in entries:
     entry_name = entry[2]
@@ -369,134 +306,9 @@ def optimize_slate_with_rosters(template_path, top_mme_rosters):
   utils.print_player_exposures(top_mme_rosters)
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
 
-def generate_top_n_rosters_sorted(by_position, roster_count, iter):
-  optimizer = FD_NBA_Optimizer()
-  rosters = optimizer.optimize_top_n(by_position, roster_count, iter=iter)
-
-  rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
-
-  return rosters_sorted
-
-
-def filter_top_mme_rosters(rosters_sorted, value_tolerance, to_take):
-  assert rosters_sorted[0].value >= rosters_sorted[1].value 
-  assert rosters_sorted[10].value >= rosters_sorted[11].value 
-  assert rosters_sorted[20].value >= rosters_sorted[21].value 
-
-  value_couttoff = rosters_sorted[0].value - value_tolerance
-  filtered_rosters = [r for r in rosters_sorted if r.value > value_couttoff]
-  player_exposures = utils.get_player_exposures(filtered_rosters)
-  player_to_new_value = {}
-
-  for player, ct in player_exposures.items():
-    player_to_new_value[player] = 1 / ct
-
-  print("input rosters: {} filtered: {}".format(len(rosters_sorted), len(filtered_rosters)))
-  if len(filtered_rosters) < to_take:
-    print("Not enough rosters to take: {}".format(to_take))
-    __import__('pdb').set_trace()
-    filtered_rosters = rosters_sorted[:to_take]
-    player_exposures = utils.get_player_exposures(filtered_rosters)
-
-  roster_and_new_value = []
-  idx = 0
-  for roster in filtered_rosters:
-
-    new_roster_value = sum([player_to_new_value[pl.name] for pl in roster.players])
-    roster_and_new_value.append((roster, new_roster_value, idx))
-    idx += 1
-      
-  roster_and_new_value_sorted = sorted(roster_and_new_value, key=lambda a: a[1], reverse=True)
-  # for roster_val in roster_and_new_value_sorted:
-  #   print("{} - {}, {}".format(round(roster_val[1], 2), roster_val[2], roster_val[0].value))
-
-  
-  all_the_new_rosters = [r[0] for r in roster_and_new_value_sorted]
-  to_return = all_the_new_rosters[:to_take]
-
-  # utils.print_player_exposures(rosters_sorted[:to_take])
-  # print("------------")
-  # utils.print_player_exposures(to_return)
-
-
-  return to_return
-
-def optimize_slate_v2(slate_path, template_path, iter, value_tolerance=5.6, validate_player_set=True):
-  projections = NBA_WNBA_Projections(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
-  projections.print_slate()
-  if validate_player_set:
-    projections.validate_player_set()
-
-  by_position = projections.players_by_position()
-
-  # utils.save_player_projections(by_position)
-
-  all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=iter)
-  # all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=120000)
-
-
-  all_rosters_sorted = [a for a in all_rosters_sorted if is_roster_valid(a)]
-
-  SE_ROSTER_TAKE = 20
-  se_rosters = all_rosters_sorted[:SE_ROSTER_TAKE]
-  
-  mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=value_tolerance, to_take=150)
-  # mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=9, to_take=150)
-  print("MME ROSTER COUNT: {}".format(len(mme_rosters)))
-  assert len(mme_rosters) == 150
-
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(utils.DOWNLOAD_FOLDER + template_path, [], '', 0)
-
-
-  entry_name_to_ct = {}
-  for entry in entries:
-    entry_name = entry[2]
-    if not entry_name in entry_name_to_ct:
-      entry_name_to_ct[entry_name] = 1
-    else:
-      entry_name_to_ct[entry_name] += 1
-
-  entry_name_to_take_idx = {}
-  index_strings = []
-  to_print = []
-
-  for entry in entries:
-    entry_name = entry[2]
-    entry_ct = entry_name_to_ct[entry_name]
-
-    if not entry_name in entry_name_to_take_idx:
-      if entry_ct > 1:
-        entry_name_to_take_idx[entry_name] = 1
-      else:
-        entry_name_to_take_idx[entry_name] = 0
-
-    take_idx = entry_name_to_take_idx[entry_name]
-
-    if entry_ct <= SE_ROSTER_TAKE:
-      idx = take_idx % len(se_rosters)
-      roster_to_append = se_rosters[idx]
-      if not is_roster_valid(roster_to_append):
-        roster_to_append = se_rosters[idx + 1]
-        assert is_roster_valid(roster_to_append)
-
-      to_print.append(roster_to_append)
-      index_strings.append(str(idx) + "_SE_{}".format(roster_to_append.value))
-    else:
-      idx = take_idx % len(mme_rosters)
-      roster_to_append = mme_rosters[idx]
-      # assert is_roster_valid(roster_to_append)
-      
-      to_print.append(roster_to_append)
-      index_strings.append(str(idx) + "_MME_{}".format(roster_to_append.value))
-    
-    entry_name_to_take_idx[entry_name] += 1
-
-  utils.print_player_exposures(to_print)
-
-  construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
 
 def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filter=None, hedge_entry_name=None, hedge_entry_ct=0):
-  projections = NBA_WNBA_Projections(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
+  projections = CBB_Projections(download_folder + slate_path, "CBB")
   projections.print_slate()
   projections.validate_player_set()
 
@@ -505,7 +317,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
 
   # # assert False
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(utils.DOWNLOAD_FOLDER + template_path, [], '', 0)
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 0)
 
 
   entry_name_to_ct = {}
@@ -520,8 +332,6 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   rosters = []
 
   optimizer = FD_NBA_Optimizer()
-  optimizer.optimize(by_position, None, iter)
-  assert False
 
   rosters = optimizer.optimize_top_n(by_position, 5000, iter=iter)
 
@@ -530,7 +340,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   if roster_filter != None:
     rosters_sorted = [r for r in rosters_sorted if roster_filter(r)]
 
-  SE_ROSTER_TAKE = 20
+  SE_ROSTER_TAKE = 10
 
   for roster in rosters_sorted[:SE_ROSTER_TAKE]:
     print(roster)
@@ -586,7 +396,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
       index_strings.append(str(idx) + "_HEDGE_{}".format(roster_to_append.value))
 
       entry_name_to_take_idx[entry_name] += 1
-    elif entry_ct <= SE_ROSTER_TAKE:
+    elif entry_ct < SE_ROSTER_TAKE:
       idx = take_idx % len(rosters_sorted)
       roster_to_append = rosters_sorted[idx]
       if not is_roster_valid(roster_to_append):
@@ -611,14 +421,15 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
 
 def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(utils.DOWNLOAD_FOLDER + current_rosters_path, [], '', 0)
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + current_rosters_path, [], '', 0)
 
+  start_times = utils.load_start_times_and_slate_path(start_times)[0]
   locked_teams = []
   for time, teams in start_times.items():
     if time < current_time:
       locked_teams += teams
   
-  projections = NBA_WNBA_Projections(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
+  projections = CBB_Projections(download_folder + slate_path, "CBB")
   projections.print_slate()
 
   by_position = projections.players_by_position(exclude_zero_value=False)
@@ -626,7 +437,7 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
   optimizer = FD_NBA_Optimizer()
 
   by_position = filter_out_locked_teams(by_position, locked_teams)
-  existing_rosters = parse_existing_rosters(utils.DOWNLOAD_FOLDER + current_rosters_path)
+  existing_rosters = parse_existing_rosters(download_folder + current_rosters_path)
   seen_roster_strings = []
   seen_roster_string_to_optimized_roster = {}
 
@@ -672,7 +483,7 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
 
 
     if lock_ct != 9:
-      result = optimizer.optimize(by_position, players5, int(2150), is_roster_valid)
+      result = optimizer.optimize(by_position, players5, int(5000))
       # result = optimizer.optimize(by_position, players5, int(600))
 
     else:
@@ -687,13 +498,8 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
       if is_se_roster:
         print("IS SE ROSTER!")
 
-      has_dead_player = any([a.value < 12.0 and a.team not in locked_teams for a in result.players])
-
-      if roster1_key in seen_roster_strings \
-          and not allow_duplicate_rosters \
-          and not is_se_roster \
-          and not has_dead_player:
-        # don't change the result!
+      if roster1_key in seen_roster_strings and not allow_duplicate_rosters and not is_se_roster:
+          # don't change the result
         print("initial roster unchanged! {}")
         all_results.append(utils.Roster(players4))
       else:
@@ -713,25 +519,24 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
     except:
       __import__('pdb').set_trace()
 
-  total_roster_val = sum([a.value for a in all_results])
   utils.print_player_exposures(all_results, locked_teams)
   variation = utils.print_roster_variation(all_results)
   print(variation)
   
   # variation = utils.print_roster_variation(existing_rosters)
   # print(variation)
-  print("TOTAL ROSTER VAL: {}".format(total_roster_val))
   
 
   construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
 
 def single_game_optimizer():
+  download_folder = "/Users/amichailevy/Downloads/"
   slate_path = "FanDuel-NBA-2022 ET-10 ET-29 ET-82506-players-list.csv"
   template_path = "FanDuel-NBA-2022-10-29-82506-entries-upload-template.csv"
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(utils.DOWNLOAD_FOLDER + template_path, [], '', 4)
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 4)
 
-  projections = NBA_WNBA_Projections(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
+  projections = CBB_Projections(download_folder + slate_path, "CBB")
 
   projections.print_slate()
 
@@ -743,106 +548,42 @@ def single_game_optimizer():
 
   construct_upload_template_file(all_results_rosters * 1000, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
-def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times):
-  file = open(entries_path)
-  file_reader = csv.reader(file, delimiter=',', quotechar='"')
-  entries = []
-  first_line = True
-  for cells in file_reader:
-    if first_line:
-      first_line = False
-      continue
-
-    if cells[0] == '':
-      break
-    first_ten_cells = cells[:12]
-    entries.append(first_ten_cells)
-
-  projections = NBA_Projections_dk(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
-  projections.print_slate()
-  locked_teams = []
-  for time, teams in start_times.items():
-    if time < current_time:
-      locked_teams += teams
-
-  by_position_unfiltered = projections.players_by_position()
-  by_position = filter_out_locked_teams(by_position_unfiltered, locked_teams)
-
-  name_to_player = {}
-  for player in by_position_unfiltered['UTIL']:
-    name_to_player[player.name] = player
-
-
-  to_print = []
-  optimizer = DK_NBA_Optimizer()
-  for entry in entries:
-    players = entry[4:12]
-    locked_players = []
-    for player in players:
-      if "(LOCKED)" in player:
-        name_stripped = utils.normalize_name(player.split('(')[0].strip())
-
-        locked_players.append(name_to_player[name_stripped])
-      else:
-        locked_players.append('')
-    optimized = optimizer.optimize(by_position, locked_players, 5000)
-    to_print.append(optimized)
-  utils.construct_dk_output_template(to_print, projections.name_to_player_id, entries_path)
-
-def optimize_slate_dk(slate_path, iter, entries_path):
-  # 
-  projections = NBA_Projections_dk(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
-  projections.print_slate()
-
-  by_position = projections.players_by_position()
-
-  optimizer = DK_NBA_Optimizer()
-
-  rosters = optimizer.optimize_top_n(by_position, 21, iter)
-  for roster in rosters:
-    optimize_dk_roster_for_late_swap(roster, start_times)
-    print(roster)
-  
-  utils.construct_dk_output_template(rosters, projections.name_to_player_id, entries_path, "ls_unoptimized")
-
-  for roster in rosters:
-    # optimize_dk_roster_for_late_swap(roster, start_times)
-    print(roster)
-  
-  utils.construct_dk_output_template(rosters, projections.name_to_player_id, entries_path, "ls_optimized")
-
-
-
-##########################################################################################################
-##########################################################################################################
-##########################################################################################################
-
-
 
 if __name__ == "__main__":
-  (start_times, slate_path, template_path, dk_slate_path) = utils.load_start_times_and_slate_path('start_times.txt')
-  
-  ##FIRST PASS
-  # all_rosters = optimize_slate_v2(slate_path, template_path, iter=90000, value_tolerance=8.0, validate_player_set=False)
+  download_folder = "/Users/amichailevy/Downloads/"
+  # template_path = "FanDuel-NBA-2022-11-01-82625-entries-upload-template.csv"
 
+  # slate_path = "FanDuel-NBA-2022 ET-11 ET-01 ET-82625-players-list.csv"
+  # all_rosters = optimize_slate(slate_path, template_path, 0, iter=120000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
 
-  # entries_path = utils.DOWNLOAD_FOLDER + "DKEntries (5).csv"
-
-  # all_rosters = optimize_slate_dk(dk_slate_path, 100000, entries_path)
 
   # assert False
+  # single_game_optimizer()
 
-  # SECOND PASS
-  current_time = 8.1
-  # reoptimize_slate(slate_path, "FanDuel-NBA-2022-11-12-83182-entries-upload-template (3).csv", current_time, start_times, allow_duplicate_rosters=False)
+  
+  # all_rosters = optimize_slate(slate_path, template_path, 155, iter=90000, roster_filter=None, hedge_entry_name="", hedge_entry_ct = 0)
+  # all_rosters = optimize_slate(slate_path, template_path, 0, 1000)
 
-  reoptimize_slate_dk(dk_slate_path, utils.DOWNLOAD_FOLDER + "DKEntries (9).csv", current_time, start_times)
+
+
+  # dk_slate_path = "DKSalaries (1).csv"
+  
+  # all_rosters = optimize_slate_dk(dk_slate_path, 200000)
+
+  # optimize_slate(slate_path, template_path2, 0, 100000)
+
+  # slate_path = "FanDuel-NBA-2022 ET-11 ET-04 ET-82790-players-list.csv"
+  # template_path = "FanDuel-NBA-2022-11-04-82790-entries-upload-template.csv"
+
+  # # TODO CONSIDER SORTING ENTRIES BY ENTRY FEE BEFORE REOPTIMIZING
+
+
+  slate_path = "FanDuel-NBA-2022 ET-11 ET-06 ET-82909-players-list.csv"
+  template_path = "FanDuel-NBA-2022-11-06-82909-entries-upload-template (1).csv"
+  # all_rosters = optimize_slate(slate_path, template_path, 0, iter=150000)
+  reoptimize_slate(slate_path, "FanDuel-NBA-2022-11-06-82909-entries-upload-template (2).csv", 9.6, "start_times.txt", False)
+
 
   assert False
 
-  
-
-#  port over lineup generator v2 - 
-# make it easy to handle multiple slates simultaenously ('start_times.txt')
-# properly sort players for dk lineups
-# we need much better logging around our scraper - who is in, out etc
+# validate player name matching!

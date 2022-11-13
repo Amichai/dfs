@@ -1,3 +1,5 @@
+# DEPRECIATED
+
 import math
 from projection_providers.NBA_WNBA_Projections import NBA_WNBA_Projections, NBA_Projections_dk
 import random
@@ -594,15 +596,14 @@ def generate_top_n_rosters_sorted(by_position, roster_count, iter):
 
 if __name__ == "__main__":
   download_folder = "/Users/amichailevy/Downloads/"
+  (start_times, slate_path, template_path, _) = utils.load_start_times_and_slate_path('start_times.txt')
 
-  slate_path = "FanDuel-NBA-2022 ET-11 ET-06 ET-82909-players-list.csv"
-  template_path = "FanDuel-NBA-2022-11-06-82909-entries-upload-template (1).csv"
   template_paths = [
     # path name
     (template_path, "mine")
   ]
 
-  projections = NBA_WNBA_Projections(download_folder + slate_path, "NBA")
+  projections = NBA_WNBA_Projections(utils.DOWNLOAD_FOLDER + slate_path, "NBA")
   projections.print_slate()
   projections.validate_player_set()
 
@@ -611,20 +612,18 @@ if __name__ == "__main__":
   # utils.save_player_projections(by_position)
 
   all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=90000)
-  # all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=150000)
+  # all_rosters_sorted = generate_top_n_rosters_sorted(by_position, roster_count=5000, iter=120000)
+
+
+  all_rosters_sorted = [a for a in all_rosters_sorted if is_roster_valid(a)]
 
   SE_ROSTER_TAKE = 20
   se_rosters = all_rosters_sorted[:SE_ROSTER_TAKE]
-  print("SE ROSTERS")
-  utils.print_player_exposures(se_rosters)
   
   mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=5.6, to_take=150)
   # mme_rosters = filter_top_mme_rosters(all_rosters_sorted, value_tolerance=9, to_take=150)
   print("MME ROSTER COUNT: {}".format(len(mme_rosters)))
   assert len(mme_rosters) == 150
-  print("MME ROSTERS")
-  utils.print_player_exposures(mme_rosters)
-
 
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(download_folder + template_path, [], '', 0)
 
@@ -671,6 +670,8 @@ if __name__ == "__main__":
       index_strings.append(str(idx) + "_MME_{}".format(roster_to_append.value))
     
     entry_name_to_take_idx[entry_name] += 1
+
+  utils.print_player_exposures(to_print)
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
 

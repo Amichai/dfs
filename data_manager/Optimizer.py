@@ -294,9 +294,9 @@ class DK_NBA_Optimizer:
     result = self.optimizer.optimize_top_n(by_position, n, iter)
     return result
 
-class FD_NBA_Optimizer:
+class DK_CBB_Optimizer:
   def __init__(self):
-    self.optimizer = Optimizer(60000, ["PG", "PG", "SG", "SG", "SF", "SF", "PF", "PF", "C"])
+    self.optimizer = Optimizer(50000, ["G", "G", "G", "F", "F", "F", "UTIL", "UTIL"])
 
   def prune_player_pool(self, by_position):
     by_position_copied = {}
@@ -320,6 +320,65 @@ class FD_NBA_Optimizer:
   def optimize(self, by_position, locked_players, iter=int(100000)):
     by_position = self.prune_player_pool(by_position)
     return self.optimizer.optimize(by_position, iter, None, locked_players)
+  
+  def optimize_top_n(self, by_position, n, iter = int(60000)):
+    by_position = self.prune_player_pool(by_position)
+    result = self.optimizer.optimize_top_n(by_position, n, iter)
+    return result
+
+  def optimize_top_n_diverse(self, by_position, n, value_tolerance, iter):
+    initial_set = self.optimize_top_n(by_position, 5000, iter)
+    initial_set_sorted = sorted(initial_set, key=lambda a:a.value, reverse=True)
+    value_couttoff = initial_set_sorted[0].value - value_tolerance
+    filtered_rosters = [r for r in initial_set_sorted if r.value > value_couttoff]
+    print("INITIAL CT: {} FILTERED: {} CUTOOFF: {}".format(len(initial_set), len(filtered_rosters), value_couttoff))
+    player_exposures = utils.get_player_exposures(filtered_rosters)
+    player_to_new_value = {}
+
+    for player, ct in player_exposures.items():
+      player_to_new_value[player] = 1 / ct
+
+    roster_and_new_value = []
+    idx = 0
+    for roster in filtered_rosters:
+
+      new_roster_value = sum([player_to_new_value[pl.name] for pl in roster.players])
+      roster_and_new_value.append((roster, new_roster_value, idx))
+      idx += 1
+        
+    roster_and_new_value_sorted = sorted(roster_and_new_value, key=lambda a: a[1], reverse=True)
+    
+    all_the_new_rosters = [r[0] for r in roster_and_new_value_sorted]
+    to_return = all_the_new_rosters[:n]
+    print("BEST ROSTER: {}".format(initial_set_sorted[0]))
+    return (to_return, initial_set_sorted[0])
+
+class FD_NBA_Optimizer:
+  def __init__(self):
+    self.optimizer = Optimizer(60000, ["PG", "PG", "SG", "SG", "SF", "SF", "PF", "PF", "C"])
+
+  def prune_player_pool(self, by_position):
+    by_position_copied = {}
+    for position, players in by_position.items():
+      by_position_copied[position] = []
+
+      all_value_per_dollars = [pl.value_per_dollar for pl in players]
+
+      best_value = max(all_value_per_dollars)
+      cuttoff = best_value / 3
+      for player in players:
+        if player.value_per_dollar < cuttoff:
+          # print("Filtered out: {}".format(player))
+          continue
+        by_position_copied[position].append(player)
+
+      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
+    
+    return by_position_copied
+
+  def optimize(self, by_position, locked_players, iter=int(100000), lineup_validator=None):
+    by_position = self.prune_player_pool(by_position)
+    return self.optimizer.optimize(by_position, iter, lineup_validator, locked_players)
   
   def optimize_top_n(self, by_position, n, iter = int(60000)):
     by_position = self.prune_player_pool(by_position)

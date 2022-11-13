@@ -1,7 +1,7 @@
 import csv
 
 download_folder = "past_entries/"
-filepaths = ["fanduel entry history 20221105.csv", "fanduel entry history 20221103.csv", "fanduel entry history 20221102.csv", "fanduel entry history 20221101.csv", "fanduel entry history 20221101 (1).csv", "fanduel entry history 20221101 (2).csv", "fanduel entry history 20221101 (3).csv", "fanduel entry history 20221101 (4).csv"]
+filepaths = ["fanduel entry history 20221112.csv", "fanduel entry history 20221110.csv", "fanduel entry history 20221105.csv", "fanduel entry history 20221103.csv", "fanduel entry history 20221102.csv", "fanduel entry history 20221101.csv", "fanduel entry history 20221101 (1).csv", "fanduel entry history 20221101 (2).csv", "fanduel entry history 20221101 (3).csv", "fanduel entry history 20221101 (4).csv"]
 
 target_sport = "nba"
 
