@@ -90,9 +90,9 @@ class DataManager:
         for stat, val in projections.items():
           new_projections[stat] = 0
 
-        has_game_started = (player_to_start_time[name] + 12) <= current_hour
-        if not has_game_started:
-          print("GAME UNSTARTED: {} -> {}".format(name, new_projections))
+        # has_game_started = player_to_start_time != None and (player_to_start_time[name] + 12) <= current_hour
+        # if not has_game_started:
+        #   print("GAME UNSTARTED: {} -> {}".format(name, new_projections))
         self.write_projection(sport, scraper_name, name, new_projections)
 
   def query_all_projections(self, sport, scraper):

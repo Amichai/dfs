@@ -17,7 +17,6 @@ name_mapper = {
   "Patrick Mills": "Patty Mills",
   "Nah'Shon Hyland": "Bones Hyland",
   "KJ Martin": "Kenyon Martin",
-  # "Jaylin Williams": "Jalen Williams",
   "Sviatoslav Mykhailiuk": "Svi Mykhailiuk",
   "Marjon Beauchamp": "MarJon Beauchamp",
   

@@ -8,6 +8,9 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
+TODAYS_SLATE_ID_NBA = "83671"
+TODAYS_SLATE_ID_NFL = "83311"
+
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
         self.name = name
@@ -107,32 +110,32 @@ def normalize_team_name(team):
     return team
 
 
-def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
-  all_players = {}
-  salaries = open(fd_slate_file_path)
-  lines = salaries.readlines()
+# def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
+#   all_players = {}
+#   salaries = open(fd_slate_file_path)
+#   lines = salaries.readlines()
 
-  for line in lines[1:]:
-    parts = line.split(',')
-    full_name = normalize_name(parts[3])
+#   for line in lines[1:]:
+#     parts = line.split(',')
+#     full_name = normalize_name(parts[3])
 
-    positions = parts[1]
-    salary = parts[7]
-    team = parts[9]
-    opp_team = parts[10]
-    team = normalize_team_name(team)
-    status = parts[11]
-    if status == "O" and exclude_injured_players:
-        continue
+#     positions = parts[1]
+#     salary = parts[7]
+#     team = parts[9]
+#     opp_team = parts[10]
+#     team = normalize_team_name(team)
+#     status = parts[11]
+#     if status == "O" and exclude_injured_players:
+#         continue
 
-    probablePitcher = parts[14]
-    if positions == 'P' and probablePitcher != "Yes":
-        continue
+#     probablePitcher = parts[14]
+#     if positions == 'P' and probablePitcher != "Yes":
+#         continue
 
-    name = full_name
-    all_players[name] = [name, positions, float(salary), team, opp_team, status]
+#     name = full_name
+#     all_players[name] = [name, positions, float(salary), team, opp_team, status]
       
-  return all_players
+#   return all_players
 
 
 def load_crunch_dfs_projection(path, slate_path, download_folder):
@@ -487,7 +490,10 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
 def print_roster_variation(rosters):
     key_to_ct = {}
     for roster in rosters:
-        names1 = [p.name for p in roster.players]
+        if isinstance(roster, list):
+            names1 = [p.name for p in roster[0].players]
+        else:
+            names1 = [p.name for p in roster.players]
         roster_key = ",".join(sorted(names1))
         if not roster_key in key_to_ct:
             key_to_ct[roster_key] = 1
@@ -495,7 +501,9 @@ def print_roster_variation(rosters):
             key_to_ct[roster_key] += 1
     
     just_cts = key_to_ct.values()
-    return sorted(just_cts, reverse=True)
+    to_return = sorted(just_cts, reverse=True)
+    print(to_return)
+    return to_return
 
 
 def parse_projection_from_caesars_lines(lines):
@@ -556,8 +564,14 @@ def get_dk_slate_players(dk_slate_path):
         team = parts[7]
         team = normalize_team_name(team)
 
+        both_teams = game_info.split(' ')[0].split('@')
+        if team == both_teams[0]:
+            opp = both_teams[1]
+        else:
+            opp = both_teams[0]
+
         player_id = parts[3]
-        all_players[name] = [name, positions, float(salary), team, player_id]
+        all_players[name] = [name, positions, float(salary), team, player_id, opp]
 
     return all_players
 
@@ -595,13 +609,14 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
         if status == "O" and exclude_injured_players:
             continue
         name = full_name
-        all_players[name] = [name, positions, float(salary), team, status]
+        fd_player_id = parts[0]
+        all_players[name] = [name, positions, float(salary), team, status, fd_player_id]
         
     return all_players
 
 
 
-def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_suffix = ''):
+def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_suffix = '', sport= "NBA"):
 
     file = open(entries_path)
     file_reader = csv.reader(file, delimiter=',', quotechar='"')
@@ -622,13 +637,17 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
     date = date.replace(":", "_")
 
     output_file = open("/Users/amichailevy/Downloads/DK_upload_template_{}_{}.csv".format(date, file_suffix), "x")
-
+    
     first_line = "Entry ID,Contest Name,Contest ID,Entry Fee,PG,SG,SF,PF,C,G,F,UTIL\n"
+    if sport == "NFL":
+        first_line = "Entry ID,Contest Name,Contest ID,Entry Fee,QB,RB,RB,WR,WR,WR,TE,FLEX,DST\n"
     output_file.write(first_line)
     
     idx = 0
     for roster in rosters:
         cells = prefix_cells[idx]
+        if cells[0] == '':
+            continue
         if isinstance(roster, list):
             idx += 1
             continue
@@ -636,6 +655,13 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
             player_id = name_to_player_id[player.name]
             cells.append(player_id)
         idx += 1
+        cells.append(str(roster.value))
+        active_player_ct = len([a for a in roster.players if a != 0])
+        val_per_player = roster.value / active_player_ct
+        total_cost = sum([a.value for a in roster.players if a != 0])
+        cost_per_player = total_cost / active_player_ct
+        # __import__('pdb').set_trace()
+        cells.append(str(val_per_player / cost_per_player * 100))
 
         output_file.write(",".join(cells) + "\n")
 
@@ -654,3 +680,30 @@ def get_player_name_to_start_time(start_times, projections):
         player_to_start_time[name] = team_to_time[team]
 
     return player_to_start_time
+
+
+import os
+def most_recently_download_filepath(*name_contains):
+    most_recent_path = None
+    most_recent_timestamp = 0
+    # assign directory
+    directory = DOWNLOAD_FOLDER
+    
+    # iterate over files in
+    # that directory
+    for filename in os.listdir(directory):
+        if not all([a in filename for a in name_contains]):
+            continue
+        f = os.path.join(directory, filename)
+        if os.path.isfile(f):
+            modified = os.path.getmtime(f)
+            if most_recent_path == None or modified > most_recent_timestamp:
+                most_recent_path = f
+                most_recent_timestamp = modified
+
+    # TODO print the time difference (how long ago this was added) and assert it's within a reasonable range
+    print("MOST RECENT: {} ({})".format(most_recent_path, round(most_recent_timestamp)))
+    if most_recent_path == None:
+        __import__('pdb').set_trace()
+    assert most_recent_path != None
+    return most_recent_path

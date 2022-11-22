@@ -380,9 +380,9 @@ class FD_NBA_Optimizer:
     by_position = self.prune_player_pool(by_position)
     return self.optimizer.optimize(by_position, iter, lineup_validator, locked_players)
   
-  def optimize_top_n(self, by_position, n, iter = int(60000)):
+  def optimize_top_n(self, by_position, n, iter = int(60000), locked_players=None, lineup_validator=None):
     by_position = self.prune_player_pool(by_position)
-    result = self.optimizer.optimize_top_n(by_position, n, iter)
+    result = self.optimizer.optimize_top_n(by_position, n, iter, lineup_validator, locked_players)
     return result
 
 class FD_WNBA_Optimizer:
@@ -418,7 +418,6 @@ class FD_WNBA_Optimizer:
     return result
 
 
-
 class MLB_Optimizer:
   def __init__(self):
     self.optimizer = Optimizer(35000, ["P", "C/1B", "2B", "3B", "SS", "OF", "OF", "OF", "UTIL"])
@@ -449,8 +448,8 @@ class MLB_Optimizer:
     return self.optimizer.optimize(by_position, iter_count, lineup_validator=lineup_validator, seed_roster=seed_roster)
 
 class NFL_Optimizer:
-  def __init__(self):
-    self.optimizer = Optimizer(60000, ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "D"])
+  def __init__(self, salary_cap=60000):
+    self.optimizer = Optimizer(salary_cap, ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "D"])
 
 
     def lineup_validator(roster):
@@ -467,11 +466,11 @@ class NFL_Optimizer:
     self.lineup_validator = lineup_validator
     
 
-  def optimize(self, by_position, locked_players):
-    return self.optimizer.optimize(by_position, int(7000), self.lineup_validator, locked_players)
+  def optimize(self, by_position, locked_players, iter):
+    return self.optimizer.optimize(by_position, iter, self.lineup_validator, locked_players)
 
-  def optimize_top_n(self, by_position, n):
-    result = self.optimizer.optimize_top_n(by_position, n, int(90000), self.lineup_validator)
+  def optimize_top_n(self, by_position, n, iter):
+    result = self.optimizer.optimize_top_n(by_position, n, iter, self.lineup_validator)
     return result
 
 class CFB_Optimizer:

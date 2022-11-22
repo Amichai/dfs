@@ -1,4 +1,11 @@
 from data_manager import DataManager
+from decimal import Decimal
+import json
+import datetime
+import boto3
+
+import random
+from table import Table
 from tabulate import tabulate
 import utils
 
@@ -210,6 +217,72 @@ class NBA_WNBA_Projections:
             print("PLAYER WITH PROJECTION NOT FOUND in slate: {} - {}".format(name, all_projections[name]))
 
 
+  def write_player_projections_to_db(self):
+    all_rows = []
+  
+    for player, info in self.fd_players.items():
+      cost = float(info[2])
+      player_row = [info[0], info[1], cost, info[3], info[5]]
+      projection = ''
+      site = "dfsc"
+      
+      projections = self.dm.query_projection(self.sport, "DFSCrunch", player)
+      if projections != None:
+        projection = parse_fantasy_score_from_projections("DFSCrunch", projections)
+
+      projections = self.dm.query_projection(self.sport, "PP", player)
+      if projections != None:
+        pp_proj = parse_fantasy_score_from_projections("PP", projections)
+        if pp_proj != '':
+          projection = pp_proj
+          site = "pp"
+      
+      # caesars
+      projections = self.dm.query_projection(self.sport, "Caesars", player)
+      if projections != None:
+        caesars_proj = parse_fantasy_score_from_projections("Caesars", projections)
+        activity_metric = parse_caesaers_projection_activity_metric(projections)
+        if activity_metric >= 3:
+          projection = caesars_proj
+          site = "caesars"
+
+      projection = float(projection)
+      if projection != '' and projection > 17:
+        if site == "dfsc":
+          # salt the dfsc projection
+          projection += random.uniform(0, 0.4) - 0.25
+          projection = round(projection, 2)
+        if site == "PP":
+          projection += random.uniform(0, 0.22) - 0.11
+          projection = round(projection, 2)
+
+
+        player_row.append(projection)
+        all_rows.append(player_row)
+    
+    dynamodb = boto3.resource('dynamodb')
+    projections = dynamodb.Table('MLE_Projections')
+    timestamp = str(datetime.datetime.now())
+    date = timestamp.split(' ')[0]
+    to_write = {
+        'Date': date,
+        'date-site-slateid': '{}-{}-{}'.format(date, 'fd', utils.TODAYS_SLATE_ID_NBA),
+        'timestamp': timestamp,
+        'site': 'fd',
+        'projections': json.dumps(all_rows)
+    }
+    to_write = json.loads(json.dumps(to_write), parse_float=Decimal)
+    try:
+        result = projections.put_item(
+          Item=to_write
+        )
+        print("UPLOADED PROJECTIONS!")
+    except Exception as err:
+        print("Error:", err)
+
+
+    return all_rows
+
   def get_player_rows(self):
     all_rows = []
 
@@ -229,7 +302,6 @@ class NBA_WNBA_Projections:
         projection = ''
         if projections != None:
           projection = parse_fantasy_score_from_projections(scraper, projections)
-
         player_row.append(projection)
 
       player_row.append(parse_caesaers_projection_activity_metric(scraper_to_projections["Caesars"]))
@@ -280,8 +352,6 @@ class NBA_WNBA_Projections:
     all_rows = self.get_player_rows()
     for row in all_rows:
       name = row[0]
-      # todo
-
       team = row[1]
       pos = row[2]
       cost = row[3]

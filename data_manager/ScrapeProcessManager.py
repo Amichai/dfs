@@ -15,11 +15,10 @@ import argparse
 from ProcessData import process
 import utils
 
-
 def run(sport, count=None):
   dataManager = data_manager.DataManager(sport)
   period = 3
-  nfs = NumberFireScraper(sport)
+  # nfs = NumberFireScraper(sport)
   pps = PPScraper(sport)
   cs = CaesarsScraper(sport, True)
   uds = UnderdogScraper(sport)
@@ -29,15 +28,16 @@ def run(sport, count=None):
   # TODO:
   dfs_crunch_slate = {
     'CBB': 'dk77460',
-    'NBA': 'fd83181',
+    'NBA': 'fd' + utils.TODAYS_SLATE_ID_NBA,
+    'NFL': 'fd' + utils.TODAYS_SLATE_ID_NFL,
   }
 
   dfsCrunch = DFSCrunchScraper(sport, dfs_crunch_slate[sport])
 
   scrapers_by_sport = {
     "NBA": [
-      cs,
       pps,
+      cs,
       dfsCrunch,
       # tfs,
       # uds,
@@ -46,9 +46,9 @@ def run(sport, count=None):
     "WNBA": [dfsCrunch, pps],
     "MLB": [tfs, uds, pps, cs, ], # , DFSCrunchScraper('MLB')
     "NFL": [
-      nfs,
       pps,
       cs,
+      dfsCrunch,
       # UnderdogScraper("NFL")], 
       # , TFScraper('NFL')
     ],
@@ -61,9 +61,11 @@ def run(sport, count=None):
   }
 
   #TODO:
-  (start_times, fd_slate_path, _, _) = utils.load_start_times_and_slate_path('start_times_all_day.txt')
-  projections = NBA_WNBA_Projections(utils.DOWNLOAD_FOLDER + fd_slate_path, "NBA")
-  player_to_start_time = utils.get_player_name_to_start_time(start_times, projections)
+  # (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times.txt')
+  # fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')
+  # projections = NBA_WNBA_Projections(fd_slate_path, "NBA")
+  # player_to_start_time = utils.get_player_name_to_start_time(start_times, projections)
+  player_to_start_time = None
 
   scrapers = scrapers_by_sport[sport]
 
@@ -111,6 +113,10 @@ if __name__ == "__main__":
   parser.add_argument('-c', '--count', required=False, default=None)
   args = vars(parser.parse_args())
   run(args['sport'], args['count'])
+
+
+  # fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')
+  # by_position = NBA_WNBA_Projections(fd_slate_path, "NBA").write_player_projections_to_db()
 
 
   # dataManager = data_manager.DataManager()

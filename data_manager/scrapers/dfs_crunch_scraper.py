@@ -60,6 +60,15 @@ query_parameters = {
     'url': 'https://www.dfscrunch.com/api/v1/nba/players/'
   },
 
+  'NFL': {
+    'params': {
+        'currentPage': '1',
+        'pageSize': '20000',
+        'site': 'fanduel',
+    },
+    'url': 'https://www.dfscrunch.com/api/v1/nfl/players/'
+  },
+
   'WNBA': {
     'params': {
       'currentPage': '1',
@@ -94,7 +103,7 @@ query_parameters = {
 class DFSCrunchScraper:
   def __init__(self, sport, slate):
     self.sport = sport
-    assert sport == "NBA" or sport == "MLB" or sport == "WNBA" or sport == "CBB"
+    assert sport == "NBA" or sport == "MLB" or sport == "WNBA" or sport == "CBB" or sport == "NFL"
     self.name = 'DFSCrunch'
     self.slate = slate
 
