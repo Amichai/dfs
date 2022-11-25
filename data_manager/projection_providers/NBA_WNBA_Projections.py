@@ -92,6 +92,7 @@ class NBA_Projections_dk:
     
     self.dk_players = utils.get_dk_slate_players(slate_path)
     self.name_to_player_id = {}
+    self.player_id_to_name = {}
 
   def get_player_rows(self):
     all_rows = []
@@ -101,6 +102,7 @@ class NBA_Projections_dk:
       cost = float(info[2])
       team = info[3]
       self.name_to_player_id[player] = info[4]
+      self.player_id_to_name[info[4]] = player
 
       player_row = [player, team, position, cost]
 
@@ -217,6 +219,21 @@ class NBA_WNBA_Projections:
             print("PLAYER WITH PROJECTION NOT FOUND in slate: {} - {}".format(name, all_projections[name]))
 
 
+  def filter_out_low_value_players(self, all_rows):
+    to_return = []
+    __import__('pdb').set_trace()
+    # [row for row in all_rows]
+    # to_return = all_rows.map((row) => r(row, "value") / r(row, "cost")).sort().reverse()
+    # # at least 55 or 60 players
+    # if(l >= 60) {
+    #   const cuttoffValue = allPlayerValues[59]
+    #   to_return = allProjections.filter((row) => r(row, "value") / r(row, "cost") >= cuttoffValue)
+    # }
+
+    return to_return
+
+    
+
   def write_player_projections_to_db(self):
     all_rows = []
   
@@ -250,16 +267,18 @@ class NBA_WNBA_Projections:
       if projection != '' and projection > 17:
         if site == "dfsc":
           # salt the dfsc projection
-          projection += random.uniform(0, 0.4) - 0.25
+          # projection += random.uniform(0, 0.4) - 0.25
           projection = round(projection, 2)
         if site == "PP":
-          projection += random.uniform(0, 0.22) - 0.11
+          # salt pp projection
+          # projection += random.uniform(0, 0.22) - 0.11
           projection = round(projection, 2)
 
 
         player_row.append(projection)
         all_rows.append(player_row)
     
+    all_rows = self.filter_out_low_value_players(all_rows)
     dynamodb = boto3.resource('dynamodb')
     projections = dynamodb.Table('MLE_Projections')
     timestamp = str(datetime.datetime.now())
@@ -281,6 +300,7 @@ class NBA_WNBA_Projections:
         print("Error:", err)
 
 
+    
     return all_rows
 
   def get_player_rows(self):

@@ -3,7 +3,8 @@ import statistics
 
 download_folder = "past_entries/"
 filepaths = [
-  "fanduel entry history 20221121.csv",
+  "fanduel entry history 20221125.csv",
+  "fanduel entry history 20221124.csv", "fanduel entry history 20221121.csv",
   "fanduel entry history 20221120.csv", "fanduel entry history 20221119.csv","fanduel entry history 20221118.csv", "fanduel entry history 20221117.csv", "fanduel entry history 20221116.csv", "fanduel entry history 20221113.csv", "fanduel entry history 20221112.csv", "fanduel entry history 20221110.csv", "fanduel entry history 20221105.csv", "fanduel entry history 20221103.csv", "fanduel entry history 20221102.csv", "fanduel entry history 20221101.csv", "fanduel entry history 20221101 (1).csv", "fanduel entry history 20221101 (2).csv", "fanduel entry history 20221101 (3).csv", "fanduel entry history 20221101 (4).csv"]
 
 target_sport = "nba"
@@ -131,6 +132,8 @@ def PandL(h2h_only=False):
       position = cells[7]
       entries = cells[8]
       contest = cells[9]
+      if len(cells) < 11:
+        continue
       entry_fee = cells[10]
       winnings = cells[11]
       if len(cells) > 13 and cells[13].strip() == "voided":
@@ -152,5 +155,5 @@ def PandL(h2h_only=False):
   # __import__('pdb').set_trace()
     
 
-H2H_analysis()
-# PandL(h2h_only=True)
+# H2H_analysis()
+PandL()

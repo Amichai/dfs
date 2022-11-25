@@ -225,7 +225,7 @@ class Optimizer:
         is_full_locked = False
         if seed_roster != None:
             is_full_locked = True
-            for i in range(9):
+            for i in range(len(seed_roster)):
                 pl = seed_roster[i]
                 if pl != '' and pl != None:
                     random_lineup.replace(pl, i)
@@ -289,9 +289,10 @@ class DK_NBA_Optimizer:
     by_position = self.prune_player_pool(by_position)
     return self.optimizer.optimize(by_position, iter, None, locked_players)
   
-  def optimize_top_n(self, by_position, n, iter = int(60000)):
+  def optimize_top_n(self, by_position, n, locked_players, iter = int(60000)):
     by_position = self.prune_player_pool(by_position)
-    result = self.optimizer.optimize_top_n(by_position, n, iter)
+    # __import__('pdb').set_trace()
+    result = self.optimizer.optimize_top_n(by_position, n, iter, None, seed_roster=locked_players)
     return result
 
 class DK_CBB_Optimizer:

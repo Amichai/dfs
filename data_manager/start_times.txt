@@ -1,34 +1,50 @@
 FanDuel-NBA-2022 ET-11 ET-12 ET-83182-players-list.csv
 FanDuel-NBA-2022-11-12-83182-entries-upload-template.csv
 DKSalaries (2).csv
-ATL
+POR
 @CLE
 7:00pm ET
 
-ORL
+MIN
 @IND
 7:00pm ET
 
-NY
-@OKC
+PHI
+@CHA
+7:00pm ET
+
+WAS
+@MIA
+7:30pm ET
+
+SAC
+@ATL
+7:30pm ET
+
+BKN
+@TOR
+7:30pm ET
+
+DAL
+@BOS
+7:30pm ET
+
+NO
+@SA
 8:00pm ET
 
-POR
+CHI
 @MIL
 8:00pm ET
 
-MIA
-@MIN
+DEN
+@OKC
 8:00pm ET
 
-GS
-@NO
-8:00pm ET
+DET
+@UTA
+9:00pm ET
 
-BOS
-@CHI
-8:00pm ET
-
-UTA
-@LAC
-10:30pm ET
+LAC
+@GS
+10:00pm ET

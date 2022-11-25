@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "83671"
-TODAYS_SLATE_ID_NFL = "83311"
+TODAYS_SLATE_ID_NBA = "83810"
+TODAYS_SLATE_ID_NFL = "83703"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -275,6 +275,7 @@ def load_start_times_and_slate_path(path):
         '7:15pm ET': 7.15, '7:45pm ET': 7.85,
         '8:00pm ET': 8, '8:30pm ET': 8.5, 
         '8:15pm ET': 8.15, '8:45pm ET': 8.85,
+        '8:20pm ET': 8.2,
         '9:00pm ET': 9, '9:30pm ET': 9.5, 
         '9:15pm ET': 9.15, '9:45pm ET': 9.85,
         '10:00pm ET': 10, '10:30pm ET': 10.5, 

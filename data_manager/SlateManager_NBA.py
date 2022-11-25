@@ -587,27 +587,14 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   return mme_rosters
 
 
-def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
-  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(current_rosters_path, [], '', 0)
-
-  locked_teams = []
-  for time, teams in start_times.items():
-    if time < current_time:
-      locked_teams += teams
-  
-  projections = NBA_WNBA_Projections(slate_path, "NBA")
+def reoptimize_slate(projections, optimizer, locked_teams, existing_rosters, player_id_to_name, allow_duplicate_rosters, is_dk=False):
   projections.print_slate()
-
   by_position = projections.players_by_position(exclude_zero_value=False)
   name_to_players = get_name_to_player_objects(by_position)
-  optimizer = FD_NBA_Optimizer()
-
   by_position = filter_out_locked_teams(by_position, locked_teams)
-  existing_rosters = parse_existing_rosters(current_rosters_path)
   seen_roster_strings = []
   seen_roster_string_to_optimized_roster = {}
 
-  resolve_roster_keys = []
 
   roster_idx = 0
   all_results = []
@@ -717,6 +704,204 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
   # print(variation)
   print("TOTAL ROSTER VAL: {}".format(total_roster_val))
   
+  __import__('pdb').set_trace()
+  return all_results
+  # construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
+
+
+def reoptimize_slate_fd_2(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
+  locked_teams = []
+  for time, teams in start_times.items():
+    if time < current_time:
+      locked_teams += teams
+
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(current_rosters_path, [], '', 0)
+  projections = NBA_WNBA_Projections(slate_path, "NBA")
+  optimizer = FD_NBA_Optimizer()
+  existing_rosters = parse_existing_rosters(current_rosters_path)
+  all_results = reoptimize_slate(projections, optimizer, locked_teams, existing_rosters, player_id_to_name, allow_duplicate_rosters)
+  construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
+  
+
+def reoptimize_slate_dk_2(slate_path, entries_path, current_time, start_times, allow_duplicate_rosters=False):
+
+  file = open(entries_path)
+  file_reader = csv.reader(file, delimiter=',', quotechar='"')
+  entries = []
+  first_line = True
+  for cells in file_reader:
+    if first_line:
+      first_line = False
+      continue
+
+    if cells[0] == '':
+      break
+    first_ten_cells = cells[:12]
+    entries.append(first_ten_cells)
+
+  locked_teams = []
+  for time, teams in start_times.items():
+    if time < current_time:
+      locked_teams += teams
+
+  projections = NBA_Projections_dk(slate_path, "NBA")
+  optimizer = DK_NBA_Optimizer()
+  player_id_to_name = projections.player_id_to_name
+
+  all_results = reoptimize_slate(projections, optimizer, locked_teams, entries, player_id_to_name, allow_duplicate_rosters)
+
+  utils.construct_dk_output_template(all_results, projections.name_to_player_id, entries_path)
+
+
+def get_locked_players_key(players):
+  to_return = ""
+  for player in players:
+    if player != None:
+      to_return += player.name
+
+    to_return += "|"
+
+  return to_return
+
+def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(current_rosters_path, [], '', 0)
+
+  locked_teams = []
+  for time, teams in start_times.items():
+    if time < current_time:
+      locked_teams += teams
+  
+  projections = NBA_WNBA_Projections(slate_path, "NBA")
+  projections.print_slate()
+
+  by_position = projections.players_by_position(exclude_zero_value=False)
+  name_to_players = get_name_to_player_objects(by_position)
+  optimizer = FD_NBA_Optimizer()
+
+  by_position = filter_out_locked_teams(by_position, locked_teams)
+  existing_rosters = parse_existing_rosters(current_rosters_path)
+  seen_roster_strings = []
+  seen_roster_string_to_optimized_roster = {}
+
+  locked_players_to_top_n_optimized = {}
+
+  roster_idx = 0
+  all_results = []
+  for existing_roster in existing_rosters:
+    print("ROSTER: {}".format(roster_idx))
+    roster_idx += 1
+    players = existing_roster[3:12]
+    if players[0] == '':
+      continue
+
+    roster_string = ",".join(players)
+
+    if roster_string in seen_roster_strings:
+      result = seen_roster_string_to_optimized_roster[roster_string]
+      all_results.append(result)
+      continue
+
+    seen_roster_strings.append(roster_string)
+    players3 = []
+    for p in players:
+      if ':' in p:
+        p = p.split(':')[0]
+      if not p in player_id_to_name:
+        __import__('pdb').set_trace()
+
+      players3.append(player_id_to_name[p])
+
+    players4 = [name_to_players[p][0] for p in players3]
+    players5 = []
+    initial_roster = []
+    lock_ct = 0
+    for p in players4:
+      if p.team in locked_teams:
+        players5.append(p)
+        lock_ct += 1
+      else:
+        players5.append(None)
+      initial_roster.append(p.name)
+
+    is_se_roster_or_h2h = "Single Entry" in existing_roster[2] or "Entries Max" in existing_roster[2] or "H2H vs" in existing_roster[2]
+
+
+    if lock_ct != 9:
+
+      locked_players_key = get_locked_players_key(players5)
+
+
+      # todo: this will be optimize_top_n
+      # iterate over the n results and take the first one not seen already (within range)
+      # result = optimizer.optimize(by_position, players5, int(1750), is_roster_valid)
+      if not locked_players_key in locked_players_to_top_n_optimized:
+        candidate_rosters = optimizer.optimize_top_n(by_position, 20, int(2650), players5, is_roster_valid)
+        locked_players_to_top_n_optimized[locked_players_key] = candidate_rosters
+      else:
+        candidate_rosters = locked_players_to_top_n_optimized[locked_players_key]
+
+      result = candidate_rosters[0]
+      
+      top_val = result.value
+      candidate_rosters_filtered = [a for a in candidate_rosters if a.value >= top_val - 10]
+      if not is_se_roster_or_h2h:
+        counter = 0
+        for roster in candidate_rosters_filtered:
+          names1 = [p.name for p in roster.players]
+          roster1_key = ",".join(sorted(names1))
+          if not roster1_key in seen_roster_strings:
+            result = roster
+            print("TAKING CANDIDATE ROSTER: {}".format(counter))
+            break
+
+          counter += 1
+          # else:
+          #   __import__('pdb').set_trace()
+          
+    else:
+      result = utils.Roster(players4)
+    
+    seen_roster_string_to_optimized_roster[roster_string] = result
+    try:
+      names1 = [p.name for p in result.players]
+      roster1_key = ",".join(sorted(names1))
+
+      if is_se_roster_or_h2h:
+        print("IS SE ROSTER or H2H!")
+
+      has_dead_player = any([a.value < 12.0 and a.team not in locked_teams for a in result.players])
+
+      if roster1_key in seen_roster_strings \
+          and not allow_duplicate_rosters \
+          and not is_se_roster_or_h2h \
+          and not has_dead_player:
+        # don't change the result!
+        print("initial roster unchanged! {}")
+        all_results.append(utils.Roster(players4))
+      else:
+        seen_roster_strings.append(roster1_key)
+
+        roster2_key = ",".join(sorted(initial_roster))
+        if roster1_key != roster2_key:
+          print("LOCKED PLAYERS: {}".format(players5))
+
+
+          print("INITIAL ROSTER:\n{}".format(initial_roster))
+          print(result)
+
+        all_results.append(result)
+    except:
+      __import__('pdb').set_trace()
+
+  total_roster_val = sum([a.value for a in all_results])
+  utils.print_player_exposures(all_results, locked_teams)
+  variation = utils.print_roster_variation(all_results)
+  print(variation)
+  
+  # variation = utils.print_roster_variation(existing_rosters)
+  # print(variation)
+  print("TOTAL ROSTER VAL: {}".format(total_roster_val))
+  
 
   construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
@@ -739,6 +924,9 @@ def single_game_optimizer():
   construct_upload_template_file(all_results_rosters * 1000, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
 def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, allow_duplicate_rosters=False):
+
+
+
   file = open(entries_path)
   file_reader = csv.reader(file, delimiter=',', quotechar='"')
   entries = []
@@ -761,6 +949,15 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
       locked_teams += teams
 
   by_position_unfiltered = projections.players_by_position()
+
+  name_to_positions = {}
+  for pos, players in by_position_unfiltered.items():
+    for player in players:
+      name = player.name
+      if not name in name_to_positions:
+        name_to_positions[name] = []
+      name_to_positions[name].append(pos)
+
   by_position = filter_out_locked_teams(by_position_unfiltered, locked_teams)
 
   name_to_player = {}
@@ -775,33 +972,53 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
     players = entry[4:12]
 
     locked_players = []
+    original_roster_names = []
     for player in players:
       if "(LOCKED)" in player:
         name_stripped = utils.normalize_name(player.split('(')[0].strip())
+        original_roster_names.append(name_stripped)
 
         locked_players.append(name_to_player[name_stripped])
       else:
         locked_players.append('')
-    optimized = optimizer.optimize(by_position, locked_players, 1800)
-    if isinstance(optimized, list):
-      names1 = [p.name for p in  optimized[0].players]
-    else:
-      names1 = [p.name for p in optimized.players]
-    roster1_key = ",".join(sorted(names1))
-    if not roster1_key in optimized_roster_keys or allow_duplicate_rosters:
-      to_print.append(optimized)
-      optimized_roster_keys.append(roster1_key)
-    else:
-      print("SKIPPING COLLIDED ROSTER!")
-      roster_names = [utils.normalize_name(a.split('(')[0].strip()) for a in players]
-      roster_players = [name_to_player[a] for a in roster_names]
-      to_print.append(utils.Roster(roster_players))
+    # optimized = optimizer.optimize(by_position, locked_players, 1900)
+    optimize_top_n = optimizer.optimize_top_n(by_position, 20, locked_players, 1900)
+    matched_roster = False
+    for i in range(len(optimize_top_n)):
+      optimized = optimize_top_n[i]
+      if isinstance(optimized, list):
+        names1 = [p.name for p in  optimized[0].players]
+      else:
+        names1 = [p.name for p in optimized.players]
+      roster1_key = ",".join(sorted(names1))
+      if not roster1_key in optimized_roster_keys or allow_duplicate_rosters:
+        
+        to_print.append(optimized)
+        optimized_roster_keys.append(roster1_key)
+        matched_roster = True
+
+        key1 = sorted([a.name for a in optimized.players])
+        key2 = sorted([a for a in original_roster_names])
+
+        if key1 == key2:
+          print("NO CHANGE!")
+        else:
+          print("TAKING ROSTER INDEX: {} - {}\n{}\ninitial: {}".format(i, roster1_key, optimized, players))
+
+        break
+
+    if not matched_roster:
+      to_print.append(optimize_top_n[0])
 
     # to_print.append(optimized)
+
+  # for roster in to_print:
+  #   optimize_dk_roster_for_late_swap(roster, start_times, name_to_positions)
 
   # utils.print_player_exposures(to_print)
   utils.construct_dk_output_template(to_print, projections.name_to_player_id, entries_path)
   print(utils.print_roster_variation(to_print))
+  utils.print_player_exposures(to_print)
 
 def optimize_slate_dk(slate_path, iter, entries_path, start_times):
   # 
@@ -821,7 +1038,7 @@ def optimize_slate_dk(slate_path, iter, entries_path, start_times):
       name_to_positions[name].append(pos)
 
   # TODO: THIS IS A DANGEROUS MAGIC NUMBER THAT RESULTS IN DEEAD ENTRIES!
-  rosters = optimizer.optimize_top_n(by_position, 151, iter)
+  rosters = optimizer.optimize_top_n(by_position, 151, locked_players=None, iter=iter)
 
   rosters = [r for r in rosters if is_roster_valid_dk(r)]
   # for roster in rosters:
@@ -859,15 +1076,31 @@ if __name__ == "__main__":
   
   # ##FIRST PASS
   # all_rosters = optimize_slate_v2(fd_slate_path, template_path, iter=120000, value_tolerance=5.5, validate_player_set=True)
-  # all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter=17000)
-  # all_rosters = optimize_slate_dk(dk_slate_path, 17000, dk_entries_path, start_times)
+  # all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter=40000)
+  # all_rosters = optimize_slate_dk(dk_slate_path, 40000, dk_entries_path, start_times)
   # assert False
 
   # SECOND PASS
-  current_time = 7.6
+  current_time = 8.6
+  # __import__('pdb').set_trace()
   reoptimize_slate_fd(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
-  reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=True)
+  reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
 
+  assert False
+
+  # reoptimize_slate_fd_2(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
+  # reoptimize_slate_dk_2(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=True)
+  
+
+
+  # slate_id = "83817"
+  fd_slate_path = utils.DOWNLOAD_FOLDER + "FanDuel-NBA-2022 ET-11 ET-23 ET-83817-players-list.csv"
+  template_path = utils.DOWNLOAD_FOLDER + "FanDuel-NBA-2022-11-23-83817-entries-upload-template.csv"
+
+  dk_slate_path= utils.DOWNLOAD_FOLDER + "DKSAL_late_slate.csv"
+  dk_entries_path = utils.DOWNLOAD_FOLDER + "DKENT_late_slate.csv"
+  all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter=40000)
+  all_rosters = optimize_slate_dk(dk_slate_path, 40000, dk_entries_path, start_times)
   # assert False
 
   assert False
