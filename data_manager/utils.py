@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "83810"
-TODAYS_SLATE_ID_NFL = "83703"
+TODAYS_SLATE_ID_NBA = "84077"
+TODAYS_SLATE_ID_NFL = "83863"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -102,7 +102,7 @@ def date_str():
 def get_team_names():
   return open('team_names.txt', "r").readlines()
 
-team_transform = {"NYK": "NY", "GSW": "GS", "PHX": "PHO", "SAS": "SA", "NOP": "NO"}
+team_transform = {"NYK": "NY", "GSW": "GS", "PHX": "PHO", "SAS": "SA", "NOP": "NO", 'JAX': 'JAC'}
 def normalize_team_name(team):
     if team in team_transform:
         return team_transform[team]
@@ -668,6 +668,8 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
 
     output_file.close()
 
+    return idx
+
 def get_player_name_to_start_time(start_times, projections):
     name_to_team = projections.get_name_to_team()
     team_to_time = {}
@@ -705,6 +707,7 @@ def most_recently_download_filepath(*name_contains):
     # TODO print the time difference (how long ago this was added) and assert it's within a reasonable range
     print("MOST RECENT: {} ({})".format(most_recent_path, round(most_recent_timestamp)))
     if most_recent_path == None:
+        print(name_contains)
         __import__('pdb').set_trace()
     assert most_recent_path != None
     return most_recent_path

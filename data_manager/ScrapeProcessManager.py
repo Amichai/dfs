@@ -36,9 +36,9 @@ def run(sport, count=None):
 
   scrapers_by_sport = {
     "NBA": [
+      dfsCrunch,
       pps,
       cs,
-      dfsCrunch,
       # tfs,
       # uds,
       # nfs, fantasyDataScraper, RotoWireScraper('NBA', '8799'),

@@ -557,6 +557,35 @@ def optimize_slate_dk(slate_path, iter, entries_path, start_times):
   utils.construct_dk_output_template(rosters, projections.name_to_player_id, entries_path, "ls_opt", "NFL")
   
 
+def optimize_for_single_game(slate_path, template_path, teams, iter=35000):
+  projections = NFL_Projections(slate_path, "NFL")
+  projections.print_slate()
+
+  by_position = projections.players_by_position()
+
+  player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(template_path, [], '', 4)
+
+  by_position_new = {}
+  for pos, players in by_position.items():
+    by_position_new[pos] = []
+    for player in players:
+      if not player.team in teams:
+        continue
+      by_position_new[pos].append(player)
+
+  result = utils.single_game_optimizer_many(by_position_new, 10)
+  index_strings = []
+  idx = 0
+  to_print = []
+  for r in result:
+    print(r)
+    index_strings.append("{} - {}".format(r[1], idx))
+    idx += 1
+    to_print.append(utils.Roster(r[0]))
+
+
+  # construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
+  
 
 
 if __name__ == "__main__":
@@ -570,23 +599,28 @@ if __name__ == "__main__":
 
 
   # assert False
+
+  slate_id = utils.TODAYS_SLATE_ID_NFL
+  (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times_NFL.txt')
+
+
+  fd_slate_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-players-list', '.csv')
+  template_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-entries-upload-template', '.csv')
+  dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
+  dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
   
-    slate_id = utils.TODAYS_SLATE_ID_NFL
-    (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times_NFL.txt')
+  optimize_for_single_game(fd_slate_path, template_path, ["GB", "PHI"], 35000)
+  assert False
 
+  
 
-    fd_slate_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-players-list', '.csv')
-    template_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-entries-upload-template', '.csv')
-    dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
-    dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
-    
-    # ##FIRST PASS
-    # all_rosters = optimize_slate(fd_slate_path, template_path, iter=35000)
-    # all_rosters = optimize_slate_dk(dk_slate_path, 35000, dk_entries_path, start_times)
+  ##FIRST PASS
+  all_rosters = optimize_slate(fd_slate_path, template_path, iter=35000)
+  all_rosters = optimize_slate_dk(dk_slate_path, 35000, dk_entries_path, start_times)
 
-    current_time = 1.2
-    reoptimize_slate(fd_slate_path, template_path, current_time, start_times)
-    reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
+  # current_time = 1.2
+  # reoptimize_slate(fd_slate_path, template_path, current_time, start_times)
+  # reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
 
 
 # stacking -

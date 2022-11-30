@@ -3,6 +3,7 @@ import statistics
 
 download_folder = "past_entries/"
 filepaths = [
+  "fanduel entry history 20221126.csv",
   "fanduel entry history 20221125.csv",
   "fanduel entry history 20221124.csv", "fanduel entry history 20221121.csv",
   "fanduel entry history 20221120.csv", "fanduel entry history 20221119.csv","fanduel entry history 20221118.csv", "fanduel entry history 20221117.csv", "fanduel entry history 20221116.csv", "fanduel entry history 20221113.csv", "fanduel entry history 20221112.csv", "fanduel entry history 20221110.csv", "fanduel entry history 20221105.csv", "fanduel entry history 20221103.csv", "fanduel entry history 20221102.csv", "fanduel entry history 20221101.csv", "fanduel entry history 20221101 (1).csv", "fanduel entry history 20221101 (2).csv", "fanduel entry history 20221101 (3).csv", "fanduel entry history 20221101 (4).csv"]
@@ -29,6 +30,7 @@ def H2H_analysis():
         continue
 
       date = cells[2].strip()
+      
       title = cells[3]
 
       if not "Head-to-head" in title:

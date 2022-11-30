@@ -220,15 +220,12 @@ class NBA_WNBA_Projections:
 
 
   def filter_out_low_value_players(self, all_rows):
-    to_return = []
-    __import__('pdb').set_trace()
-    # [row for row in all_rows]
-    # to_return = all_rows.map((row) => r(row, "value") / r(row, "cost")).sort().reverse()
-    # # at least 55 or 60 players
-    # if(l >= 60) {
-    #   const cuttoffValue = allPlayerValues[59]
-    #   to_return = allProjections.filter((row) => r(row, "value") / r(row, "cost") >= cuttoffValue)
-    # }
+    to_return = all_rows
+    all_value_per_dollars = sorted([(row[5] / row[2] ) for row in all_rows], reverse=True)
+    cuttof_idx = 65
+    if len(all_value_per_dollars) > cuttof_idx:
+      cuttoff = all_value_per_dollars[cuttof_idx - 1]
+      to_return = [row for row in all_rows if row[5] / row[2] >= cuttoff]
 
     return to_return
 
