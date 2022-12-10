@@ -32,3 +32,11 @@ enter 150 MME!
 ----
 11/1/22
 https://www.fanduel.com/games/82612/contests/82612-259923515/enter
+
+Cancel entries:
+$('button[data-test-id="cancel-button"]').each((idx) => $('button[data-test-id="cancel-button"]')[0].click())
+
+-----
+https://chromedriver.chromium.org/downloads
+
+xattr -d com.apple.quarantine <chromedriver>

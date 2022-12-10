@@ -1,4 +1,6 @@
 import math
+import json
+import uuid
 from projection_providers.NBA_WNBA_Projections import NBA_WNBA_Projections, NBA_Projections_dk
 import random
 import datetime
@@ -7,6 +9,8 @@ import statistics
 from ScrapeProcessManager import run
 from Optimizer import FD_NBA_Optimizer, DK_NBA_Optimizer
 import csv
+import itertools
+import hashlib
 
 # produce a table of projections
 # generate an ensemble of rosters
@@ -233,6 +237,7 @@ def is_roster_valid_dk(roster):
 dk_positions = ["PG", "SG", "SF", "PF", "C", "G", "F", "UTIL"]
 
 def consider_swap(idx1, idx2, team_to_start_time, players, name_to_positions):
+  # if one of these players is locked (zero projection) abort the swap
   player1 = players[idx1]
   player2 = players[idx2]
   # player 1 is specific
@@ -482,7 +487,6 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   #TODO:
   # projections.validate_player_set()
 
-
   by_position = projections.players_by_position()
 
 
@@ -504,7 +508,9 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   optimizer = FD_NBA_Optimizer()
   # optimizer.optimize(by_position, None, iter)
 
-  rosters = optimizer.optimize_top_n(by_position, 5000, iter=iter)
+  # TODO
+  rosters = optimizer.optimize_top_n(by_position, 500, iter=iter)
+  # rosters = optimizer.optimize_top_n(by_position, 2, iter=iter)
 
   rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
   rosters_sorted = [r for r in rosters_sorted if is_roster_valid(r)]
@@ -691,6 +697,8 @@ def reoptimize_slate(projections, optimizer, locked_teams, existing_rosters, pla
 
 
           print("INITIAL ROSTER:\n{}".format(initial_roster))
+          __import__('pdb').set_trace()
+
           print(result)
 
         all_results.append(result)
@@ -838,7 +846,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
       # iterate over the n results and take the first one not seen already (within range)
       # result = optimizer.optimize(by_position, players5, int(1750), is_roster_valid)
       if not locked_players_key in locked_players_to_top_n_optimized:
-        candidate_rosters = optimizer.optimize_top_n(by_position, 50, int(6650), players5, is_roster_valid)
+        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(5050), players5, is_roster_valid)
         locked_players_to_top_n_optimized[locked_players_key] = candidate_rosters
       else:
         candidate_rosters = locked_players_to_top_n_optimized[locked_players_key]
@@ -863,8 +871,6 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
           
     else:
       result = utils.Roster(players4)
-    
-    seen_roster_string_to_optimized_roster[roster_string] = result
 
     try:
       names1 = [p.name for p in result.players]
@@ -881,22 +887,41 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
           and not has_dead_player:
         # don't change the result!
         print("initial roster unchanged! {}")
-        all_results.append(utils.Roster(players4))
+        original_roster_result = utils.Roster(players4)
+        all_results.append(original_roster_result)
+        seen_roster_string_to_optimized_roster[roster_string] = original_roster_result
         annotations.append("UNCHANGED")
       else:
         seen_roster_keys.append(optimized_roster_key)
         initial_roster_key = ",".join(sorted(initial_roster))
+        is_improvement = True
         if optimized_roster_key != initial_roster_key:
           print("LOCKED PLAYERS: {}".format(players5))
 
 
           print("INITIAL ROSTER:\n{}".format(initial_roster))
-          print(result)
+
+          initial_value = round(sum([name_to_players[a][0].value for a in initial_roster]), 2)
+          new_value = result.value
+          diff = new_value - initial_value
+          if diff >= 0:
+            print("OLD VAL {} NEW VAL: {} = {}".format(initial_value, new_value, diff))
+            print(result)
+          else:
+            is_improvement = False
         # else:
 
         #   print("NO CHANGE {} - {}".format(result, initial_roster))
-        annotations.append("reopt - {} - {}".format(lock_ct, result.value))
-        all_results.append(result)
+        if is_improvement:
+          annotations.append("reopt - {} - {}".format(lock_ct, result.value))
+          all_results.append(result)
+          seen_roster_string_to_optimized_roster[roster_string] = result
+        else:
+          print("NO IMPROVEMENT")
+          original_roster_result = utils.Roster(players4)
+          all_results.append(original_roster_result)
+          seen_roster_string_to_optimized_roster[roster_string] = original_roster_result
+          annotations.append("UNCHANGED")
     except:
       __import__('pdb').set_trace()
 
@@ -912,9 +937,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
   construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
 
 
-def single_game_optimizer():
-  slate_path = "FanDuel-NBA-2022 ET-10 ET-29 ET-82506-players-list.csv"
-  template_path = "FanDuel-NBA-2022-10-29-82506-entries-upload-template.csv"
+def single_game_optimizer(slate_path, template_path):
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(template_path, [], '', 4)
 
   projections = NBA_WNBA_Projections(slate_path, "NBA")
@@ -923,11 +946,21 @@ def single_game_optimizer():
 
   by_position = projections.players_by_position()
 
-  all_results = utils.single_game_optimizer_many(by_position, 4)
+  all_results = utils.single_game_optimizer_many(by_position, 10)
 
-  all_results_rosters = [utils.Roster(result[0]) for result in all_results]
+  roster_distribution = [(0,6), (1,3), (0, 1), (2,1), (3,1), (4,1), (0,1)]
 
-  construct_upload_template_file(all_results_rosters * 1000, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
+  all_rosters = []
+  annotations = []
+  for (idx, ct) in roster_distribution:
+    for i in range(ct):
+      roster = all_results[idx]
+      all_rosters.append(utils.Roster(roster[0]))
+      annotations.append("{}_{}".format(idx, roster[1]))
+
+  # all_results_rosters = [utils.Roster(result[0]) for result in all_results]
+
+  construct_upload_template_file(all_rosters, first_line, entries, name_to_player_id, player_id_to_fd_name, annotations)
 
 def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, allow_duplicate_rosters=False):
   file = open(entries_path)
@@ -984,7 +1017,7 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
       else:
         locked_players.append('')
     # optimized = optimizer.optimize(by_position, locked_players, 1900)
-    optimize_top_n = optimizer.optimize_top_n(by_position, 20, locked_players, 5900)
+    optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 5200)
     matched_roster = False
     for i in range(len(optimize_top_n)):
       optimized = optimize_top_n[i]
@@ -995,17 +1028,25 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
       roster1_key = ",".join(sorted(names1))
       if not roster1_key in optimized_roster_keys or allow_duplicate_rosters:
         
-        to_print.append(optimized)
-        optimized_roster_keys.append(roster1_key)
-        matched_roster = True
+        initial_value = round(sum([name_to_player[a].value for a in original_roster_names]), 2)
 
-        key1 = ",".join(sorted([a.name for a in optimized.players]))
-        key2 = ",".join(sorted([a for a in original_roster_names]))
+        new_val = round(optimized.value, 2)
+        diff_val = new_val - initial_value
 
-        if key1 == key2:
-          print("NO CHANGE!")
-        else:
+        print("OLD VAL {} NEW VAL: {} = {}".format(initial_value, new_val, diff_val))
+        if diff_val > 0:
           print("TAKING ROSTER INDEX: {} - {}\n{}\ninitial: {}".format(i, roster1_key, optimized, players))
+
+          to_print.append(optimized)
+          optimized_roster_keys.append(roster1_key)
+          matched_roster = True
+        else:
+          print("NO IMROVEMENT SKIPPING")
+          original_roster = utils.Roster([name_to_player[a] for a in original_roster_names])
+          to_print.append(original_roster)
+          matched_roster = True
+          pass
+        
 
         break
 
@@ -1014,8 +1055,10 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
 
     # to_print.append(optimized)
 
-  # for roster in to_print:
-  #   optimize_dk_roster_for_late_swap(roster, start_times, name_to_positions)
+  for roster in to_print:
+    # this needs to work for reopto by respecting locked players
+    __import__('pdb').set_trace()
+    # optimize_dk_roster_for_late_swap(roster, start_times, name_to_positions)
 
   # utils.print_player_exposures(to_print)
   utils.construct_dk_output_template(to_print, projections.name_to_player_id, entries_path)
@@ -1063,14 +1106,101 @@ def optimize_slate_dk(slate_path, iter, entries_path, start_times):
 ##########################################################################################################
 ##########################################################################################################
 
+def showdown_roster_cost(roster, player_data):
+  cpt = roster[0]
+  utils = roster[1:]
+  return player_data[cpt][2] * 1.5 + sum([player_data[a][2] for a in utils])
+
+
+def generate_showdown_lineups(showdown_slate_path):
+  
+  player_data = utils.get_dk_slate_players(utils.DOWNLOAD_FOLDER + showdown_slate_path)
+  projections = NBA_Projections_dk(utils.DOWNLOAD_FOLDER + showdown_slate_path, "NBA")
+  projection_names = projections.players_by_position()['UTIL']
+  name_to_projections = {}
+  for projection in projection_names:
+    name_to_projections[projection.name] = projection.value
+
+  names = player_data.keys()
+  candidates = []
+  for name in names:
+    capt = name
+
+    names_filtered = [n for n in names if n != capt]
+    other_payers = itertools.combinations(names_filtered, 5)
+    for sub_set in other_payers:
+      candidates.append([capt] + list(sub_set))
+  
+  current_set = []
+  seen_roster_keys = set()
+  idx = 0
+  for candidate in candidates:
+    idx += 1 
+    if idx % 1000000 == 0:
+      print("{} {}".format(idx, len(current_set)))
+
+    cost = showdown_roster_cost(candidate, player_data)
+    if cost > 50000:
+      continue
+    if cost < 49000:
+      continue
+
+    roster_key = "{}|{}".format(candidate[0], sorted([candidate[1], candidate[2], candidate[3], candidate[4], candidate[5]]))
+    if roster_key in seen_roster_keys:
+      continue
+
+    seen_roster_keys.add(roster_key)
+
+    projected = name_to_projections[candidate[0]] * 1.5 + name_to_projections[candidate[1]] + \
+       + name_to_projections[candidate[2]]  + name_to_projections[candidate[3]] + \
+         + name_to_projections[candidate[4]]  + name_to_projections[candidate[5]]
+
+    projected = round(projected, 2)
+    current_set.append([candidate, cost, projected])
+
+  current_set_sorted = sorted(current_set, key=lambda a: a[2], reverse=True)
+  to_upload = current_set_sorted[:60]
+  # utils.construct_dk_showdown_output_template(to_upload, projections.name_to_player_id, utils.DOWNLOAD_FOLDER + upload_template_path)
+
+  timestamp = str(datetime.datetime.now())
+  date = timestamp.split(' ')[0]
+  site = "dk"
+  slate = "78980"
+  id = str(uuid.uuid4()).split('-')[0]
+
+  rosters_string = json.dumps(to_upload)
+  hash_object = hashlib.md5(bytes(rosters_string, 'utf-8'))
+
+  utils.write_to_db('MLE_Lineups', {
+    'date-site-slateid-id': "{}_{}_{}_{}".format(date, site, slate, id),
+    'date': date,
+    'slate': slate,
+    'timestamp': timestamp,
+    'rosters': rosters_string,
+    'name_to_player_id': json.dumps(projections.name_to_player_id),
+    'hash': hash_object.hexdigest()
+  })
+  # write these projections to s3
 
 
 if __name__ == "__main__":
+  # showdown_slate_path = "DK_78980.csv"
+  # generate_showdown_lineups(showdown_slate_path)
+  # assert False
+
+
+  # express_slate_id = "84449"
+  # fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', express_slate_id, '-players-list', '.csv')
+  # template_path = utils.most_recently_download_filepath('FanDuel-NBA-', express_slate_id, '-entries-upload-template', '.csv')
+  # all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter=40000)
   
+
+
 
   #(start_times, slate_path, template_path, dk_slate_path)
   slate_id = utils.TODAYS_SLATE_ID_NBA
   (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times.txt')
+  
 
 
   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-players-list', '.csv')
@@ -1078,19 +1208,19 @@ if __name__ == "__main__":
   dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
   dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
   
+
   ##FIRST PASS
-  # all_rosters = optimize_slate_v2(fd_slate_path, template_path, iter=120000, value_tolerance=5.5, validate_player_set=True)
-  # all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter=80000)
-  # all_rosters = optimize_slate_dk(dk_slate_path, 80000, dk_entries_path, start_times)
-  # assert False
+  all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter=60000)
+  all_rosters = optimize_slate_dk(dk_slate_path, 60000, dk_entries_path, start_times)
+  assert False
 
   # SECOND PASS
-  current_time = 9.6
-  # __import__('pdb').set_trace()
+  current_time = 8.1
+  # # __import__('pdb').set_trace()
   reoptimize_slate_fd(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
   reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
 
-  assert False
+  # assert False
 
   # reoptimize_slate_fd_2(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
   # reoptimize_slate_dk_2(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=True)
@@ -1100,7 +1230,6 @@ if __name__ == "__main__":
 
   
 
-#  port over lineup generator v2 - 
-# make it easy to handle multiple slates simultaenously ('start_times.txt')
-# properly sort players for dk lineups
+# properly sort players for dk lineups - FOR REOPTIMIZATION
 # we need much better logging around our scraper - who is in, out etc
+

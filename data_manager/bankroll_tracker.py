@@ -3,6 +3,10 @@ import statistics
 
 download_folder = "past_entries/"
 filepaths = [
+  "fanduel entry history 20221208.csv",
+  "fanduel entry history 20221207.csv",
+  "fanduel entry history 20221206.csv",
+  "fanduel entry history 20221201.csv",
   "fanduel entry history 20221126.csv",
   "fanduel entry history 20221125.csv",
   "fanduel entry history 20221124.csv", "fanduel entry history 20221121.csv",
@@ -157,5 +161,5 @@ def PandL(h2h_only=False):
   # __import__('pdb').set_trace()
     
 
-# H2H_analysis()
-PandL()
+H2H_analysis()
+# PandL()

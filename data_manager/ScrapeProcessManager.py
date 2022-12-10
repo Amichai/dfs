@@ -11,12 +11,16 @@ from scrapers.underdog_scraper import UnderdogScraper
 from scrapers.rotowire_scraper import RotoWireScraper
 from scrapers.numberfire_scraper import NumberFireScraper
 from scrapers.fantasy_data_scraper import FantasyDataScraper
+from scrapers.stokastic_scraper import StokasticScraper
 import argparse
 from ProcessData import process
 import utils
 
 def run(sport, count=None):
   dataManager = data_manager.DataManager(sport)
+
+  (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times.txt')
+  target_teams = sum(list(start_times.values()), [])
   period = 3
   # nfs = NumberFireScraper(sport)
   pps = PPScraper(sport)
@@ -24,6 +28,7 @@ def run(sport, count=None):
   uds = UnderdogScraper(sport)
   tfs = TFScraper(sport)
   # fantasyDataScraper = FantasyDataScraper(sport)
+  stokastic = StokasticScraper(sport)
 
   # TODO:
   dfs_crunch_slate = {
@@ -36,9 +41,11 @@ def run(sport, count=None):
 
   scrapers_by_sport = {
     "NBA": [
+      stokastic,
       dfsCrunch,
       pps,
-      cs,
+      # cs,
+      
       # tfs,
       # uds,
       # nfs, fantasyDataScraper, RotoWireScraper('NBA', '8799'),
@@ -47,8 +54,8 @@ def run(sport, count=None):
     "MLB": [tfs, uds, pps, cs, ], # , DFSCrunchScraper('MLB')
     "NFL": [
       pps,
-      cs,
       dfsCrunch,
+      # cs,
       # UnderdogScraper("NFL")], 
       # , TFScraper('NFL')
     ],
@@ -113,6 +120,8 @@ if __name__ == "__main__":
   parser.add_argument('-c', '--count', required=False, default=None)
   args = vars(parser.parse_args())
   run(args['sport'], args['count'])
+
+  # StokasticScraper("NBA").run()
 
 
   # fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')

@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "84077"
-TODAYS_SLATE_ID_NFL = "83863"
+TODAYS_SLATE_ID_NBA = "84559"
+TODAYS_SLATE_ID_NFL = "84056"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -81,7 +81,7 @@ def get_request_beautiful_soup(url):
 # https://chromedriver.chromium.org/downloads
 # xattr -d com.apple.quarantine <chromedriver>
 def get_chrome_driver():
-  return webdriver.Chrome("../master_scrape_process/chromedriver11")
+  return webdriver.Chrome("../master_scrape_process/chromedriver12")
 
 def get_with_selenium(url):
   driver = get_chrome_driver()
@@ -552,7 +552,7 @@ def parse_projection_from_caesars_lines(lines):
 
     return [round(projected, 2), activity]
 
-def get_dk_slate_players(dk_slate_path):
+def get_dk_slate_players(dk_slate_path, is_showdown=False):
     all_players = {}
     #'SG/SF,Rodney Hood (20071564),Rodney Hood,20071564,SG/SF/F/G/UTIL,3000,MIL@PHI 11/09/2021 07:30PM ET,MIL,8.88\n'
     all_lines = open(dk_slate_path,  encoding="ISO-8859-1").readlines()
@@ -564,6 +564,10 @@ def get_dk_slate_players(dk_slate_path):
         game_info = parts[6]
         team = parts[7]
         team = normalize_team_name(team)
+
+        roster_position = parts[4]
+        if is_showdown and roster_position == "CPT":
+            continue
 
         both_teams = game_info.split(' ')[0].split('@')
         if team == both_teams[0]:
@@ -670,6 +674,48 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
 
     return idx
 
+def construct_dk_showdown_output_template(rosters, name_to_player_id, entries_path, file_suffix = '', sport= "NBA"):
+    file = open(entries_path)
+    file_reader = csv.reader(file, delimiter=',', quotechar='"')
+    prefix_cells = []
+    first_line = True
+    for cells in file_reader:
+        if first_line:
+            first_line = False
+            continue
+
+        row_prefix = [cells[0], cells[1], cells[2], cells[3]]
+        prefix_cells.append(row_prefix)
+
+
+    timestamp = str(datetime.datetime.now())
+    date = timestamp.replace('.', '_')
+    date = date.replace(":", "_")
+
+    output_file = open("/Users/amichailevy/Downloads/DK_showdown_upload_template_{}_{}.csv".format(date, file_suffix), "x")
+    
+    first_line = "Entry ID,Contest Name,Contest ID,Entry Fee,CPT,UTIL,UTIL,UTIL,UTIL,UTIL\n"
+
+    output_file.write(first_line)
+    
+    idx = 0
+    for roster in rosters:
+        cells = prefix_cells[idx]
+        if cells[0] == '':
+            continue
+        for player in roster[0]:
+            player_id = name_to_player_id[player]
+            cells.append(player_id)
+        idx += 1
+        cells.append(str(roster[2]))
+        
+
+        output_file.write(",".join(cells) + "\n")
+
+    output_file.close()
+
+    return idx
+
 def get_player_name_to_start_time(start_times, projections):
     name_to_team = projections.get_name_to_team()
     team_to_time = {}
@@ -711,3 +757,18 @@ def most_recently_download_filepath(*name_contains):
         __import__('pdb').set_trace()
     assert most_recent_path != None
     return most_recent_path
+
+import boto3
+from decimal import Decimal
+def write_to_db(table_name, to_write):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(table_name)
+    
+    to_write = json.loads(json.dumps(to_write), parse_float=Decimal)
+    try:
+        result = table.put_item(
+          Item=to_write
+        )
+        print("UPLOADED TO TABLE: {}!".format(table_name))
+    except Exception as err:
+        print("Error:", err)

@@ -127,7 +127,7 @@ class NFL_Projections:
         # print(" -- {}".format(player))
         if position == "D":
           if not player in team_to_defense_name:
-            print("----{} - {}".format(team, player))
+            # print("----{} - {}".format(team, player))
             continue
 
           player = team_to_defense_name[player]
