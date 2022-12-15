@@ -559,6 +559,8 @@ def optimize_slate_dk(slate_path, iter, entries_path, start_times, print_slate =
   roster_ct = utils.construct_dk_output_template(rosters, projections.name_to_player_id, entries_path, "ls_opt", "NFL")
 
   utils.print_player_exposures(rosters[:roster_ct])
+
+  return rosters  
   
 
 def optimize_for_single_game(slate_path, template_path, teams, iter=35000):
@@ -587,7 +589,7 @@ def optimize_for_single_game(slate_path, template_path, teams, iter=35000):
     idx += 1
     to_print.append(utils.Roster(r[0]))
 
-
+  return to_print
   # construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
   
 
@@ -601,6 +603,8 @@ def optimize_slate_fd_dk(slate_id, start_times, iter=35000, fd=True, dk=True):
     dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
     dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
     all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
+    print("-----")
+    print(all_rosters[0])
 
 
 if __name__ == "__main__":
@@ -613,7 +617,7 @@ if __name__ == "__main__":
   # # reoptimize_slate(slate_path, "FanDuel-NFL-2022-10-23-81947-entries-upload-template (2).csv", 3.1)
 
   (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times_NFL.txt')
-  optimize_slate_fd_dk("84094", start_times)
+  optimize_slate_fd_dk("84409", start_times)
   assert False
 
 
@@ -626,8 +630,9 @@ if __name__ == "__main__":
   # optimize_for_single_game(fd_slate_path, template_path, ["GB", "PHI"], 35000)
   
   ##FIRST PASS
-  # all_rosters = optimize_slate(fd_slate_path, template_path, iter=35000)
-  # all_rosters = optimize_slate_dk(dk_slate_path, 35000, dk_entries_path, start_times, print_slate=False)
+  # all_rosters = optimize_slate(fd_slate_path, template_path, iter=45000)
+  # all_rosters = optimize_slate_dk(dk_slate_path, 45000, dk_entries_path, start_times, print_slate=False)
+  # assert False
 
 
   current_time = 3.2

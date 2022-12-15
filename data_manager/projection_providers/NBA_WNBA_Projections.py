@@ -33,7 +33,9 @@ def parse_fantasy_score_from_projections(site, projections):
       return ''
     return projections["Fantasy Score"]
 
-  elif site == "DFSCrunch":
+  elif site == "DFSCrunch" or site == "Stokastic":
+    if not "Fantasy Score" in projections:
+      return ''
     return projections["Fantasy Score"]
   elif site == "Caesars":
     if not "Points" in projections:
@@ -53,6 +55,30 @@ def parse_fantasy_score_from_projections(site, projections):
     stls = float(projections['Steals'])
     turnovers = float(projections["Turnovers"])
     projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
+    return round(projected, 2)
+
+def parse_fantasy_score_from_projections_dk(site, projections):
+  if site == "Stokastic":
+    return projections["dk_Fantasy Score"]
+  elif site == "Caesars":
+    if not "Points" in projections:
+        return
+    pts = float(projections['Points'])
+    if not 'Rebounds' in projections:
+        return
+    rbds = float(projections['Rebounds'])
+    if not 'Assists' in projections:
+        return
+    asts = float(projections['Assists'])
+    if not 'Blocks' in projections:
+        return
+    blks = float(projections['Blocks'])
+    if not 'Steals' in projections:
+        return
+    
+    stls = float(projections['Steals'])
+    turnovers = float(projections["Turnovers"])
+    projected = pts + rbds * 1.25 + asts * 1.5 + blks * 2 + stls * 2 - (turnovers / 6.0)
     return round(projected, 2)
 
 def parse_caesaers_projection_activity_metric(caesars_projection):
@@ -88,7 +114,7 @@ class NBA_Projections_dk:
   def __init__(self, slate_path, sport, day=None):
     self.dm = DataManager(sport, day)
     self.sport = sport
-    self.scrapers = ['PP', 'Caesars', 'NumberFire', "FantasyData", "DFSCrunch"]
+    self.scrapers = ['Caesars', "Stokastic"]
     
     self.dk_players = utils.get_dk_slate_players(slate_path)
     self.name_to_player_id = {}
@@ -113,7 +139,7 @@ class NBA_Projections_dk:
         scraper_to_projections[scraper] = projections
         projection = ''
         if projections != None:
-          projection = parse_fantasy_score_from_projections(scraper, projections)
+          projection = parse_fantasy_score_from_projections_dk(scraper, projections)
 
         player_row.append(projection)
 
@@ -132,24 +158,22 @@ class NBA_Projections_dk:
       team = row[1]
       pos = row[2]
       cost = row[3]
-      pp_proj = row[4]
-      caesars_proj = row[5]
-      numberfire_proj = row[6]
-      fantasy_data_proj = row[7]
-      dfs_crunch_proj = row[8]
+      caesars_proj = row[4]
+      stokastic_proj = row[5]
       caesars_is_active = row[-1]
 
       value = 0
       if int(caesars_is_active) >= 3:
         value = caesars_proj
-      elif pp_proj != '':
-        value = pp_proj
       else:
         # TODO VALIDATE THIS CHANGE!
-        value = dfs_crunch_proj
+        value = stokastic_proj
 
       if value == '':
         continue
+      
+      if value == None:
+        __import__('pdb').set_trace()
 
       value = float(value)
 
@@ -195,7 +219,7 @@ class NBA_WNBA_Projections:
   def __init__(self, slate_path, sport):
     self.dm = DataManager(sport)
     self.sport = sport
-    self.scrapers = ['DFSCrunch', 'PP', 'Caesars', 'RotoWire', 'NumberFire', "FantasyData"]
+    self.scrapers = ['DFSCrunch', 'PP', 'Caesars', "Stokastic"]
 
     self.fd_players = utils.get_fd_slate_players(slate_path, exclude_injured_players=False)
 
@@ -247,7 +271,7 @@ class NBA_WNBA_Projections:
       projections = self.dm.query_projection(self.sport, "PP", player)
       if projections != None:
         pp_proj = parse_fantasy_score_from_projections("PP", projections)
-        if pp_proj != '':
+        if pp_proj != '' and pp_proj != 0:
           projection = pp_proj
           site = "pp"
       
@@ -296,8 +320,6 @@ class NBA_WNBA_Projections:
     except Exception as err:
         print("Error:", err)
 
-
-    
     return all_rows
 
   def get_player_rows(self):
@@ -318,6 +340,7 @@ class NBA_WNBA_Projections:
         scraper_to_projections[scraper] = projections
         projection = ''
         if projections != None:
+            # trim down the draft kings player pool!!!
           projection = parse_fantasy_score_from_projections(scraper, projections)
         player_row.append(projection)
 
@@ -376,23 +399,22 @@ class NBA_WNBA_Projections:
       dfs_crunch = row[5]
       pp_proj = row[6]
       caesars_proj = row[7]
-      rotowire_proj = row[8]
-      numberfire_proj = row[9]
-      fantasy_data_proj = row[10]
-      caesars_is_active = row[11]
+      stokastic = row[8]
+      caesars_is_active = row[9]
 
       value = 0
       if int(caesars_is_active) >= 3:
         value = caesars_proj
-      elif pp_proj != '':
+      elif pp_proj != '' and pp_proj != 0:
         value = pp_proj
       else:
-        value = dfs_crunch
+        value = stokastic
 
       if value == '':
         continue
 
       value = float(value)
+
 
       if exclude_zero_value and value == 0:
         continue

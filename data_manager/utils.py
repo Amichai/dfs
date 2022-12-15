@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "84559"
-TODAYS_SLATE_ID_NFL = "84056"
+TODAYS_SLATE_ID_NBA = "84729"
+TODAYS_SLATE_ID_NFL = "84373"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -449,6 +449,8 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
             if not player.name in player_to_ct:
                 player_to_ct[player.name] = 1
                 name_to_player[player.name] = player
+                if max_ct == 0:
+                    max_ct = 1
             else:
                 player_to_ct[player.name] += 1
                 new_ct = player_to_ct[player.name]
@@ -481,6 +483,8 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
 
     print("CORE!!")
     for player_name, ct in player_to_ct.items():
+        if ct == 0:
+            continue
         exposure = round(ct / max_ct, 1)
         if exposure >= 0.8:
             player = name_to_player[player_name]
@@ -631,12 +635,14 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
         if first_line:
             first_line = False
             continue
-
+        
+        if cells[0] == '':
+            continue
         row_prefix = [cells[0], cells[1], cells[2], cells[3]]
         prefix_cells.append(row_prefix)
         
-
-
+    # prices = [float(a[3][1:]) for a in prefix_cells]
+    # prefix_cells = sorted(prefix_cells, key=lambda a: float(a[3][1:]), reverse=True)
     timestamp = str(datetime.datetime.now())
     date = timestamp.replace('.', '_')
     date = date.replace(":", "_")
@@ -650,6 +656,8 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
     
     idx = 0
     for roster in rosters:
+        if idx > len(prefix_cells) - 1:
+            break
         cells = prefix_cells[idx]
         if cells[0] == '':
             continue

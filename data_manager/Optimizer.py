@@ -273,8 +273,15 @@ class DK_NBA_Optimizer:
 
       all_value_per_dollars = [pl.value_per_dollar for pl in players]
 
+      # best_value = max(all_value_per_dollars)
+      # cuttoff = best_value / 3
+
+
       best_value = max(all_value_per_dollars)
-      cuttoff = best_value / 3
+      worst_value = min(all_value_per_dollars)
+      value_range = best_value - worst_value
+      cuttoff = best_value - value_range / 1.6
+
       for player in players:
         if player.value_per_dollar < cuttoff:
           # print("Filtered out: {}".format(player))
@@ -367,6 +374,13 @@ class FD_NBA_Optimizer:
 
       best_value = max(all_value_per_dollars)
       cuttoff = best_value / 3
+
+
+      # best_value = max(all_value_per_dollars)
+      # worst_value = min(all_value_per_dollars)
+      # value_range = best_value - worst_value
+      # cuttoff = best_value - value_range / 1.5
+
       for player in players:
         if player.value_per_dollar < cuttoff:
           # print("Filtered out: {}".format(player))

@@ -42,9 +42,9 @@ def run(sport, count=None):
   scrapers_by_sport = {
     "NBA": [
       stokastic,
-      dfsCrunch,
+      # dfsCrunch,
       pps,
-      # cs,
+      cs,
       
       # tfs,
       # uds,
