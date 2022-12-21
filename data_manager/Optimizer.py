@@ -371,9 +371,10 @@ class FD_NBA_Optimizer:
       by_position_copied[position] = []
 
       all_value_per_dollars = [pl.value_per_dollar for pl in players]
-
-      best_value = max(all_value_per_dollars)
-      cuttoff = best_value / 3
+      cuttoff = 0
+      if len(all_value_per_dollars) > 18:
+        best_value = max(all_value_per_dollars)
+        cuttoff = best_value / 3
 
 
       # best_value = max(all_value_per_dollars)

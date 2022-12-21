@@ -489,23 +489,42 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times):
     players = entry[4:13]
 
     locked_players = []
+    original_roster_names = []
     for player in players:
       if "(LOCKED)" in player:
         name_stripped = utils.normalize_name(player.split('(')[0].strip())
-
+        original_roster_names.append(name_stripped)
+        if not name_stripped in name_to_player:
+          __import__('pdb').set_trace()
         locked_players.append(name_to_player[name_stripped])
       else:
         locked_players.append('')
 
-    optimized = optimizer.optimize(by_position, locked_players, 1800)
+    optimized = optimizer.optimize(by_position, locked_players, 3800)
     if isinstance(optimized, list):
       names1 = [p.name for p in  optimized[0].players]
     else:
       names1 = [p.name for p in optimized.players]
     roster1_key = ",".join(sorted(names1))
+
     if not roster1_key in optimized_roster_keys:
-      to_print.append(optimized)
-      optimized_roster_keys.append(roster1_key)
+
+      initial_value = round(sum([name_to_player[a].value for a in original_roster_names]), 2)
+
+      new_val = round(optimized.value, 2)
+      diff_val = new_val - initial_value
+
+      print("OLD VAL {} NEW VAL: {} = {}".format(initial_value, new_val, diff_val))
+      if diff_val > 0:
+        print("TAKING ROSTER {}\n{}\ninitial: {}".format(roster1_key, optimized, players))
+        to_print.append(optimized)
+        optimized_roster_keys.append(roster1_key)
+      else:
+        print("NO IMPROVEMENT SKIPPING!")
+        roster_names = [utils.normalize_name(a.split('(')[0].strip()) for a in players]
+        roster_players = [name_to_player[a] for a in roster_names]
+        to_print.append(utils.Roster(roster_players))
+
     else:
       print("SKIPPING COLLIDED ROSTER!")
       roster_names = [utils.normalize_name(a.split('(')[0].strip()) for a in players]
@@ -522,7 +541,7 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times):
   # utils.print_player_exposures(to_print)
 
 def optimize_slate_dk(slate_path, iter, entries_path, start_times, print_slate = True):
-  projections = NFL_Projections_dk(slate_path, "NFL", player_adjustments={})
+  projections = NFL_Projections_dk(slate_path, "NFL")
   if print_slate:
     projections.print_slate()
 
@@ -593,18 +612,22 @@ def optimize_for_single_game(slate_path, template_path, teams, iter=35000):
   # construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
   
 
-def optimize_slate_fd_dk(slate_id, start_times, iter=35000, fd=True, dk=True):
-  if fd:
+def optimize_slate_fd_dk(slate_id, start_times, iter=35000, fd=True, dk=True, reoptimize=False):
+  if fd and not reoptimize:
     fd_slate_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-players-list', '.csv')
     template_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-entries-upload-template', '.csv')
     all_rosters = optimize_slate(fd_slate_path, template_path, iter)
   
-  if dk:
-    dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
-    dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
+  dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
+  dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
+  if dk and not reoptimize:
     all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
     print("-----")
     print(all_rosters[0])
+
+  if dk and reoptimize:
+    current_time = 7.1
+    reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
 
 
 if __name__ == "__main__":
@@ -617,8 +640,8 @@ if __name__ == "__main__":
   # # reoptimize_slate(slate_path, "FanDuel-NFL-2022-10-23-81947-entries-upload-template (2).csv", 3.1)
 
   (start_times, _, _, _) = utils.load_start_times_and_slate_path('start_times_NFL.txt')
-  optimize_slate_fd_dk("84409", start_times)
-  assert False
+  # optimize_slate_fd_dk("84719", start_times, fd=False, reoptimize=True)
+  # assert False
 
 
   slate_id = utils.TODAYS_SLATE_ID_NFL
@@ -629,10 +652,11 @@ if __name__ == "__main__":
   
   # optimize_for_single_game(fd_slate_path, template_path, ["GB", "PHI"], 35000)
   
-  ##FIRST PASS
-  # all_rosters = optimize_slate(fd_slate_path, template_path, iter=45000)
-  # all_rosters = optimize_slate_dk(dk_slate_path, 45000, dk_entries_path, start_times, print_slate=False)
-  # assert False
+  #FIRST PASS
+  iter = 60000
+  all_rosters = optimize_slate(fd_slate_path, template_path, iter)
+  all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
+  assert False
 
 
   current_time = 3.2

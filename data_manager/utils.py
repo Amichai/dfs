@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "84729"
-TODAYS_SLATE_ID_NFL = "84373"
+TODAYS_SLATE_ID_NBA = "84971"
+TODAYS_SLATE_ID_NFL = "84700"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -625,7 +625,7 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
 
 
 
-def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_suffix = '', sport= "NBA"):
+def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_suffix = '', sport= "NBA", should_sort_by_entry_fee=True):
 
     file = open(entries_path)
     file_reader = csv.reader(file, delimiter=',', quotechar='"')
@@ -642,7 +642,8 @@ def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_
         prefix_cells.append(row_prefix)
         
     # prices = [float(a[3][1:]) for a in prefix_cells]
-    # prefix_cells = sorted(prefix_cells, key=lambda a: float(a[3][1:]), reverse=True)
+    if should_sort_by_entry_fee:
+        prefix_cells = sorted(prefix_cells, key=lambda a: float(a[3][1:]), reverse=True)
     timestamp = str(datetime.datetime.now())
     date = timestamp.replace('.', '_')
     date = date.replace(":", "_")

@@ -164,7 +164,7 @@ class NFL_Projections:
       if len(row) > 7:
         dfscrunch_proj = row[7]
       
-      if pp_proj != '':
+      if pp_proj != '' and pp_proj != 0:
         value = pp_proj
       else:
         value = dfscrunch_proj
@@ -283,7 +283,7 @@ class NFL_Projections_dk:
       if len(row) > 6:
         dfscrunch_proj = row[6]
       
-      if pp_proj != '':
+      if pp_proj != '' and pp_proj != 0:
         value = pp_proj
       else:
         value = dfscrunch_proj

@@ -791,6 +791,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
 
   by_position = projections.players_by_position(exclude_zero_value=False)
   name_to_players = get_name_to_player_objects(by_position)
+
   optimizer = FD_NBA_Optimizer()
 
   by_position = filter_out_locked_teams(by_position, locked_teams)
@@ -816,7 +817,9 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
 
     if roster_string in seen_roster_string_to_optimized_roster:
       result = seen_roster_string_to_optimized_roster[roster_string]
+
       all_results.append(result)
+      annotations.append(' - ')
       continue
 
     players3 = []
@@ -884,7 +887,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
       if is_se_roster_or_h2h:
         print("IS SE ROSTER or H2H!")
 
-      has_dead_player = any([a.value < 12.0 and a.team not in locked_teams for a in result.players])
+      has_dead_player = any([a.value < 12.0 and a.team not in locked_teams for a in players4])
 
       if optimized_roster_key in seen_roster_keys \
           and not allow_duplicate_rosters \
@@ -895,6 +898,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
         original_roster_result = utils.Roster(players4)
         all_results.append(original_roster_result)
         seen_roster_string_to_optimized_roster[roster_string] = original_roster_result
+
         annotations.append("UNCHANGED")
       else:
         seen_roster_keys.append(optimized_roster_key)
@@ -912,15 +916,18 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
           if diff >= 0:
             print("OLD VAL {} NEW VAL: {} = {}".format(initial_value, new_value, diff))
             print(result)
-            if abs(diff) > 20:
-              __import__('pdb').set_trace()
+            # if abs(diff) > 20:
+            #   __import__('pdb').set_trace()
           else:
             is_improvement = False
         # else:
 
         #   print("NO CHANGE {} - {}".format(result, initial_roster))
         if is_improvement:
-          annotations.append("reopt - {} - {}".format(lock_ct, result.value))
+          initial_value = round(sum([name_to_players[a][0].value for a in initial_roster]), 2)
+          new_value = result.value
+          diff = new_value - initial_value
+          annotations.append("reopt - {} - {} diff: {}".format(lock_ct, new_value, diff))
           all_results.append(result)
           seen_roster_string_to_optimized_roster[roster_string] = result
         else:
@@ -929,7 +936,8 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
           all_results.append(original_roster_result)
           seen_roster_string_to_optimized_roster[roster_string] = original_roster_result
           annotations.append("UNCHANGED")
-    except:
+    except Exception as exception:
+      print(exception)
       __import__('pdb').set_trace()
 
   total_roster_val = sum([a.value for a in all_results])
@@ -940,8 +948,8 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
   # variation = utils.print_roster_variation(existing_rosters)
   # print(variation)
   print("TOTAL ROSTER VAL: {}".format(total_roster_val))
-  
-  construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, None)
+
+  construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name, annotations)
 
 
 def single_game_optimizer(slate_path, template_path):
@@ -1044,6 +1052,8 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
         diff_val = new_val - initial_value
 
         print("OLD VAL {} NEW VAL: {} = {}".format(initial_value, new_val, diff_val))
+        # if diff_val < -5:
+          # __import__('pdb').set_trace()
         if diff_val > 0:
           print("TAKING ROSTER INDEX: {} - {}\n{}\ninitial: {}".format(i, roster1_key, optimized, players))
 
@@ -1074,7 +1084,7 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
     roster_idx += 1
 
   # utils.print_player_exposures(to_print)
-  utils.construct_dk_output_template(to_print, projections.name_to_player_id, entries_path)
+  utils.construct_dk_output_template(to_print, projections.name_to_player_id, entries_path, should_sort_by_entry_fee=False)
   print(utils.print_roster_variation(to_print))
   utils.print_player_exposures(to_print)
 
@@ -1217,27 +1227,24 @@ if __name__ == "__main__":
   #(start_times, slate_path, template_path, dk_slate_path)
   slate_id = utils.TODAYS_SLATE_ID_NBA
   
+  now = datetime.datetime.now()
+  current_time = (now.hour - 12) + (now.minute / 60)
+  print("CURRENT TIME: {}".format(current_time))
   
-
-
   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-players-list', '.csv')
   template_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-entries-upload-template', '.csv')
   dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
   dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
   
-
-  iter = 40000
-  # # ##FIRST PASS
-  # all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter)
-  # all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times)
-  # assert False
-
-  # SECOND PASS
-  # # __import__('pdb').set_trace()
-  
-  current_time = 9.6
-  reoptimize_slate_fd(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
-  reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
+  if current_time < min(start_times.keys()):
+    iter = 60000
+    all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter)
+    iter = int(iter * 0.85)
+    all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times)
+  else:
+    current_time = 9.6
+    reoptimize_slate_fd(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
+    # reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
 
   # assert False
 

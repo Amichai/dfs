@@ -1,4 +1,5 @@
 from projection_providers.NBA_WNBA_Projections import NBA_WNBA_Projections, NBA_Projections_dk
+import datetime
 from email import parser
 import time
 from datetime import timedelta, date
@@ -41,10 +42,10 @@ def run(sport, count=None):
 
   scrapers_by_sport = {
     "NBA": [
+      cs,
       stokastic,
       # dfsCrunch,
       pps,
-      cs,
       
       # tfs,
       # uds,
@@ -115,6 +116,9 @@ def run(sport, count=None):
 # Store projections in memory but don't write to disk until later?
 
 if __name__ == "__main__":
+  now = datetime.datetime.now()
+  current_hour = (now.hour - 12) + (now.minute / 60)
+  print("CURRENT TIME: {}".format(current_hour))
   parser = argparse.ArgumentParser()
   parser.add_argument('-s', '--sport', required=True)
   parser.add_argument('-c', '--count', required=False, default=None)

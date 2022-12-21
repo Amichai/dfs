@@ -170,7 +170,8 @@ class NBA_Projections_dk:
         value = stokastic_proj
 
       if value == '':
-        continue
+        value = 0
+        # continue
       
       if value == None:
         __import__('pdb').set_trace()
@@ -410,8 +411,12 @@ class NBA_WNBA_Projections:
       else:
         value = stokastic
 
+      # if "Ayton" in name:
+      #   __import__('pdb').set_trace()
+
       if value == '':
-        continue
+        value = 0
+        # continue
 
       value = float(value)
 
