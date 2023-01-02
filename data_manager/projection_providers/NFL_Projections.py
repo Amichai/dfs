@@ -169,6 +169,9 @@ class NFL_Projections:
       else:
         value = dfscrunch_proj
 
+      if not value:
+        value = pp_proj
+
       if name in self.player_adjustments:
         new_value = value * self.player_adjustments[name]
         print("{} ADJUSTED: {} -> {}".format(name, value, new_value))
@@ -287,6 +290,9 @@ class NFL_Projections_dk:
         value = pp_proj
       else:
         value = dfscrunch_proj
+
+      if not value:
+        value = pp_proj
 
       if name in self.player_adjustments:
         new_value = value * self.player_adjustments[name]

@@ -42,8 +42,8 @@ def run(sport, count=None):
 
   scrapers_by_sport = {
     "NBA": [
-      cs,
       stokastic,
+      cs,
       # dfsCrunch,
       pps,
       
@@ -103,7 +103,7 @@ def run(sport, count=None):
     # print the diff
     # run queries on the data to find arbitrage
 
-    time.sleep(period)
+    # time.sleep(period)
     idx += 1
 
 
@@ -118,22 +118,18 @@ def run(sport, count=None):
 if __name__ == "__main__":
   now = datetime.datetime.now()
   current_hour = (now.hour - 12) + (now.minute / 60)
+  current_hour = round(current_hour, 2)
   print("CURRENT TIME: {}".format(current_hour))
   parser = argparse.ArgumentParser()
   parser.add_argument('-s', '--sport', required=True)
   parser.add_argument('-c', '--count', required=False, default=None)
   args = vars(parser.parse_args())
-  run(args['sport'], args['count'])
+  sport = args['sport']
+  run(sport, args['count'])
 
-  # StokasticScraper("NBA").run()
-
-
-  # fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')
-  # by_position = NBA_WNBA_Projections(fd_slate_path, "NBA").write_player_projections_to_db()
-
-
-  # dataManager = data_manager.DataManager()
-  # process(dataManager)
+  if sport == "NBA":
+    fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')
+    by_position = NBA_WNBA_Projections(fd_slate_path, "NBA").write_player_projections_to_db()
 
 
 # fix writing zero

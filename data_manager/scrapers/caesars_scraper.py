@@ -90,7 +90,7 @@ class CaesarsScraper:
 
       self.driver.get(url)
 
-      time.sleep(1.5)
+      time.sleep(1.0)
 
       as_text = self.driver.find_element_by_tag_name('body').text
 

@@ -9,6 +9,10 @@ from table import Table
 from tabulate import tabulate
 import utils
 
+def round_off(val):
+  # return round(val, 2)
+  return round(val * 2) / 2
+
 def parse_fantasy_score_from_projections(site, projections):
   if site == "NumberFire":
     if "Fantasy Score" not in projections:
@@ -56,6 +60,7 @@ def parse_fantasy_score_from_projections(site, projections):
     turnovers = float(projections["Turnovers"])
     projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
     return round(projected, 2)
+    # return round_off(projected)
 
 def parse_fantasy_score_from_projections_dk(site, projections):
   if site == "Stokastic":
@@ -80,6 +85,7 @@ def parse_fantasy_score_from_projections_dk(site, projections):
     turnovers = float(projections["Turnovers"])
     projected = pts + rbds * 1.25 + asts * 1.5 + blks * 2 + stls * 2 - (turnovers / 6.0)
     return round(projected, 2)
+    # return round_off(projected)
 
 def parse_caesaers_projection_activity_metric(caesars_projection):
   if caesars_projection == None:
@@ -261,13 +267,14 @@ class NBA_WNBA_Projections:
   
     for player, info in self.fd_players.items():
       cost = float(info[2])
+
       player_row = [info[0], info[1], cost, info[3], info[5]]
       projection = ''
-      site = "dfsc"
+      site = "Stokastic"
       
-      projections = self.dm.query_projection(self.sport, "DFSCrunch", player)
+      projections = self.dm.query_projection(self.sport, "Stokastic", player)
       if projections != None:
-        projection = parse_fantasy_score_from_projections("DFSCrunch", projections)
+        projection = parse_fantasy_score_from_projections("Stokastic", projections)
 
       projections = self.dm.query_projection(self.sport, "PP", player)
       if projections != None:
@@ -285,22 +292,18 @@ class NBA_WNBA_Projections:
           projection = caesars_proj
           site = "caesars"
 
+      # TODO: automate the setting of this parameter
+      if projection == '' or projection < 14:
+        continue
+
       projection = float(projection)
-      if projection != '' and projection > 17:
-        if site == "dfsc":
-          # salt the dfsc projection
-          # projection += random.uniform(0, 0.4) - 0.25
-          projection = round(projection, 2)
-        if site == "PP":
-          # salt pp projection
-          # projection += random.uniform(0, 0.22) - 0.11
-          projection = round(projection, 2)
-
-
-        player_row.append(projection)
-        all_rows.append(player_row)
+      if site == "Stokastic":
+        projection = round(projection * 2) / 2
+      
+      player_row.append(projection)
+      all_rows.append(player_row)
     
-    all_rows = self.filter_out_low_value_players(all_rows)
+    # all_rows = self.filter_out_low_value_players(all_rows)
     dynamodb = boto3.resource('dynamodb')
     projections = dynamodb.Table('MLE_Projections')
     timestamp = str(datetime.datetime.now())

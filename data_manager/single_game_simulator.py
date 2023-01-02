@@ -4,6 +4,7 @@ import statistics
 import json
 import csv
 import itertools
+from projection_providers.NBA_WNBA_Projections import NBA_WNBA_Projections, NBA_Projections_dk
 # load up the projections
 # come up with roster generation strategies
 # (add actual point annotaitions as needed)
@@ -275,10 +276,6 @@ def draftKingsShowDownAnalysis():
     print("{} - {}".format(len(current_set), is_take_by_cost))
 
 
-  def evaluate_result_set():
-    # max, average, first
-    pass
-
   # top_150 = current_set[:150]
   top_150 = current_set[150:]
 
@@ -289,4 +286,113 @@ def draftKingsShowDownAnalysis():
 
   pass
 
-draftKingsShowDownAnalysis()
+def draftKingsShowDownAnalysis_lastNight():
+  dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
+  dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
+  projections = NBA_Projections_dk(dk_slate_path, "NBA", "2022-12-27")
+
+  data_file = open('data_files/dfs_crunch_dk_12_27_22_1000.json', "r")
+  as_json = json.loads(data_file.read())
+
+  names_to_actual = {}
+
+  for row in as_json:
+    name = row['name']
+    if not 'UTIL' in name:
+      continue
+
+    name = utils.normalize_name(name)
+    points = row['points']
+    if points == None:
+      points = 0
+
+    actual_points = float(points)
+    names_to_actual[name] = actual_points
+
+  by_position = projections.players_by_position()
+
+  player_pool_all = by_position['UTIL']
+  player_pool = []
+  seen_names = []
+  for player in player_pool_all:
+    if player.name in seen_names:
+      continue
+    seen_names.append(player.name)
+    player_pool.append(player)
+
+
+  player_pool = [a for a in player_pool if a.value > 4]
+
+  for p in player_pool:
+    p.value = round(p.value * 2) / 2
+
+  candidates = []
+
+  print("size:")
+  print(len(player_pool))
+
+  for name in player_pool:
+    capt = name
+
+    names_filtered = [n for n in player_pool if n != capt]
+    other_payers = itertools.combinations(names_filtered, 5)
+    for sub_set in other_payers:
+      candidate = [capt] + list(sub_set)
+
+      total_cost = candidate[0].cost * 1.5 + candidate[1].cost + candidate[2].cost + candidate[3].cost + candidate[4].cost + candidate[5].cost
+      if total_cost > 50000:
+        continue
+      candidates.append(candidate)
+  
+  sorted_by_value = sorted(candidates, key=lambda a: utils.candidate_value(a), reverse=True)
+  
+  filtered_lineups = []
+  max_cpt_ct = 25
+  capt_to_ct = {}
+  for roster in sorted_by_value:
+    cpt = roster[0].name
+    if not cpt in capt_to_ct:
+      capt_to_ct[cpt] = 1
+    else:
+      capt_to_ct[cpt] += 1
+
+    if capt_to_ct[cpt] > max_cpt_ct:
+      continue
+
+    filtered_lineups.append(roster)
+    if len(filtered_lineups) == 150:
+      break
+
+  
+  max_val = 0
+  over_the_line = 0
+  idx = 0
+  # play the first 50 and then 200-300
+  # for roster in sorted_by_value[100:2600]:
+  for roster in filtered_lineups:
+  # for roster in sorted_by_value[:150]:
+    actual_val = names_to_actual[roster[0].name] * 1.5
+    for player in roster[1:]:
+      actual_val += names_to_actual[player.name]
+    cost = utils.candidate_cost(roster)
+    # print("{} - {}".format(roster, actual_val))
+    # print("{}, {}, {}".format(idx, actual_val, cost))
+    print("{}, {}".format(idx, actual_val))
+    # print("{}, {}".format(cost, actual_val))
+    idx += 1
+    if actual_val > max_val:
+      max_val = actual_val
+
+    if actual_val > 224.5:
+      over_the_line += 1
+
+  # print(by_position)
+  print("MAX: {} OVER: {}".format(max_val, over_the_line))
+  # __import__('pdb').set_trace()
+# $43 TO MAX
+
+# draftKingsShowDownAnalysis()
+draftKingsShowDownAnalysis_lastNight()
+
+# how many different captains should I be targeting? 
+# how long do we see linear results? 

@@ -8,6 +8,7 @@ import statistics
 from ScrapeProcessManager import run
 from Optimizer import FD_WNBA_Optimizer
 import csv
+import itertools
 
 position_list = ["QB", "RB", "RB", "WR", "WR", "WR", "TE", "FLEX", "D"]
 
@@ -156,7 +157,7 @@ def parse_upload_template(csv_template_file, exclude, sport, offset = 0, entry_f
     return player_id_to_name, name_to_team, name_to_salary, name_to_player_id, first_line, entries, players_to_remove, player_id_to_fd_name
 
 
-def construct_upload_template_file(rosters, first_line, entries, player_to_id, player_id_to_name, index_strings):
+def construct_upload_template_file(rosters, first_line, entries, player_to_id, player_id_to_name, index_strings=None):
     timestamp = str(datetime.datetime.now())
     date = timestamp.replace('.', '_')
     date = date.replace(":", "_")
@@ -270,7 +271,11 @@ def is_roster_stacked(roster):
   # defense opp can't contain any off teams
   return qb_has_stack and defense_not_opposed
 
-def optimize_slate(slate_path, template_path, iter, print_slate=True):
+
+def distribute_rosters(rosters, mme_roster_offset=0):
+  pass
+
+def optimize_slate(slate_path, template_path, iter, print_slate=True, mme_roster_offset=0):
   projections = NFL_Projections(slate_path, "NFL")
   if print_slate:
     projections.print_slate()
@@ -332,17 +337,21 @@ def optimize_slate(slate_path, template_path, iter, print_slate=True):
 
     take_idx = entry_name_to_take_idx[entry_name]
 
-    # entry_ct = entry_name_to_ct[entry_name]
-    # if entry_ct == 1:
-    #   to_print.append(rosters_sorted[0])
-    # else:
-    idx = take_idx % len(rosters_sorted)
-    roster_to_append = rosters_sorted[idx]
-    to_print.append(roster_to_append)
-    index_strings.append(str(idx) + "_MME_{}".format(roster_to_append.value))
-    entry_name_to_take_idx[entry_name] += 1
+    entry_ct = entry_name_to_ct[entry_name]
+    if entry_ct == 1:
+      roster_to_append = rosters_sorted[0]
+      to_print.append(roster_to_append)
+      index_strings.append("0_SE_{}".format(roster_to_append.value))
+    else:
+      idx = take_idx % len(rosters_sorted) + mme_roster_offset
+      roster_to_append = rosters_sorted[idx]
+      to_print.append(roster_to_append)
+      index_strings.append(str(idx) + "_MME_{}".format(roster_to_append.value))
+      entry_name_to_take_idx[entry_name] += 1
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
+
+  return rosters_sorted
 
 
 def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
@@ -404,7 +413,9 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
     seen_roster_string_to_optimized_roster[roster_string] = result
 
     ##TEST CODE
-
+    if isinstance(result, list):
+      result = result[0]
+    
     names1 = [p.name for p in result.players]
     roster1_key = ",".join(sorted(names1))
 
@@ -432,7 +443,22 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
         print("INITIAL ROSTER:\n{}".format(initial_roster))
         print(result)
 
-      all_results.append(result)
+        initial_value = round(sum([name_to_players[a][0].value for a in initial_roster]), 2)
+        new_val = round(result.value, 2)
+        diff_val = new_val - initial_value
+
+        print("OLD VAL {} NEW VAL: {} = {}".format(initial_value, new_val, diff_val))
+        if diff_val > 0:
+          print("TAKING ROSTER {}\n{}\ninitial: {}".format(roster1_key, result, players))
+          all_results.append(result)
+        else:
+          print("NO IMPROVEMENT SKIPPING!")
+          roster_players = [name_to_players[a][0] for a in initial_roster]
+          all_results.append(utils.Roster(roster_players))
+
+      else:
+        all_results.append(result)
+
 
     ##END TEST CODE
 
@@ -443,6 +469,8 @@ def reoptimize_slate(slate_path, current_rosters_path, current_time, start_times
   utils.print_player_exposures(all_results)
 
   construct_upload_template_file(all_results, first_line, entries, name_to_player_id, player_id_to_fd_name)
+
+  utils.print_roster_variation(all_results)
 
 
 def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times):
@@ -498,6 +526,8 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times):
           __import__('pdb').set_trace()
         locked_players.append(name_to_player[name_stripped])
       else:
+        name_stripped = utils.normalize_name(player.split('(')[0].strip())
+        original_roster_names.append(name_stripped)
         locked_players.append('')
 
     optimized = optimizer.optimize(by_position, locked_players, 3800)
@@ -582,7 +612,7 @@ def optimize_slate_dk(slate_path, iter, entries_path, start_times, print_slate =
   return rosters  
   
 
-def optimize_for_single_game(slate_path, template_path, teams, iter=35000):
+def optimize_for_single_game_fd(slate_path, template_path, teams):
   projections = NFL_Projections(slate_path, "NFL")
   projections.print_slate()
 
@@ -608,8 +638,36 @@ def optimize_for_single_game(slate_path, template_path, teams, iter=35000):
     idx += 1
     to_print.append(utils.Roster(r[0]))
 
+  construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
   return to_print
-  # construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
+
+def optimize_for_single_game_dk(slate_path, template_path):
+  projections = NFL_Projections_dk(slate_path, "NFL")
+  projections.print_slate()
+
+  by_position = projections.players_by_position()
+
+  player_pool = by_position['FLEX'] + by_position["D"]
+
+  candidates = []
+
+  for name in player_pool:
+    capt = name
+
+    names_filtered = [n for n in player_pool if n != capt]
+    other_payers = itertools.combinations(names_filtered, 5)
+    for sub_set in other_payers:
+      candidate = [capt] + list(sub_set)
+
+      total_cost = candidate[0].cost * 1.5 + candidate[1].cost + candidate[2].cost + candidate[3].cost + candidate[4].cost + candidate[5].cost
+      if total_cost > 50000:
+        continue
+      candidates.append(candidate)
+  
+  sorted_by_value = sorted(candidates, key=lambda a: utils.candidate_value(a), reverse=True)
+
+  roster_ct = utils.construct_dk_output_single_game(sorted_by_value, projections.name_to_player_id, template_path, "ls_opt", "NFL")
+  # return to_print
   
 
 def optimize_slate_fd_dk(slate_id, start_times, iter=35000, fd=True, dk=True, reoptimize=False):
@@ -630,6 +688,8 @@ def optimize_slate_fd_dk(slate_id, start_times, iter=35000, fd=True, dk=True, re
     reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
 
 
+
+
 if __name__ == "__main__":
   # download_folder = "/Users/amichailevy/Downloads/"
   # slate_path = "FanDuel-NFL-2022 ET-10 ET-23 ET-81947-players-list.csv"
@@ -643,6 +703,10 @@ if __name__ == "__main__":
   # optimize_slate_fd_dk("84719", start_times, fd=False, reoptimize=True)
   # assert False
 
+  now = datetime.datetime.now()
+  current_time = (now.hour - 12) + (now.minute / 60)
+  current_time = round(current_time, 2)
+  print("CURRENT TIME: {}".format(current_time))
 
   slate_id = utils.TODAYS_SLATE_ID_NFL
   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-players-list', '.csv')
@@ -650,18 +714,23 @@ if __name__ == "__main__":
   dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
   dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
   
-  # optimize_for_single_game(fd_slate_path, template_path, ["GB", "PHI"], 35000)
+  # optimize_for_single_game_fd(fd_slate_path, template_path, ["DAL", "TEN"])
+  # optimize_for_single_game_dk(dk_slate_path, dk_entries_path)
+
+  # assert False
   
   #FIRST PASS
-  iter = 60000
-  all_rosters = optimize_slate(fd_slate_path, template_path, iter)
-  all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
-  assert False
-
-
-  current_time = 3.2
-  reoptimize_slate(fd_slate_path, template_path, current_time, start_times)
-  reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
+  if current_time < min(start_times.keys()):
+    iter = 50000
+    # all_rosters = optimize_slate(fd_slate_path, utils.DOWNLOAD_FOLDER + "didi_fd_nfl.csv", iter, mme_roster_offset=0)
+    # print(len(all_rosters))
+    # __import__('pdb').set_trace()
+    all_rosters = optimize_slate(fd_slate_path, template_path, iter, mme_roster_offset=42)
+    all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
+  else:
+  # current_time = 3.6
+    reoptimize_slate(fd_slate_path, template_path, current_time, start_times)
+    reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
 
 
 # stacking -

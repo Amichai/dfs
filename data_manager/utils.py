@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "84971"
-TODAYS_SLATE_ID_NFL = "84700"
+TODAYS_SLATE_ID_NBA = "85468"
+TODAYS_SLATE_ID_NFL = "85186"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -253,6 +253,7 @@ def single_game_optimizer_many(by_position, ct, locks=None):
 
 DOWNLOAD_FOLDER = "/Users/amichailevy/Downloads/"
 
+
 def load_start_times_and_slate_path(path):
     start_times = open(path, "r")
     lines = start_times.readlines()
@@ -492,6 +493,35 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
 
     return player_to_ct
 
+def print_roster_time_distribution(rosters, start_times):
+    team_to_start_time = {}
+    start_time_to_start_idx = {}
+
+    all_start_times = sorted(list(start_times.keys()))
+    for i in range(len(all_start_times)):
+        start_time_to_start_idx[all_start_times[i]] = i
+
+    start_idx_to_ct = {}
+
+    for time, teams in start_times.items():
+        for team in teams:
+            team_to_start_time[team] = time
+    for roster in rosters:
+        for player in roster.players:
+            team = player.team
+            start_time = team_to_start_time[team]
+            start_idx = start_time_to_start_idx[start_time]
+            if not start_time in start_idx_to_ct:
+                start_idx_to_ct[start_time] = player.value
+            else:
+                start_idx_to_ct[start_time] += player.value
+    
+    start_idx_to_ct_sorted = sorted(start_idx_to_ct.items(), key=lambda a: a[0])
+    for start_idx_ct in start_idx_to_ct_sorted:
+        val = start_idx_ct[1]
+        val = round(val / 1000, 1)
+        print("{} - {}".format(start_idx_ct[0], val))
+
 def print_roster_variation(rosters):
     key_to_ct = {}
     for roster in rosters:
@@ -623,7 +653,62 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
         
     return all_players
 
+def construct_dk_output_single_game(rosters, name_to_player_id, entries_path, file_suffix = '', sport= "NBA", should_sort_by_entry_fee=True):
+    file = open(entries_path)
+    file_reader = csv.reader(file, delimiter=',', quotechar='"')
+    prefix_cells = []
+    first_line = True
+    for cells in file_reader:
+        if first_line:
+            first_line = False
+            continue
+        
+        if cells[0] == '':
+            continue
+        row_prefix = [cells[0], cells[1], cells[2], cells[3]]
+        prefix_cells.append(row_prefix)
+        
+    # prices = [float(a[3][1:]) for a in prefix_cells]
+    if should_sort_by_entry_fee:
+        prefix_cells = sorted(prefix_cells, key=lambda a: float(a[3][1:]), reverse=True)
+    timestamp = str(datetime.datetime.now())
+    date = timestamp.replace('.', '_')
+    date = date.replace(":", "_")
 
+    output_file = open("/Users/amichailevy/Downloads/DK_upload_template_single_game_{}_{}.csv".format(date, file_suffix), "x")
+    
+    if sport == "NFL":
+        first_line = "Entry ID,Contest Name,Contest ID,Entry Fee,CPT,FLEX,FLEX,FLEX,FLEX,FLEX\n"
+    else:
+        first_line = "Entry ID,Contest Name,Contest ID,Entry Fee,CPT,UTIL,UTIL,UTIL,UTIL,UTIL\n"
+
+    output_file.write(first_line)
+    
+    idx = 0
+    for roster in rosters:
+        if idx > len(prefix_cells) - 1:
+            break
+        cells = prefix_cells[idx]
+        if cells[0] == '':
+            continue
+        for player in roster:
+            player_id = name_to_player_id[player.name]
+            cells.append(player_id)
+        idx += 1
+        roster_val = candidate_value(roster)
+        cells.append(str(roster_val))
+        active_player_ct = len([a for a in roster if a != 0])
+        val_per_player = roster_val / active_player_ct
+        total_cost = sum([a.value for a in roster if a != 0])
+        cost_per_player = total_cost / active_player_ct
+        cells.append(str(round(val_per_player / cost_per_player * 100, 2)))
+        cells.append(str(candidate_cost(roster)))
+
+        output_file.write(",".join(cells) + "\n")
+
+    output_file.close()
+
+    return idx
 
 def construct_dk_output_template(rosters, name_to_player_id, entries_path, file_suffix = '', sport= "NBA", should_sort_by_entry_fee=True):
 
@@ -781,3 +866,9 @@ def write_to_db(table_name, to_write):
         print("UPLOADED TO TABLE: {}!".format(table_name))
     except Exception as err:
         print("Error:", err)
+
+def candidate_value(candidate):
+    return candidate[0].value * 1.5 + candidate[1].value + candidate[2].value + candidate[3].value + candidate[4].value + candidate[5].value
+
+def candidate_cost(candidate):
+    return candidate[0].cost * 1.5 + candidate[1].cost + candidate[2].cost + candidate[3].cost + candidate[4].cost + candidate[5].cost
