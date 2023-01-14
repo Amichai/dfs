@@ -42,10 +42,10 @@ def run(sport, count=None):
 
   scrapers_by_sport = {
     "NBA": [
-      stokastic,
       cs,
       # dfsCrunch,
       pps,
+      stokastic,
       
       # tfs,
       # uds,
@@ -127,9 +127,9 @@ if __name__ == "__main__":
   sport = args['sport']
   run(sport, args['count'])
 
-  if sport == "NBA":
-    fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')
-    by_position = NBA_WNBA_Projections(fd_slate_path, "NBA").write_player_projections_to_db()
+  # if sport == "NBA":
+  #   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', utils.TODAYS_SLATE_ID_NBA, '-players-list', '.csv')
+  #   by_position = NBA_WNBA_Projections(fd_slate_path, "NBA").write_player_projections_to_db()
 
 
 # fix writing zero

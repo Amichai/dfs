@@ -9,7 +9,7 @@ headers = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
     'accept-language': 'en-US,en;q=0.9',
     'cache-control': 'max-age=0',
-    'cookie': 'wisepops_activity_session=%7B%22id%22%3A%22f70ac129-e52e-4a23-ba9b-11f5fc8011cd%22%2C%22start%22%3A1672618551956%7D; advanced_ads_pro_visitor_referrer=%7B%22expires%22%3A1699232442%2C%22data%22%3A%22https%3A//www.google.com/%22%7D; _gcl_au=1.1.1491631464.1667696442; wisepops=%7B%22csd%22%3A1%2C%22popups%22%3A%7B%7D%2C%22sub%22%3A0%2C%22ucrn%22%3A23%2C%22cid%22%3A%2247155%22%2C%22v%22%3A4%2C%22bandit%22%3A%7B%22recos%22%3A%7B%7D%7D%7D; _fbp=fb.1.1667696442157.502392265; advanced_ads_pro_server_info=%7B%22conditions%22%3A%7B%22geo_targeting%22%3A%7B%22fb0761cc21%22%3A%7B%22data%22%3A%7B%22visitor_city%22%3A%22New%20Rochelle%22%2C%22visitor_region%22%3A%22New%20York%22%2C%22country_code%22%3A%22US%22%2C%22continent_code%22%3A%22NA%22%2C%22is_eu_state%22%3Afalse%2C%22current_lat%22%3A40.9163%2C%22current_lon%22%3A-73.7898%7D%2C%22time%22%3A1670675765%7D%7D%7D%2C%22vc_cache_reset%22%3A0%7D; __stripe_mid=4fc4579c-b991-4dba-a624-eb6a2325e3849ca10d; wordpress_test_cookie=WP+Cookie+check; _au_1d=AU1D-0100-001670678988-0DTM92XR-FTD0; _hp2_id.5711864=%7B%22userId%22%3A%223899547445236944%22%2C%22pageviewId%22%3A%22686799774779564%22%2C%22sessionId%22%3A%225181616089750261%22%2C%22identity%22%3Anull%2C%22trackerVersion%22%3A%224.0%22%7D; advanced_ads_browser_width=1535; wisepops_visits=%5B%222023-01-02T00%3A15%3A51.468Z%22%2C%222022-12-30T23%3A50%3A49.285Z%22%2C%222022-12-30T15%3A43%3A51.168Z%22%2C%222022-12-30T02%3A26%3A29.784Z%22%2C%222022-12-27T15%3A33%3A58.987Z%22%2C%222022-12-23T00%3A46%3A28.602Z%22%2C%222022-12-22T03%3A15%3A44.600Z%22%2C%222022-12-16T23%3A54%3A00.809Z%22%2C%222022-12-16T23%3A46%3A08.681Z%22%2C%222022-12-16T23%3A45%3A53.101Z%22%5D; _gid=GA1.2.58472392.1672618552; _gat_UA-113468959-1=1; _clck=19bduop|1|f7x|0; _gat_gtag_UA_113468959_1=1; wisepops_activity_session=%7B%22id%22%3A%22bd3ed950-f829-4204-a336-62721b9274da%22%2C%22start%22%3A1672618554054%7D; _au_last_seen_pixels=eyJhcG4iOjE2NzI2MTg1NTQsInR0ZCI6MTY3MjYxODU1NCwicHViIjoxNjcyNjE4NTU0LCJ0YXBhZCI6MTY3MjYxODU1NCwiYWR4IjoxNjcyNjE4NTU0LCJnb28iOjE2NzI2MTg1NTQsIm1lZGlhbWF0aCI6MTY3MjYxODU1NCwiYmVlcyI6MTY3MjQ0NDI1NCwidGFib29sYSI6MTY3MjQ0NDI1NywicnViIjoxNjcyNDQ0MjU3LCJzb24iOjE2NzI2MTg1NTQsImFkbyI6MTY3MjQ0NDI1NywidW5ydWx5IjoxNjcyNDQ0MjU3LCJwcG50IjoxNjcyNjE4NTU0LCJpbXByIjoxNjcyNjE4NTU0LCJzbWFydCI6MTY3MjQ0NDI1NCwib3BlbngiOjE2NzI0NDQyNTd9; wordpress_logged_in_ee248d429f08b2f1ef6087d0533242ab=aml2%7C1672791356%7CmKHsxHVxmHpiuWEkMFiRhbGGNZDHJ6tJAUcLQP5yHUm%7C9a061a39ee80d2cff5ba6a11641a0326f3b7d882cd9092d570c7d409de78ad64; advanced_ads_page_impressions=%7B%22expires%22%3A1983056442%2C%22data%22%3A113%7D; wisepops_session=%7B%22arrivalOnSite%22%3A%222023-01-02T00%3A15%3A51.468Z%22%2C%22mtime%22%3A1672618558793%2C%22pageviews%22%3A3%2C%22popups%22%3A%7B%7D%2C%22bars%22%3A%7B%7D%2C%22countdowns%22%3A%7B%7D%2C%22src%22%3Anull%2C%22utm%22%3A%7B%7D%2C%22testIp%22%3Anull%7D; _ga_FY84WPJ80Q=GS1.1.1672618552.27.1.1672618559.53.0.0; _ga=GA1.2.1974118152.1667696442; _clsk=ep514c|1672618560128|3|1|j.clarity.ms/collect',
+    'cookie': 'wisepops_activity_session=%7B%22id%22%3A%22a728679b-4e9e-4cc3-9dca-1376c74569a2%22%2C%22start%22%3A1673656080334%7D; advanced_ads_pro_visitor_referrer=%7B%22expires%22%3A1699232442%2C%22data%22%3A%22https%3A//www.google.com/%22%7D; _gcl_au=1.1.1491631464.1667696442; wisepops=%7B%22csd%22%3A1%2C%22popups%22%3A%7B%7D%2C%22sub%22%3A0%2C%22ucrn%22%3A23%2C%22cid%22%3A%2247155%22%2C%22v%22%3A4%2C%22bandit%22%3A%7B%22recos%22%3A%7B%7D%7D%7D; _fbp=fb.1.1667696442157.502392265; __stripe_mid=4fc4579c-b991-4dba-a624-eb6a2325e3849ca10d; wordpress_test_cookie=WP+Cookie+check; _au_1d=AU1D-0100-001670678988-0DTM92XR-FTD0; _hp2_id.5711864=%7B%22userId%22%3A%223899547445236944%22%2C%22pageviewId%22%3A%22686799774779564%22%2C%22sessionId%22%3A%225181616089750261%22%2C%22identity%22%3Anull%2C%22trackerVersion%22%3A%224.0%22%7D; advanced_ads_pro_server_info=%7B%22conditions%22%3A%7B%22geo_targeting%22%3A%7B%22fb0761cc21%22%3A%7B%22data%22%3A%7B%22visitor_city%22%3A%22New%20Rochelle%22%2C%22visitor_region%22%3A%22New%20York%22%2C%22country_code%22%3A%22US%22%2C%22continent_code%22%3A%22NA%22%2C%22is_eu_state%22%3Afalse%2C%22current_lat%22%3A40.9163%2C%22current_lon%22%3A-73.7898%7D%2C%22time%22%3A1673308050%7D%7D%7D%2C%22vc_cache_reset%22%3A0%7D; _gid=GA1.2.2001643962.1673623453; advanced_ads_browser_width=1728; _clck=19bduop|1|f89|0; wisepops_visits=%5B%222023-01-14T00%3A27%3A59.839Z%22%2C%222023-01-14T00%3A17%3A32.127Z%22%2C%222023-01-13T23%3A38%3A16.356Z%22%2C%222023-01-13T23%3A06%3A16.487Z%22%2C%222023-01-13T15%3A24%3A10.919Z%22%2C%222023-01-12T00%3A26%3A35.432Z%22%2C%222023-01-11T01%3A20%3A09.610Z%22%2C%222023-01-10T00%3A01%3A17.616Z%22%2C%222023-01-09T23%3A52%3A01.209Z%22%2C%222023-01-09T23%3A46%3A46.968Z%22%5D; _gat_UA-113468959-1=1; _gat_gtag_UA_113468959_1=1; wisepops_activity_session=%7B%22id%22%3A%22c92aeb92-3a55-4a4f-9e7d-840889e93108%22%2C%22start%22%3A1673656083916%7D; _au_last_seen_pixels=eyJhcG4iOjE2NzM2NTYwODQsInR0ZCI6MTY3MzY1NjA4NCwicHViIjoxNjczNjU2MDg0LCJ0YXBhZCI6MTY3MzY1NjA4NCwiYWR4IjoxNjczNjU2MDg0LCJnb28iOjE2NzM2NTYwODQsIm1lZGlhbWF0aCI6MTY3MzY1NjA4NCwiYmVlcyI6MTY3MzQ4MzE5OSwidGFib29sYSI6MTY3MzQ4MzIwNCwicnViIjoxNjczNjU2MDg0LCJzb24iOjE2NzM0ODMyMDQsImFkbyI6MTY3MzY1NjA4NCwidW5ydWx5IjoxNjczNDgzMTk5LCJwcG50IjoxNjczNjU2MDg0LCJpbXByIjoxNjczNDgzMjA0LCJzbWFydCI6MTY3MzQ4MzIwNCwib3BlbngiOjE2NzM0ODMyMDR9; wordpress_logged_in_ee248d429f08b2f1ef6087d0533242ab=aml2%7C1673828885%7CxERMwuTa6GDR0u9K3fJrZ29vK7EwAJpHNdZLtW6d73V%7C59190b249fbea1d9d1cab99ecd47178d7655896aa9e8b698c392fe94a380f7c8; _ga_FY84WPJ80Q=GS1.1.1673655452.41.1.1673656087.52.0.0; advanced_ads_page_impressions=%7B%22expires%22%3A1983056442%2C%22data%22%3A158%7D; wisepops_session=%7B%22arrivalOnSite%22%3A%222023-01-14T00%3A27%3A59.839Z%22%2C%22mtime%22%3A1673656087552%2C%22pageviews%22%3A3%2C%22popups%22%3A%7B%7D%2C%22bars%22%3A%7B%7D%2C%22countdowns%22%3A%7B%7D%2C%22src%22%3Anull%2C%22utm%22%3A%7B%7D%2C%22testIp%22%3Anull%7D; _ga=GA1.2.1974118152.1667696442; _clsk=s1mxa|1673656089529|4|1|j.clarity.ms/collect',
     'referer': 'https://www.stokastic.com/login2',
     'sec-ch-ua': '"Not?A_Brand";v="8", "Chromium";v="108", "Google Chrome";v="108"',
     'sec-ch-ua-mobile': '?0',
@@ -45,26 +45,26 @@ class StokasticScraper:
       projection = float(parts[4])
       bust = float(parts[8])
       boom = float(parts[9])
-      posProj = parts[10]
+      # posProj = parts[10]
       try:
         posProj = round(float(posProj), 2)
       except:
         pass
       ownership = parts[11]
       optimal = parts[12]
-      leverage = parts[13]
+      # leverage = parts[13]
       if not name in to_return:
         to_return[name] = {}
       to_return[name][prefix + 'Fantasy Score'] = projection
-      to_return[name][prefix + 'boom'] = boom
-      to_return[name][prefix + 'bust'] = bust
-      if posProj != '':
-        to_return[name][prefix + 'posProj'] = posProj
+      # to_return[name][prefix + 'boom'] = boom
+      # to_return[name][prefix + 'bust'] = bust
+      # if posProj != '':
+      #   to_return[name][prefix + 'posProj'] = posProj
       if ownership != '':
         to_return[name][prefix + 'ownership'] = ownership
       if optimal != '':
         to_return[name][prefix + 'optimal'] = optimal
-      to_return[name][prefix + 'leverage'] = leverage
+      # to_return[name][prefix + 'leverage'] = leverage
 
     return to_return
 

@@ -288,7 +288,7 @@ class DK_NBA_Optimizer:
           continue
         by_position_copied[position].append(player)
 
-      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
+      # print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
     
     return by_position_copied
 
@@ -388,7 +388,7 @@ class FD_NBA_Optimizer:
           continue
         by_position_copied[position].append(player)
 
-      print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
+      # print("{} Player ct before: {} after: {}".format(position, len(players), len(by_position_copied[position])))
     
     return by_position_copied
 

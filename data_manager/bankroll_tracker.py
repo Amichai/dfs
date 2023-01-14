@@ -3,6 +3,7 @@ import statistics
 
 download_folder = "past_entries/"
 filepaths = [
+  "fanduel entry history 20230110.csv",
   "fanduel entry history 20221208.csv",
   "fanduel entry history 20221207.csv",
   "fanduel entry history 20221206.csv",

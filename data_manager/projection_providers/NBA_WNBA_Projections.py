@@ -83,7 +83,7 @@ def parse_fantasy_score_from_projections_dk(site, projections):
     
     stls = float(projections['Steals'])
     turnovers = float(projections["Turnovers"])
-    projected = pts + rbds * 1.25 + asts * 1.5 + blks * 2 + stls * 2 - (turnovers / 6.0)
+    projected = pts + rbds * 1.25 + asts * 1.5 + blks * 2 + stls * 2 - (turnovers / 6.0) + 1.8
     return round(projected, 2)
     # return round_off(projected)
 
@@ -169,7 +169,7 @@ class NBA_Projections_dk:
       caesars_is_active = row[-1]
 
       value = 0
-      if int(caesars_is_active) >= 3:
+      if int(caesars_is_active) >= 4:
         value = caesars_proj
       else:
         # TODO VALIDATE THIS CHANGE!
@@ -391,7 +391,7 @@ class NBA_WNBA_Projections:
     return name_to_team
 
 
-  def players_by_position(self, exclude_zero_value=False):
+  def players_by_position(self, exclude_zero_value=False, proj_adjust={}):
     by_position = {}
     all_rows = self.get_player_rows()
     for row in all_rows:
@@ -407,12 +407,17 @@ class NBA_WNBA_Projections:
       caesars_is_active = row[9]
 
       value = 0
-      if int(caesars_is_active) >= 3:
+      if int(caesars_is_active) >= 4:
         value = caesars_proj
       elif pp_proj != '' and pp_proj != 0:
         value = pp_proj
       else:
         value = stokastic
+        # if stokastic != '':
+        # else: 
+        #   value = dfs_crunch
+      
+      # __import__('pdb').set_trace()
 
       # if "Ayton" in name:
       #   __import__('pdb').set_trace()
@@ -423,6 +428,8 @@ class NBA_WNBA_Projections:
 
       value = float(value)
 
+      if name in proj_adjust:
+        value *= proj_adjust[name]
 
       if exclude_zero_value and value == 0:
         continue

@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
 
-TODAYS_SLATE_ID_NBA = "85468"
-TODAYS_SLATE_ID_NFL = "85186"
+TODAYS_SLATE_ID_NBA = "85929"
+TODAYS_SLATE_ID_NFL = "85546"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -459,8 +459,6 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
                     max_ct = new_ct
 
 
-
-
     player_to_ct_sorted = sorted(player_to_ct.items(), key=lambda a: a[1], reverse=True)
     print(player_to_ct_sorted)
 
@@ -471,7 +469,7 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
             continue
         if locked_teams != None and pl.team in locked_teams:
             continue
-        rows.append([player_name, ct, pl.team, round(pl.value, 2)])
+        rows.append([player_name, ct, pl.team, round(pl.value, 2), round(pl.value / pl.cost * 100, 2)])
 
     rows_sorted = sorted(rows, key=lambda a: a[1], reverse=True)
     idx = 1
@@ -480,7 +478,7 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
         new_row = [idx] + row
         rows_sorted_with_idx.append(new_row)
         idx += 1
-    print(tabulate(rows_sorted_with_idx, headers=["idx", "name", "ct", "team", "value"]))
+    print(tabulate(rows_sorted_with_idx, headers=["idx", "name", "ct", "team", "value", "val/$", ""]))
 
     print("CORE!!")
     for player_name, ct in player_to_ct.items():
@@ -537,7 +535,7 @@ def print_roster_variation(rosters):
     
     just_cts = key_to_ct.values()
     to_return = sorted(just_cts, reverse=True)
-    print(to_return)
+    print("{} - {}".format(len(to_return), to_return))
     return to_return
 
 

@@ -19,5 +19,7 @@ name_mapper = {
   "KJ Martin": "Kenyon Martin",
   "Sviatoslav Mykhailiuk": "Svi Mykhailiuk",
   "Marjon Beauchamp": "MarJon Beauchamp",
-  
+
+  # todo: this one doesn't seem to be working!
+  "Guillermo Hernangomez": 'Willy Hernangomez',
 }

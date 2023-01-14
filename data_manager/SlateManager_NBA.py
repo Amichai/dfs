@@ -218,11 +218,20 @@ def is_roster_valid(roster):
     
   return True
 
+
+# TODO:
+# team_to_opp = {'BOS': 'OKC', 'OKC': 'BOS', 'WAS': 'MIL', 'MIL': 'WAS', 'SAC': 'UTA', 'UTA': 'SAC'}
+
 def is_roster_valid_dk(roster):
   team_ct = {}
   for pl in roster.players:
     team = pl.team
+    # opp = pl.opp
+    # opp = team_to_opp[team]
     opp = pl.opp
+
+    # TODO:
+    
     if not team in team_ct:
       team_ct[team] = 1
       team_ct[opp] = 1
@@ -231,6 +240,7 @@ def is_roster_valid_dk(roster):
       team_ct[opp] += 1
     
   # __import__('pdb').set_trace()
+  
   return len(team_ct.keys()) > 2
 
 
@@ -482,6 +492,26 @@ def optimize_slate_v2(slate_path, template_path, iter, value_tolerance=5.6, vali
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
 
+def sort_all_entries(entries):
+  se_entries = []
+  mme_entries = []
+
+  for entry in entries:
+    name = entry[2]
+    if "Single Entry" in name or "Entries Max" in name or "H2H vs" in name:
+      se_entries.append(entry)
+    else:
+      pot_size = name.split('(')[1].split(' to ')[0].strip('$K')
+      mme_entries.append([entry, float(pot_size)])
+
+    pass
+
+  mme_sorted = sorted(mme_entries, key=lambda a: a[1], reverse=True)
+  se_entries = sorted(se_entries)
+
+  to_return = [a[0] for a in mme_sorted] + se_entries
+  return to_return
+
 def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filter=None, hedge_entry_name=None, hedge_entry_ct=0):
   projections = NBA_WNBA_Projections(slate_path, "NBA")
   projections.print_slate()
@@ -491,10 +521,13 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
   by_position = projections.players_by_position()
 
-
-  # # assert False
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(template_path, [], '', 0)
 
+  random.shuffle(entries)
+
+  entries = sort_all_entries(entries)
+
+  # __import__('pdb').set_trace()
 
   entry_name_to_ct = {}
   for entry in entries:
@@ -530,10 +563,10 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   valid_mme_rosters = [r for r in mme_rosters if is_roster_valid(r)]
   mme_rosters = valid_mme_rosters
 
-  if len(mme_rosters) < 151:
+  if len(mme_rosters) < len(entries):
     __import__('pdb').set_trace()
 
-  top_mme_rosters = mme_rosters[rosters_to_skip:151 + rosters_to_skip]
+  top_mme_rosters = mme_rosters[:len(entries)]
 
   # hedge_rosters = generate_hedge_lineups(player_to_ct, by_position, optimizer, 100, iter=50000)
   hedge_rosters = None
@@ -543,6 +576,8 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
   # distribute best roster to the single entry, and the rest to the MME
   entry_name_to_take_idx = {}
   invalid_roster_ct = 1
+
+  mme_entry_take_idx = 0
 
   for entry in entries:
     entry_name = entry[2]
@@ -554,7 +589,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
     if not entry_name in entry_name_to_take_idx:
       if entry_ct > 1 and not IS_HEDGE_ENTRY:
-        entry_name_to_take_idx[entry_name] = 1
+        entry_name_to_take_idx[entry_name] = 0
       else:
         entry_name_to_take_idx[entry_name] = 0
 
@@ -581,7 +616,9 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
       entry_name_to_take_idx[entry_name] += 1
     else:
-      idx = take_idx % len(top_mme_rosters)
+      idx = mme_entry_take_idx % len(top_mme_rosters)
+      # idx = take_idx % len(top_mme_rosters)
+      mme_entry_take_idx += 1
       roster_to_append = top_mme_rosters[idx]
       assert is_roster_valid(roster_to_append)
       
@@ -614,6 +651,8 @@ def get_locked_players_key(players):
 def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(current_rosters_path, [], '', 0)
 
+  # entries = sort_all_entries(entries)
+
   locked_teams = []
   for time, teams in start_times.items():
     if time < current_time:
@@ -643,6 +682,11 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
     print("ROSTER: {}".format(roster_idx))
     roster_idx += 1
     players = existing_roster[3:12]
+    if len(players) == 0:
+      print("Did you forget to set this roster??")
+      __import__('pdb').set_trace()
+      continue
+
     if players[0] == '':  
       continue
 
@@ -687,7 +731,9 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
       # iterate over the n results and take the first one not seen already (within range)
       # result = optimizer.optimize(by_position, players5, int(1750), is_roster_valid)
       if not locked_players_key in locked_players_to_top_n_optimized:
-        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(6050), players5, is_roster_valid)
+        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(4050), players5, is_roster_valid)
+        # TODO:
+        # candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(8050), players5, is_roster_valid)
         locked_players_to_top_n_optimized[locked_players_key] = candidate_rosters
       else:
         candidate_rosters = locked_players_to_top_n_optimized[locked_players_key]
@@ -875,7 +921,9 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
 
     all_locked_players.append(locked_players)
     # optimized = optimizer.optimize(by_position, locked_players, 1900)
-    optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 6200)
+    optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 4200)
+    # TODO:
+    # optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 8200)
     matched_roster = False
     for i in range(len(optimize_top_n)):
       optimized = optimize_top_n[i]
@@ -1142,24 +1190,26 @@ if __name__ == "__main__":
   
   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-players-list', '.csv')
   template_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-entries-upload-template', '.csv')
-  # dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
-  # dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
+  dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
+  dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
 
   # # 25 seems optimal for 150 mme
   # optimize_for_single_game_dk(dk_slate_path, dk_entries_path, 10)
 
   # assert False
   
+  # TODO - do we still want SE rosters to be unique from MME rosters?
+  # TODO: I'm explicitly mapping team to opponent for DK roster validation :facepalm:
   
   if current_time < min(start_times.keys()):
-    iter = 110000
+    iter = 70000
     all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter)
     iter = int(iter * 0.85)
-    # all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times)
+    all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times)
   else:
     # current_time = 9.6
     reoptimize_slate_fd(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
-    # reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
+    reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
 
   # assert False
 
