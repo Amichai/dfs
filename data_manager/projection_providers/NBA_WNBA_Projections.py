@@ -223,8 +223,8 @@ class NBA_Projections_dk:
 
 
 class NBA_WNBA_Projections:
-  def __init__(self, slate_path, sport):
-    self.dm = DataManager(sport)
+  def __init__(self, slate_path, sport, date=None):
+    self.dm = DataManager(sport, date)
     self.sport = sport
     self.scrapers = ['DFSCrunch', 'PP', 'Caesars', "Stokastic"]
 
@@ -429,7 +429,7 @@ class NBA_WNBA_Projections:
       value = float(value)
 
       if name in proj_adjust:
-        value *= proj_adjust[name]
+        value = proj_adjust[name]
 
       if exclude_zero_value and value == 0:
         continue

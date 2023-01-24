@@ -7,9 +7,11 @@ import requests
 from bs4 import BeautifulSoup
 from tabulate import tabulate
 import csv
+import random
+import statistics
 
-TODAYS_SLATE_ID_NBA = "85929"
-TODAYS_SLATE_ID_NFL = "85546"
+TODAYS_SLATE_ID_NBA = "86310"
+TODAYS_SLATE_ID_NFL = "85796"
 
 class Player:
     def __init__(self, name, position, cost, team, value, opp=None):
@@ -19,10 +21,13 @@ class Player:
         self.team = team
         self.value = float(value)
         self.opp = opp
-        self.value_per_dollar = self.value * 100 / self.cost
+        self.value_per_dollar = self.value * 100 / (self.cost + 1)
 
     def __repr__(self):
         return "{} - {} - {}".format(self.name, self.value, self.team)
+
+    def clone(self):
+        return Player(self.name, self.position, self.cost, self.team, self.value, self.opp)
 
 
 class Roster:
@@ -46,6 +51,9 @@ class Roster:
   def at_position(self, position):
       return [p for p in self.players if p.position == position]
 
+  def clone(self):
+    return Roster(list(self.players))
+
   def get_ids(self, id_mapping):
       ids = []
       for p in self.players:
@@ -54,6 +62,13 @@ class Roster:
 
       ids.reverse()
       return ",".join(ids)
+
+  def are_names_unique(self):
+    return len(self.players) == len(set([a.name for a in self.players]))
+
+  def roster_key(self):
+    names = [a.name for a in self.players]
+    return ",".join(sorted(names))
 
 
 def normalize_name(name):
@@ -73,6 +88,11 @@ def normalize_name(name):
 def get_request(url):
     r = requests.get(url)
     return r.json()
+
+def random_element(arr):
+    idx = random.randint(0, len(arr) - 1)
+    val = arr[idx]
+    return val
 
 def get_request_beautiful_soup(url):
     r = requests.get(url)
@@ -441,7 +461,11 @@ def get_player_exposures(rosters_sorted):
     return player_to_ct
 
 def print_player_exposures(rosters_sorted, locked_teams=None):
+    print("Average roster val: {}".format(statistics.mean([a.value for a in rosters_sorted])))
+
     print("print player exposures")
+    
+
     name_to_player = {}
     max_ct = 0
     player_to_ct = {}
@@ -469,6 +493,7 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
             continue
         if locked_teams != None and pl.team in locked_teams:
             continue
+
         rows.append([player_name, ct, pl.team, round(pl.value, 2), round(pl.value / pl.cost * 100, 2)])
 
     rows_sorted = sorted(rows, key=lambda a: a[1], reverse=True)
@@ -478,6 +503,8 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
         new_row = [idx] + row
         rows_sorted_with_idx.append(new_row)
         idx += 1
+
+
     print(tabulate(rows_sorted_with_idx, headers=["idx", "name", "ct", "team", "value", "val/$", ""]))
 
     print("CORE!!")

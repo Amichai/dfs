@@ -28,7 +28,7 @@ def get_fd_slate_players(fd_slate_file_path, exclude_injured_players=True):
   return all_players
 
 def parse_fantasy_score_from_projections(site, projections):
-  if site == "PP" or site == 'NumberFire' or site == "DFSCrunch":
+  if site == "PP" or site == 'NumberFire' or site == "DFSCrunch" or site == "Stokastic":
     if "Fantasy Score" not in projections:
       return ''
     return projections["Fantasy Score"]
@@ -105,7 +105,7 @@ class NFL_Projections:
   def __init__(self, slate_path, sport, player_adjustments = {}):
     self.dm = DataManager(sport)
     self.sport = sport
-    self.scrapers = ['PP', 'DFSCrunch']
+    self.scrapers = ['PP', 'Stokastic']
     self.player_adjustments = player_adjustments
     self.fd_players = get_fd_slate_players(slate_path, exclude_injured_players=False)
     
@@ -159,15 +159,15 @@ class NFL_Projections:
       status = row[4]
       opp = row[5]
       pp_proj = row[6]
-      dfscrunch_proj = ''
+      stokastic_proj = ''
 
       if len(row) > 7:
-        dfscrunch_proj = row[7]
+        stokastic_proj = row[7]
       
       if pp_proj != '' and pp_proj != 0:
         value = pp_proj
       else:
-        value = dfscrunch_proj
+        value = stokastic_proj
 
       if not value:
         value = pp_proj
@@ -221,7 +221,7 @@ class NFL_Projections_dk:
   def __init__(self, slate_path, sport, player_adjustments = {}):
     self.dm = DataManager(sport)
     self.sport = sport
-    self.scrapers = ['PP', 'DFSCrunch']
+    self.scrapers = ['PP', 'Stokastic']
     self.player_adjustments = player_adjustments
     self.dk_players = utils.get_dk_slate_players(slate_path)
     self.name_to_player_id = {}
@@ -281,15 +281,15 @@ class NFL_Projections_dk:
       cost = row[3]
       opp = row[4]
       pp_proj = row[5]
-      dfscrunch_proj = ''
+      stokastic_proj = ''
 
       if len(row) > 6:
-        dfscrunch_proj = row[6]
+        stokastic_proj = row[6]
       
       if pp_proj != '' and pp_proj != 0:
         value = pp_proj
       else:
-        value = dfscrunch_proj
+        value = stokastic_proj
 
       if not value:
         value = pp_proj

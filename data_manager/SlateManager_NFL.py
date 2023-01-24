@@ -331,7 +331,7 @@ def optimize_slate(slate_path, template_path, iter, print_slate=True, mme_roster
     entry_ct = entry_name_to_ct[entry_name]
     if not entry_name in entry_name_to_take_idx:
       if entry_ct > 1:
-        entry_name_to_take_idx[entry_name] = 1
+        entry_name_to_take_idx[entry_name] = 0
       else:
         entry_name_to_take_idx[entry_name] = 0
 
@@ -711,8 +711,8 @@ if __name__ == "__main__":
   slate_id = utils.TODAYS_SLATE_ID_NFL
   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-players-list', '.csv')
   template_path = utils.most_recently_download_filepath('FanDuel-NFL-', slate_id, '-entries-upload-template', '.csv')
-  dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
-  dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
+  # dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
+  # dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
   
   # optimize_for_single_game_fd(fd_slate_path, template_path, ["DAL", "TEN"])
   # optimize_for_single_game_dk(dk_slate_path, dk_entries_path)
@@ -721,16 +721,16 @@ if __name__ == "__main__":
   
   #FIRST PASS
   if current_time < min(start_times.keys()):
-    iter = 50000
+    iter = 90000
     # all_rosters = optimize_slate(fd_slate_path, utils.DOWNLOAD_FOLDER + "didi_fd_nfl.csv", iter, mme_roster_offset=0)
     # print(len(all_rosters))
     # __import__('pdb').set_trace()
-    all_rosters = optimize_slate(fd_slate_path, template_path, iter, mme_roster_offset=42)
-    all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
+    all_rosters = optimize_slate(fd_slate_path, template_path, iter, mme_roster_offset=0)
+    # all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times, print_slate=False)
   else:
   # current_time = 3.6
     reoptimize_slate(fd_slate_path, template_path, current_time, start_times)
-    reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
+    # reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times)
 
 
 # stacking -

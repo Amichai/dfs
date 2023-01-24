@@ -3,11 +3,6 @@ import time
 
 import utils
 
-def random_element(arr):
-  idx = random.randint(0, len(arr) - 1)
-  val = arr[idx]
-  return val
-
 class Optimizer:
   def __init__(self, max_cost, positions_to_fill):
       self.max_cost = max_cost
@@ -35,7 +30,7 @@ class Optimizer:
       if len(better_players) == 0:
           return None
 
-      return random_element(better_players)
+      return utils.random_element(better_players)
 
 
   def optimize_roster(self, roster, by_position):
@@ -77,7 +72,7 @@ class Optimizer:
     # to_return = []
     # taken_names = []
     # for pos in self.positions_to_fill:
-    #   element = random_element(by_position[pos], taken_names)
+    #   element = utils.random_element(by_position[pos], taken_names)
     #   taken_names.append(element.name)
     #   to_return.append(element)
 
@@ -128,7 +123,8 @@ class Optimizer:
       if len(to_return) != len(set([a.name for a in to_return])):
         __import__('pdb').set_trace()
 
-    return utils.Roster(to_return)
+    to_return = utils.Roster(to_return)
+    return to_return
 
 
   def optimize(self, by_position, iter_count = 600000, lineup_validator = None, seed_roster = None):
@@ -141,7 +137,7 @@ class Optimizer:
               print(i)
           to_remove = None
           if best_roster != None:
-              to_remove = random_element(best_roster.players)
+              to_remove = utils.random_element(best_roster.players)
 
           by_position_copied = {}
           for pos, players in by_position.items():
@@ -212,12 +208,13 @@ class Optimizer:
   def optimize_top_n(self, by_position, n, iter_count = 600000, lineup_validator = None, seed_roster = None):
     all_rosters = []
     roster_keys = []
+
     random.seed(time.time())
     
     for i in range(iter_count):
         if i % 50000 == 0:
             print(i)
-
+        
         random_lineup = self.build_random_line_up(by_position)
         if random_lineup == None:
           continue
@@ -362,7 +359,7 @@ class DK_CBB_Optimizer:
     return (to_return, initial_set_sorted[0])
 
 class FD_NBA_Optimizer:
-  def __init__(self):
+  def __init__(self, by_position=None):
     self.optimizer = Optimizer(60000, ["PG", "PG", "SG", "SG", "SF", "SF", "PF", "PF", "C"])
 
   def prune_player_pool(self, by_position):

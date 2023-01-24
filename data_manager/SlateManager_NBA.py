@@ -7,7 +7,9 @@ import datetime
 import utils
 import statistics
 from ScrapeProcessManager import run
-from Optimizer import FD_NBA_Optimizer, DK_NBA_Optimizer
+# from Optimizer import FD_NBA_Optimizer, DK_NBA_Optimizer
+import Optimizer
+from EnsembleOptimizer import FD_NBA_Optimizer
 import csv
 import itertools
 import hashlib
@@ -540,7 +542,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
   rosters = []
 
-  optimizer = FD_NBA_Optimizer()
+  optimizer = FD_NBA_Optimizer(by_position)
   # optimizer.optimize(by_position, None, iter)
 
   # TODO
@@ -628,6 +630,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
       entry_name_to_take_idx[entry_name] += 1
 
   print("PLAYER EXPOSURES:")
+
   player_to_ct = utils.print_player_exposures(to_print)
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
   utils.print_roster_time_distribution(to_print, start_times)
@@ -648,6 +651,17 @@ def get_locked_players_key(players):
 
   return to_return
 
+
+def get_roster_keys_from_rosters(rosters):
+  #  [b.name for b in [a.players for a in candidate_rosters][0]]
+  roster_keys = []
+  for roster in rosters:
+    players = roster.players
+    names = [a.name for a in players]
+    roster_keys.append(",".join(sorted(names)))
+
+  return roster_keys
+
 def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_times, allow_duplicate_rosters=False):
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(current_rosters_path, [], '', 0)
 
@@ -662,9 +676,11 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
   projections.print_slate()
 
   by_position = projections.players_by_position(exclude_zero_value=False)
+
+  # __import__('pdb').set_trace()
   name_to_players = get_name_to_player_objects(by_position)
 
-  optimizer = FD_NBA_Optimizer()
+  optimizer = Optimizer.FD_NBA_Optimizer(by_position)
 
   by_position = filter_out_locked_teams(by_position, locked_teams)
   existing_rosters = parse_existing_rosters(current_rosters_path)
@@ -677,6 +693,15 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
   roster_idx = 0
   all_results = []
   annotations = []
+  
+  def roster_to_roster_key(roster):
+    playerIds = roster[3:12]
+    names = [player_id_to_name[playerId] for playerId in playerIds]
+    candidate_roster_key = ",".join(sorted(names))
+    return candidate_roster_key
+
+  # currently unused
+  all_known_roster_keys = [roster_to_roster_key(a) for a in existing_rosters]
 
   for existing_roster in existing_rosters:
     print("ROSTER: {}".format(roster_idx))
@@ -731,9 +756,13 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
       # iterate over the n results and take the first one not seen already (within range)
       # result = optimizer.optimize(by_position, players5, int(1750), is_roster_valid)
       if not locked_players_key in locked_players_to_top_n_optimized:
-        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(4050), players5, is_roster_valid)
+        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(9550), players5, is_roster_valid)
         # TODO:
-        # candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(8050), players5, is_roster_valid)
+        # candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(11050), players5, is_roster_valid)
+
+        candidate_rosters_keys = get_roster_keys_from_rosters(candidate_rosters)
+        # TODO: consider filtering out currently in-play rosters from these candidates to avoid collisions?
+
         locked_players_to_top_n_optimized[locked_players_key] = candidate_rosters
       else:
         candidate_rosters = locked_players_to_top_n_optimized[locked_players_key]
@@ -921,9 +950,9 @@ def reoptimize_slate_dk(slate_path, entries_path, current_time, start_times, all
 
     all_locked_players.append(locked_players)
     # optimized = optimizer.optimize(by_position, locked_players, 1900)
-    optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 4200)
+    # optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 4200)
     # TODO:
-    # optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 8200)
+    optimize_top_n = optimizer.optimize_top_n(by_position, 50, locked_players, 8200)
     matched_roster = False
     for i in range(len(optimize_top_n)):
       optimized = optimize_top_n[i]
@@ -1190,8 +1219,8 @@ if __name__ == "__main__":
   
   fd_slate_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-players-list', '.csv')
   template_path = utils.most_recently_download_filepath('FanDuel-NBA-', slate_id, '-entries-upload-template', '.csv')
-  dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
-  dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
+  # dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
+  # dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
 
   # # 25 seems optimal for 150 mme
   # optimize_for_single_game_dk(dk_slate_path, dk_entries_path, 10)
@@ -1200,16 +1229,18 @@ if __name__ == "__main__":
   
   # TODO - do we still want SE rosters to be unique from MME rosters?
   # TODO: I'm explicitly mapping team to opponent for DK roster validation :facepalm:
+
   
+  # iter = 85000
+  iter = 25000
   if current_time < min(start_times.keys()):
-    iter = 70000
     all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter)
     iter = int(iter * 0.85)
-    all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times)
+    # all_rosters = optimize_slate_dk(dk_slate_path, iter, dk_entries_path, start_times)
   else:
     # current_time = 9.6
     reoptimize_slate_fd(fd_slate_path, template_path, current_time, start_times, allow_duplicate_rosters=False)
-    reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
+    # reoptimize_slate_dk(dk_slate_path, dk_entries_path, current_time, start_times, allow_duplicate_rosters=False)
 
   # assert False
 
