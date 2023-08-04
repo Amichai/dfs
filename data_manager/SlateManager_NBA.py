@@ -369,7 +369,7 @@ def optimize_slate_with_rosters(template_path, top_mme_rosters):
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
 
 def generate_top_n_rosters_sorted(by_position, roster_count, iter):
-  optimizer = FD_NBA_Optimizer()
+  optimizer = Optimizer.FD_NBA_Optimizer()
   rosters = optimizer.optimize_top_n(by_position, roster_count, iter=iter)
 
   rosters_sorted = sorted(rosters, key=lambda a:a.value, reverse=True)
@@ -502,7 +502,10 @@ def sort_all_entries(entries):
     name = entry[2]
     if "Single Entry" in name or "Entries Max" in name or "H2H vs" in name:
       se_entries.append(entry)
+    elif "Dime" in name or "Assist" in name or "Block" in name or "Swat" in name:
+      se_entries.append(entry)
     else:
+      # print(name)
       pot_size = name.split('(')[1].split(' to ')[0].strip('$K')
       mme_entries.append([entry, float(pot_size)])
 
@@ -514,14 +517,52 @@ def sort_all_entries(entries):
   to_return = [a[0] for a in mme_sorted] + se_entries
   return to_return
 
+def adjust_by_position_by_rank_order(by_position):
+  seen_names = []
+  name_to_val = []
+  for pos, players in by_position.items():
+    for player in players:
+      if player.name in seen_names:
+        continue
+      name_to_val.append((player.name, player.value))
+      seen_names.append(player.name)
+    
+  name_to_val_sorted = sorted(name_to_val, key=lambda a: a[1], reverse=True)
+
+  name_to_val_new = {}
+  idx = len(name_to_val_sorted) + 2
+  last_val = None
+  for (name, val) in name_to_val_sorted:
+    if val != last_val:
+      idx -= 1
+
+    name_to_val_new[name] = idx
+    last_val = val
+
+  for pos, players in by_position.items():
+    for player in players:
+      player.value = name_to_val_new[player.name]
+
+  return by_position
+  
+
 def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filter=None, hedge_entry_name=None, hedge_entry_ct=0):
   projections = NBA_WNBA_Projections(slate_path, "NBA")
   projections.print_slate()
 
   #TODO:
   # projections.validate_player_set()
+  by_position = projections.players_by_position(
+    exclude_zero_value=True,
+    proj_adjust={
+      # "Jock Landale": 0.94
+      # "Damian Lillard": 0.95,
+      # "Kyle Kuzma": 0.95,
+      # "Tim Hardaway": 0
+    }
+  )
 
-  by_position = projections.players_by_position()
+  # by_position = adjust_by_position_by_rank_order(by_position)
 
   player_id_to_name, _, _, name_to_player_id, first_line, entries, to_remove, player_id_to_fd_name = parse_upload_template(template_path, [], '', 0)
 
@@ -542,7 +583,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
   rosters = []
 
-  optimizer = FD_NBA_Optimizer(by_position)
+  optimizer = Optimizer.FD_NBA_Optimizer(by_position)
   # optimizer.optimize(by_position, None, iter)
 
   # TODO
@@ -596,6 +637,7 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
         entry_name_to_take_idx[entry_name] = 0
 
     take_idx = entry_name_to_take_idx[entry_name]
+    # __import__('pdb').set_trace()
 
     if IS_HEDGE_ENTRY:
       idx = (take_idx - hedge_entry_ct) % len(rosters_sorted)
@@ -618,8 +660,8 @@ def optimize_slate(slate_path, template_path, rosters_to_skip, iter, roster_filt
 
       entry_name_to_take_idx[entry_name] += 1
     else:
-      idx = mme_entry_take_idx % len(top_mme_rosters)
-      # idx = take_idx % len(top_mme_rosters)
+      # idx = mme_entry_take_idx % len(top_mme_rosters)
+      idx = take_idx % len(top_mme_rosters)
       mme_entry_take_idx += 1
       roster_to_append = top_mme_rosters[idx]
       assert is_roster_valid(roster_to_append)
@@ -675,9 +717,20 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
   projections = NBA_WNBA_Projections(slate_path, "NBA")
   projections.print_slate()
 
-  by_position = projections.players_by_position(exclude_zero_value=False)
+  by_position = projections.players_by_position(
+    
+    proj_adjust={
+    # "Jock Landale": 0.94,
+    # "Kyle Kuzma": 0.95,
+    # "Jonas Valanciunas": 0.96,
+    # "Kevin Duorant": 0,
+    # "Kyrie Irving": 0,
+    # "Brandon Ingram": 0
+    # "Damian Lillard": 0.95,
+    # "James Harden": 0,
+    },
+    exclude_zero_value=False)
 
-  # __import__('pdb').set_trace()
   name_to_players = get_name_to_player_objects(by_position)
 
   optimizer = Optimizer.FD_NBA_Optimizer(by_position)
@@ -733,6 +786,8 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
 
       players3.append(player_id_to_name[p])
 
+    # if "Ziaire Williams" in players3:
+    #   __import__('pdb').set_trace()
     players4 = [name_to_players[p][0] for p in players3]
     players5 = []
     initial_roster = []
@@ -752,12 +807,12 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
       locked_players_key = get_locked_players_key(players5)
 
 
-      # todo: this will be optimize_top_n
+      # ---todo---: this will be optimize_top_n
       # iterate over the n results and take the first one not seen already (within range)
       # result = optimizer.optimize(by_position, players5, int(1750), is_roster_valid)
       if not locked_players_key in locked_players_to_top_n_optimized:
-        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(9550), players5, is_roster_valid)
-        # TODO:
+        candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(12950), players5, is_roster_valid)
+        # TODO: 6050
         # candidate_rosters = optimizer.optimize_top_n(by_position, 120, int(11050), players5, is_roster_valid)
 
         candidate_rosters_keys = get_roster_keys_from_rosters(candidate_rosters)
@@ -767,7 +822,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
       else:
         candidate_rosters = locked_players_to_top_n_optimized[locked_players_key]
 
-      result = candidate_rosters[0] 
+      result = candidate_rosters[0]
       
       top_val = result.value
       candidate_rosters_filtered = [a for a in candidate_rosters if a.value >= top_val - 10]
@@ -827,6 +882,7 @@ def reoptimize_slate_fd(slate_path, current_rosters_path, current_time, start_ti
           # if diff < 0:
           #   __import__('pdb').set_trace()
 
+          # if diff >= -3:
           if diff >= 0:
             print(result)
             # if abs(diff) > 20:
@@ -1127,7 +1183,7 @@ def generate_showdown_lineups(showdown_slate_path):
   # write these projections to s3
 
 
-def optimize_for_single_game_dk(slate_path, template_path, max_cpt_exposure):
+def optimize_for_single_game_dk(slate_path, template_path, max_cpt_exposure, exlude=[]):
   projections = NBA_Projections_dk(slate_path, "NBA")
   projections.print_slate()
 
@@ -1136,6 +1192,8 @@ def optimize_for_single_game_dk(slate_path, template_path, max_cpt_exposure):
   player_pool = []
   seen_names = []
   for player in player_pool_all:
+    if player.name in exlude:
+      continue
     # if not player.team in teams:
     #   continue
     if player.name in seen_names:
@@ -1230,9 +1288,9 @@ if __name__ == "__main__":
   # TODO - do we still want SE rosters to be unique from MME rosters?
   # TODO: I'm explicitly mapping team to opponent for DK roster validation :facepalm:
 
-  
-  # iter = 85000
-  iter = 25000
+  iter = 62000
+  # iter = 29000
+  # iter = 300
   if current_time < min(start_times.keys()):
     all_rosters = optimize_slate(fd_slate_path, template_path, 0, iter)
     iter = int(iter * 0.85)

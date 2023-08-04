@@ -628,7 +628,7 @@ def optimize_for_single_game_fd(slate_path, template_path, teams):
         continue
       by_position_new[pos].append(player)
 
-  result = utils.single_game_optimizer_many(by_position_new, 10)
+  result = utils.single_game_optimizer_many(by_position_new, len(entries))
   index_strings = []
   idx = 0
   to_print = []
@@ -637,6 +637,7 @@ def optimize_for_single_game_fd(slate_path, template_path, teams):
     index_strings.append("{} - {}".format(r[1], idx))
     idx += 1
     to_print.append(utils.Roster(r[0]))
+
 
   construct_upload_template_file(to_print, first_line, entries, name_to_player_id, player_id_to_fd_name, index_strings)
   return to_print
@@ -714,14 +715,14 @@ if __name__ == "__main__":
   # dk_slate_path = utils.most_recently_download_filepath('DKSalaries', '(', ')', '.csv')
   # dk_entries_path = utils.most_recently_download_filepath('DKEntries', '(', ')', '.csv')
   
-  # optimize_for_single_game_fd(fd_slate_path, template_path, ["DAL", "TEN"])
+  optimize_for_single_game_fd(fd_slate_path, template_path, ["KC", "PHI"])
   # optimize_for_single_game_dk(dk_slate_path, dk_entries_path)
 
-  # assert False
+  assert False
   
   #FIRST PASS
   if current_time < min(start_times.keys()):
-    iter = 90000
+    iter = 110000
     # all_rosters = optimize_slate(fd_slate_path, utils.DOWNLOAD_FOLDER + "didi_fd_nfl.csv", iter, mme_roster_offset=0)
     # print(len(all_rosters))
     # __import__('pdb').set_trace()

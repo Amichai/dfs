@@ -1,14 +1,10 @@
 FanDuel-NBA-2022 ET-11 ET-12 ET-83182-players-list.csv
 FanDuel-NBA-2022-11-12-83182-entries-upload-template.csv
 DKSalaries (2).csv
-MIA
-@BUF
-1:00pm ET
+SF
+@PHI
+3:00pm ET
 
-NYG
-@MIN
-4:30pm ET
-
-BAL
-@CIN
-8:15pm ET
+CIN
+@KC
+6:30pm ET

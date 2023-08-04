@@ -5,6 +5,8 @@ import dateutil.parser
 import utils
 import json
 import time
+from selenium.webdriver.common.by import By
+
 
 known_sports = ["NBA","WNBA","MLB","NFL","MMA","CFB","PGA", "NHL"]
 
@@ -92,7 +94,9 @@ class CaesarsScraper:
 
       time.sleep(1.0)
 
-      as_text = self.driver.find_element_by_tag_name('body').text
+      # as_text = self.driver.find_element('tag', 'body').text
+      as_text = self.driver.find_element(By.CSS_SELECTOR, 'body').text
+
 
       as_json = json.loads(as_text)
       if not 'markets' in as_json:

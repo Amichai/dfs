@@ -57,8 +57,16 @@ def parse_fantasy_score_from_projections(site, projections):
     if not 'Steals' in projections:
         return
     stls = float(projections['Steals'])
-    turnovers = float(projections["Turnovers"])
+
+    turnovers = 0
+    if 'Turnovers' in projections:
+      turnovers = float(projections["Turnovers"])
+
     projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
+    to_return = round(projected, 2)
+    if to_return == None:
+      __import__('pdb').set_trace()
+
     return round(projected, 2)
     # return round_off(projected)
 
@@ -79,9 +87,13 @@ def parse_fantasy_score_from_projections_dk(site, projections):
         return
     blks = float(projections['Blocks'])
     if not 'Steals' in projections:
-        return
-    
-    stls = float(projections['Steals'])
+        if 'Blocks + Steals' in projections:
+          __import__('pdb').set_trace()
+          stls = float(projections['Blocks + Steals'] - blks)
+        else:
+          return
+    else: 
+      stls = float(projections['Steals'])
     turnovers = float(projections["Turnovers"])
     projected = pts + rbds * 1.25 + asts * 1.5 + blks * 2 + stls * 2 - (turnovers / 6.0) + 1.8
     return round(projected, 2)
@@ -326,6 +338,8 @@ class NBA_WNBA_Projections:
 
     return all_rows
 
+  # def get_optimal_ownership_stokastic()
+
   def get_player_rows(self):
     all_rows = []
 
@@ -334,6 +348,8 @@ class NBA_WNBA_Projections:
       cost = float(info[2])
       team = info[3]
       status = info[4]
+
+
 
       player_row = [player, team, position, cost, status]
 
@@ -344,7 +360,6 @@ class NBA_WNBA_Projections:
         scraper_to_projections[scraper] = projections
         projection = ''
         if projections != None:
-            # trim down the draft kings player pool!!!
           projection = parse_fantasy_score_from_projections(scraper, projections)
         player_row.append(projection)
 
@@ -406,13 +421,18 @@ class NBA_WNBA_Projections:
       stokastic = row[8]
       caesars_is_active = row[9]
 
+      projection_source = ''
+
       value = 0
       if int(caesars_is_active) >= 4:
         value = caesars_proj
+        projection_source = "Caesars"
       elif pp_proj != '' and pp_proj != 0:
         value = pp_proj
+        projection_source = "PP"
       else:
         value = stokastic
+        projection_source = "Stokastic"
         # if stokastic != '':
         # else: 
         #   value = dfs_crunch
@@ -426,10 +446,38 @@ class NBA_WNBA_Projections:
         value = 0
         # continue
 
+      if value == None:
+        print("{} - NO PROJECTION: {}".format(projection_source, name))
+        # __import__('pdb').set_trace()
+        continue
+
       value = float(value)
 
+      # if projection_source == "Stokastic":
+      #   value *= 0.97
+
+      optimal_ownership = 0
+      ceiling = 0
+      stddev = 0
+      stokastic_projection = self.dm.query_projection(self.sport, "Stokastic", name)
+      if stokastic_projection != None and 'optimal' in stokastic_projection:
+        optimal_ownership = float(stokastic_projection['optimal'])
+        ceiling = float(stokastic_projection['ceiling'])
+        stddev = float(stokastic_projection['stddev'])
+
+      # if optimal_ownership < 1.0 and optimal_ownership != 0:
+      # #  and projection_source == "Stokastic":
+      #   continue
+
+
+      # if projection_source == "Stokastic":
+      #   continue
+      # __import__('pdb').set_trace()
       if name in proj_adjust:
-        value = proj_adjust[name]
+        value *= proj_adjust[name]
+
+      # less_than_5 = min(0, optimal_ownership - 5)
+      # value += less_than_5
 
       if exclude_zero_value and value == 0:
         continue
@@ -438,7 +486,7 @@ class NBA_WNBA_Projections:
       for position in positions:
         if not position in by_position:
           by_position[position] = []
-        by_position[position].append(utils.Player(name, position, cost, team, value))
+        by_position[position].append(utils.Player(name, position, cost, team, value, projection_source="{}, {}, {} - {}".format(optimal_ownership, ceiling, stddev, projection_source)))
 
     return by_position
 

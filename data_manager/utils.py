@@ -9,12 +9,13 @@ from tabulate import tabulate
 import csv
 import random
 import statistics
+from selenium.webdriver.common.by import By
 
-TODAYS_SLATE_ID_NBA = "86310"
-TODAYS_SLATE_ID_NFL = "85796"
+TODAYS_SLATE_ID_NBA = "88765"
+TODAYS_SLATE_ID_NFL = "86558"
 
 class Player:
-    def __init__(self, name, position, cost, team, value, opp=None):
+    def __init__(self, name, position, cost, team, value, opp=None, projection_source=''):
         self.name = name
         self.position = position
         self.cost = float(cost)
@@ -22,12 +23,13 @@ class Player:
         self.value = float(value)
         self.opp = opp
         self.value_per_dollar = self.value * 100 / (self.cost + 1)
+        self.projection_source = projection_source
 
     def __repr__(self):
         return "{} - {} - {}".format(self.name, self.value, self.team)
 
     def clone(self):
-        return Player(self.name, self.position, self.cost, self.team, self.value, self.opp)
+        return Player(self.name, self.position, self.cost, self.team, self.value, self.opp, self.projection_source)
 
 
 class Roster:
@@ -101,13 +103,13 @@ def get_request_beautiful_soup(url):
 # https://chromedriver.chromium.org/downloads
 # xattr -d com.apple.quarantine <chromedriver>
 def get_chrome_driver():
-  return webdriver.Chrome("../master_scrape_process/chromedriver12")
+  return webdriver.Chrome("../master_scrape_process/chromedriver13")
 
 def get_with_selenium(url):
   driver = get_chrome_driver()
 
   driver.get(url)
-  as_text = driver.find_element_by_tag_name('body').text
+  as_text = driver.find_element(By.CSS_SELECTOR, 'body').text
   as_json = json.loads(as_text)
   driver.close()
 
@@ -270,6 +272,22 @@ def single_game_optimizer_many(by_position, ct, locks=None):
         print(roster)
         
     return to_return
+
+team_to_start_time_dict = {}
+
+def team_to_start_time(path, input_team):
+    
+
+    if team_to_start_time_dict == {}:
+        start_times = load_start_times_and_slate_path(path)[0]
+        for time, teams in start_times.items():
+            for team in teams:
+                team_to_start_time_dict[team] = time
+
+
+    result = team_to_start_time_dict[input_team]
+
+    return result
 
 DOWNLOAD_FOLDER = "/Users/amichailevy/Downloads/"
 
@@ -494,7 +512,10 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
         if locked_teams != None and pl.team in locked_teams:
             continue
 
-        rows.append([player_name, ct, pl.team, round(pl.value, 2), round(pl.value / pl.cost * 100, 2)])
+        team = pl.team
+        start_time = team_to_start_time('start_times.txt', team)
+        # print("st {},{} - {}".format(player_name, team, start_time))
+        rows.append([player_name, ct, pl.team, round(pl.value, 2), round(pl.value / pl.cost * 100, 2), pl.projection_source, start_time])
 
     rows_sorted = sorted(rows, key=lambda a: a[1], reverse=True)
     idx = 1
@@ -505,7 +526,7 @@ def print_player_exposures(rosters_sorted, locked_teams=None):
         idx += 1
 
 
-    print(tabulate(rows_sorted_with_idx, headers=["idx", "name", "ct", "team", "value", "val/$", ""]))
+    print(tabulate(rows_sorted_with_idx, headers=["idx", "name", "ct", "team", "value", "val/$", "source", "start"]))
 
     print("CORE!!")
     for player_name, ct in player_to_ct.items():
@@ -531,6 +552,7 @@ def print_roster_time_distribution(rosters, start_times):
     for time, teams in start_times.items():
         for team in teams:
             team_to_start_time[team] = time
+
     for roster in rosters:
         for player in roster.players:
             team = player.team
@@ -582,7 +604,11 @@ def parse_projection_from_caesars_lines(lines):
     if not 'Steals' in lines:
         return
     stls = float(lines['Steals'])
-    turnovers = float(lines["Turnovers"])
+    turnovers = 0
+
+    if "Turnovers" in lines:
+        turnovers = float(lines["Turnovers"])
+    
     projected = pts + rbds * 1.2 + asts * 1.5 + blks * 3 + stls * 3 - (turnovers / 3.0)
 
     a1 = False
